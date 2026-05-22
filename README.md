@@ -1,5 +1,7 @@
 # CDFD Part III: Adaptive Flux Limitation Biology and Medicine
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20344695.svg)](https://doi.org/10.5281/zenodo.20344695)
+
 This release contains the public Part III biology-and-medicine archive for the
 Constraint-Driven Flux Dynamics project.
 
@@ -110,7 +112,8 @@ International License (CC BY 4.0). See `LICENSE` and `LICENSE_BOUNDARY.md`.
 ## Citation
 
 Mujjabi, S. B. (2026). CDFD Part III: Adaptive Flux Limitation Biology and Medicine -
-Constraint-Driven Flux Dynamics. Public preprint archive.
+Constraint-Driven Flux Dynamics. Zenodo.
+https://doi.org/10.5281/zenodo.20344695
 
 Runtime software cited by the papers:
 

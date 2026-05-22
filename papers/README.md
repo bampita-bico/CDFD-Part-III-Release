@@ -4,6 +4,9 @@ These are the 17 active manuscripts for `CDFD Part III: Adaptive Flux
 Limitation Biology and Medicine`. Titles use the same numbered-paper convention as Parts I and II:
 `Paper BIO-01` through `Paper BIO-17`.
 
+Part III archive DOI:
+https://doi.org/10.5281/zenodo.20344695
+
 All papers cite the public CDFD Runtime software archive:
 https://doi.org/10.5281/zenodo.20343160
 

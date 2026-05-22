@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this archive, cite this Part III release and also cite the CDFD Runtime DOI when using runtime-linked CDFL diagnostics."
 title: "CDFD Part III: Adaptive Flux Limitation Biology and Medicine - Constraint-Driven Flux Dynamics"
 version: "1.0.0"
+doi: 10.5281/zenodo.20344695
 date-released: 2026-05-22
 license: CC-BY-4.0
 authors:
