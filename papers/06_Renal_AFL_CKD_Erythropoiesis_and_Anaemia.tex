@@ -1,0 +1,395 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-06: Adaptive Flux Limitation in Renal Disease:\\ A CDFD Model of CKD, Erythropoiesis, and Anaemia}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Renal Disease: A CDFD Model of CKD, Erythropoiesis, and Anaemia}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Chronic Kidney Disease (CKD) is a progressive syndrome affecting over 800 million people worldwide, characterized by declining glomerular filtration rate (GFR), mineral dysregulation, anaemia, and eventual multi-organ failure. Classical nephrology treats CKD-MBD (mineral and bone disorder), renal anaemia, cardiovascular disease, and uremia as parallel complications. The AFL framework reveals a different picture: these are sequential, causally connected expressions of a single \textbf{renal constraint cascade}.
+
+We model CKD progression as an adaptive constraint accumulation system in which nephron loss raises the primary renal constraint $C_{\mathrm{renal}}$, triggering a cascade of adaptive responses --- FGF23 elevation, PTH secondary hyperparathyroidism, vitamin D suppression, bone remodelling, erythropoietin resistance, and vascular calcification --- each of which is an AFL compensation for the upstream constraint failure.
+
+Key results: (1) GFR functions as $1/C_{\mathrm{renal}}$, making CKD progression a rising constraint trajectory; (2) FGF23 rise precedes hyperphosphatemia because the body detects $\Phi_{\mathrm{phosphate}}/C_{\mathrm{renal}} \to 1$ before overt constraint failure; (3) ESA resistance is a second-layer constraint problem superimposed on the primary renal constraint; (4) vascular calcification is phosphate flux overflow when all buffering capacity is exhausted; (5) dialysis creates constraint oscillation rather than restoration, explaining the cardiovascular burden of end-stage renal disease.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This renal paper is the most clinically concrete early test of AFL. CKD is already understood as a systems disease: declining filtration, phosphate handling, FGF23, PTH, vitamin D, anaemia, inflammation, cardiovascular remodeling, and dialysis timing are coupled. AFL does not need to invent that coupling. It gives a compact language for why the coupling becomes nonlinear.
+
+The main translation is that falling GFR raises effective renal constraint $C_{\mathrm{renal}}$. The patient may keep serum values apparently controlled for a while because compensatory hormones and bone buffering carry extra burden. That compensation has a price: vascular, skeletal, erythropoietic, inflammatory, and cardiac surfaces inherit the renal bottleneck.
+
+For clinicians, the important caution is that this paper must remain aligned with nephrology evidence and guidelines. ESA use, iron therapy, mineral bone disorder treatment, dialysis, and cardiovascular risk cannot be derived from AFL alone. AFL can propose a way to think about response plateaus and multi-axis bottlenecks; it cannot replace KDIGO-style evidence or individual patient judgement.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+The kidney is not only a filter. It is a regulator of the internal chemical environment, a pressure-volume organ, an endocrine organ, a mineral-bone coordinator, and a determinant of erythropoietic drive. CKD therefore becomes clinically serious before it becomes a single-number problem. A falling eGFR is accompanied by rising phosphate burden, FGF23 and PTH compensation, vitamin D suppression, anaemia, inflammation, vascular stiffness, and cardiac risk.
+
+In AFL notation, nephron loss raises effective renal constraint $C_{\mathrm{renal}}$. Solute, acid, volume, and phosphate flows continue to arrive, but the organ's capacity to reset the internal milieu declines. The body then borrows reserve from other surfaces: bone buffers mineral imbalance, hormones re-tune phosphate handling, the marrow receives weaker erythropoietic support, and the vasculature absorbs calcific and pressure stress.
+
+The result is a cascade, not a list. Each compensation is intelligible at the moment it appears, but the price is transferred downstream. That is why CKD-MBD, renal anaemia, inflammation, cardiovascular disease, and dialysis stress should be read as coupled states of one renal constraint architecture. AFL does not replace nephrology; it sharpens the question of which constraint is currently limiting recovery.
+
+The clinical boundary is central. ESA therapy, iron replacement, phosphate management, dialysis timing, and cardiovascular risk decisions remain governed by evidence, guidelines, and individual risk. The model is useful only if it yields testable trajectories and clear invalidation conditions.
+
+\textbf{Status: Hypothesis}
+
+\section{GFR as the Primary Constraint}
+
+Define:
+\begin{itemize}
+    \item $\Phi_{\mathrm{solute}}$: solute delivery rate to the kidney (product of plasma concentration and renal blood flow)
+    \item $C_{\mathrm{renal}}$: renal constraint (effective inverse of nephron clearance capacity)
+    \item $\Psi_{s,\mathrm{renal}} = \Phi_{\mathrm{solute}} / C_{\mathrm{renal}}$: renal operating ratio
+\end{itemize}
+
+The relationship between GFR and AFL constraint:
+\begin{equation}
+    C_{\mathrm{renal}} \propto \frac{1}{\mathrm{GFR}}
+\end{equation}
+
+As GFR falls (nephron loss), $C_{\mathrm{renal}} \uparrow$, and $\Psi_{s,\mathrm{renal}} \downarrow$. The kidney operates in an increasingly constrained regime, unable to clear solutes at the rate they are delivered.
+
+\textbf{CKD staging as $C_{\mathrm{renal}}$ levels:}
+\begin{center}
+\begin{tabular}{lllll}
+\toprule
+CKD Stage & GFR (mL/min/1.73m$^2$) & $C_{\mathrm{renal}}$ (relative) & $\Psi_{s,\mathrm{renal}}$ & Clinical state \\
+\midrule
+1 & $\geq 90$ & 1.0 (baseline) & $\sim 1$ & Normal or mild \\
+2 & 60--89 & 1.1--1.5 & $0.7$--$0.9$ & Mild decline \\
+3a/3b & 30--59 & 1.5--3.3 & $0.3$--$0.7$ & Moderate; FGF23 rises \\
+4 & 15--29 & 3.5--6.7 & $0.15$--$0.3$ & Severe; PTH rises \\
+5 (ESRD) & $< 15$ & $> 6.7$ & $< 0.15$ & Kidney failure \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Derived} (given the GFR--constraint mapping)
+
+\section{The Phosphate Cascade: FGF23, PTH, and Vitamin D}
+
+\subsection{Why FGF23 Rises Before Hyperphosphatemia}
+
+Classical nephrology notes that FGF23 rises early in CKD (Stage 2--3a) before serum phosphate is elevated. This appears paradoxical: why does the phosphate-regulating hormone rise when phosphate is normal?
+
+AFL explanation: FGF23 responds to $\Phi_{\mathrm{phosphate}} / C_{\mathrm{renal}}$ approaching 1, not to serum phosphate concentration. Even when serum phosphate is within normal limits, the flux of phosphate through a declining renal system means each nephron is handling more phosphate per unit time. The kidney detects constraint loading before frank failure.
+
+\begin{equation}
+    \frac{d[\mathrm{FGF23}]}{dt} \propto \alpha_{\mathrm{FGF23}} \cdot \Psi_{s,\mathrm{phosphate}} = \alpha_{\mathrm{FGF23}} \cdot \frac{\Phi_{\mathrm{phosphate}}}{C_{\mathrm{renal}}}
+\end{equation}
+
+FGF23 is therefore an \textbf{early warning signal} of approaching constraint saturation --- an AFL regulatory response that precedes clinical failure. This predicts the observed clinical timeline.
+
+\textbf{Status: Inferred}
+
+\subsection{PTH as a Second-Order Constraint Regulator}
+
+As CKD advances, FGF23 suppresses calcitriol (active vitamin D) production, leading to hypocalcemia, which stimulates parathyroid hormone (PTH) secretion. PTH acts as a second-order AFL constraint regulator:
+
+\begin{equation}
+    C_{\mathrm{PTH}} \uparrow \Rightarrow \begin{cases}
+        \text{Renal phosphate excretion} \uparrow & \text{(direct constraint reduction)} \\
+        \text{Bone resorption} \uparrow & \text{(mobilizes Ca, redistributes phosphate)} \\
+        \text{Calcitriol production} \uparrow & \text{(vitamin D axis)}
+    \end{cases}
+\end{equation}
+
+In AFL terms: bone becomes a \textbf{secondary phosphate buffer} --- a constraint reservoir that accepts excess phosphate flux when the primary renal constraint is saturated.
+
+\textbf{Status: Inferred}
+
+\subsection{The Vitamin D Axis}
+
+Calcitriol suppression by FGF23 creates a cascade failure:
+\begin{equation}
+    C_{\mathrm{renal}} \uparrow \Rightarrow \mathrm{FGF23} \uparrow \Rightarrow \mathrm{Calcitriol} \downarrow \Rightarrow \mathrm{Ca^{2+}\ absorption} \downarrow \Rightarrow \mathrm{PTH} \uparrow
+\end{equation}
+
+The vitamin D axis is not an independent complication but a downstream effect of the primary $C_{\mathrm{renal}}$ increase propagating through the hormonal network.
+
+\textbf{Status: Inferred}
+
+\section{Bone Disease: Renal Osteodystrophy}
+
+\subsection{High-Turnover vs Low-Turnover Bone Disease}
+
+Renal osteodystrophy takes two AFL forms:
+
+\textbf{High-turnover (osteitis fibrosa cystica):} Elevated PTH drives excessive bone resorption. In AFL terms: PTH has raised the bone constraint $C_{\mathrm{bone}}$ to the point where the natural $\beta_{\mathrm{bone}}$ recovery rate is overwhelmed. $\Phi_{\mathrm{resorption}} \gg \Phi_{\mathrm{formation}}$; net bone loss.
+
+\textbf{Low-turnover (adynamic bone disease):} Occurs when PTH is aggressively suppressed (e.g., by calcitriol therapy or calcimimetics). With PTH suppressed, the buffering signal is removed. Bone neither resorbs nor forms --- $\Phi_{\mathrm{bone}} \to 0$. The constraint remains high but the regulator is disabled. Bone becomes brittle under mechanical load.
+
+AFL prediction: optimal bone health in CKD requires maintaining PTH in an intermediate range that preserves the buffering function without driving excessive turnover --- a $\Psi_{s,\mathrm{bone}} \approx 1$ target.
+
+\textbf{Status: Inferred}
+
+\section{Vascular Calcification: Overflow Beyond Bone Buffer Capacity}
+
+When bone buffering is exhausted (severely elevated PTH + advanced CKD), phosphate flux has nowhere to go within the physiological constraint network. The result is \textbf{ectopic mineralization}: phosphate and calcium deposit in arterial walls, cardiac valves, and soft tissues.
+
+In AFL terms:
+\begin{equation}
+    J_{\mathrm{phosphate}} \to \text{vascular smooth muscle} \quad \text{when} \quad C_{\mathrm{renal}} + C_{\mathrm{bone}} < \Phi_{\mathrm{phosphate}}
+\end{equation}
+
+Vascular calcification is the AFL equivalent of flood overflow: when all channels are at capacity, the flux finds the path of least resistance --- in this case, calcium-phosphate precipitation in arterial media.
+
+This explains the cardiovascular mortality pattern in CKD: it is not primarily atherosclerosis but constraint overflow calcification that reduces arterial compliance and increases cardiac afterload.
+
+\textbf{Status: Inferred}
+
+\section{Renal Anaemia: ESA Resistance as a Superimposed Constraint}
+
+\subsection{The Primary Problem: EPO Deficiency as Missing Flux Signal}
+
+Declining renal interstitial cells produce less erythropoietin (EPO) as GFR falls. In AFL terms: the $\Phi_{\mathrm{EPO}}$ signal that drives erythropoietic throughput is diminished. This is analogous to the Type 1 diabetes scenario: a missing driver, not excess constraint.
+
+\begin{equation}
+    \Phi_{\mathrm{EPO}} \downarrow \Rightarrow J_{\mathrm{RBC}} \downarrow \Rightarrow \text{anaemia}
+\end{equation}
+
+\subsection{ESA Resistance: The Second-Layer Constraint}
+
+Erythropoiesis-stimulating agents (ESAs: epoetin, darbepoetin) restore $\Phi_{\mathrm{EPO}}$ exogenously. In uncomplicated EPO deficiency, this would fully correct anaemia. But in CKD, ESA response is frequently blunted --- ESA resistance.
+
+AFL explanation: CKD imposes a second-layer constraint on erythropoiesis ($C_{\mathrm{erythro}}$) through:
+\begin{itemize}
+    \item \textbf{Iron restriction}: hepcidin elevation (an AFL response to inflammation (system-wide constraint $C$ amplification)) sequesters iron in macrophages, reducing iron availability for haemoglobin synthesis. $C_{\mathrm{Fe}} \uparrow$.
+    \item \textbf{Inflammatory load}: chronic inflammation (system-wide constraint $C$ amplification) raises $C_{\mathrm{inflam}}$ in the erythroid progenitor environment, slowing proliferation.
+    \item \textbf{Uraemic toxins}: accumulating uraemic solutes directly inhibit erythroid colony growth. $C_{\mathrm{uraemia}} \uparrow$.
+    \item \textbf{Marrow capacity}: haematological reserve is limited in advanced CKD.
+\end{itemize}
+
+ESA therapy increases $\Phi_{\mathrm{EPO}}$ but cannot overcome $C_{\mathrm{erythro}}$. This is the AFL ESA resistance mechanism: \textbf{adding flux into a high-constraint system produces diminishing returns}.
+
+\begin{equation}
+    J_{\mathrm{RBC}} = \frac{\Phi_{\mathrm{EPO}}}{C_{\mathrm{erythro}}} \quad \text{where} \quad C_{\mathrm{erythro}} = C_{\mathrm{Fe}} + C_{\mathrm{inflam}} + C_{\mathrm{uraemia}} + C_{\mathrm{marrow}}
+\end{equation}
+
+\textbf{Status: Inferred}
+
+\subsection{Multi-Modality Treatment as Constraint Reduction}
+
+Effective anaemia management in CKD requires parallel constraint reduction:
+\begin{itemize}
+    \item IV iron: reduces $C_{\mathrm{Fe}}$ directly
+    \item Anti-inflammatory measures (infection control, optimization of dialysis adequacy): reduces $C_{\mathrm{inflam}}$
+    \item Improved dialysis clearance: reduces $C_{\mathrm{uraemia}}$
+\end{itemize}
+
+AFL prediction: combination therapy (ESA + IV iron + anti-inflammatory) produces superlinear improvement in haemoglobin compared to ESA alone, because it attacks $C_{\mathrm{erythro}}$ from multiple directions simultaneously.
+
+This is consistent with guidelines emphasizing iron optimization before ESA dose escalation.
+
+\textbf{Status: Inferred}
+
+\section{Dialysis: Constraint Oscillation Rather Than Restoration}
+
+Haemodialysis clears uraemic toxins intermittently (typically 3$\times$/week, 4 hours per session). In AFL terms, dialysis creates:
+
+\begin{equation}
+    C_{\mathrm{renal}}(t) = \begin{cases}
+        C_{\mathrm{high}} & \text{between sessions (toxin accumulation)} \\
+        C_{\mathrm{low}} & \text{during/immediately after session (clearance)} \\
+    \end{cases}
+\end{equation}
+
+This is a \textbf{forced constraint oscillation} with amplitude $\Delta C = C_{\mathrm{high}} - C_{\mathrm{low}}$ and period 48--72 hours.
+
+Consequences of oscillation vs continuous constraint:
+\begin{itemize}
+    \item Fluid overload and rapid ultrafiltration create cardiovascular $\Phi$ spikes during dialysis
+    \item Intradialytic hypotension occurs when $\Phi_{\mathrm{cardiac}}$ cannot maintain cardiac output under rapid volume removal
+    \item Post-dialysis fatigue reflects the constraint recovery period after aggressive clearance
+\end{itemize}
+
+AFL prediction: continuous or nocturnal dialysis (longer, gentler sessions) should produce better cardiovascular outcomes than conventional 3$\times$/week dialysis because it minimizes $\Delta C$ (reduces oscillation amplitude). This is consistent with evidence from frequent/nocturnal dialysis trials.
+
+\textbf{Status: Inferred}
+
+\section{Flux--Constraint Regime Summary}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+System & $\Psi_s$ regime & State & Clinical correlate \\
+\midrule
+GFR/renal clearance & $\Psi_s \approx 1$ & Compensated & CKD 1--2 \\
+Phosphate handling & $\Psi_s \to 1^-$ & Early warning & FGF23 elevation (CKD 3) \\
+PTH/bone buffering & $\Psi_s < 1$ & Buffering active & Secondary HPT (CKD 3--4) \\
+Vascular (calcification) & $\Psi_s > C_{\mathrm{buffer}}$ & Overflow & CKD 4--5 \\
+Erythropoiesis (ESA-naive) & $\Psi_s \ll 1$ & Suppressed & Anaemia of CKD \\
+Erythropoiesis (ESA + Fe) & $\Psi_s \to 1$ & Partially restored & Treated anaemia \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+\begin{enumerate}
+    \item \textbf{FGF23 as early $\Psi_s$ sensor}: In prospective cohorts, FGF23 should begin rising when $\mathrm{GFR} \cdot \mathrm{[serum\ phosphate]}$ (a proxy for $\Phi_{\mathrm{phosphate}}$) crosses a threshold even before serum phosphate is elevated.
+    \item \textbf{Bone PTH optimum}: Outcomes data should show a U-shaped relationship between PTH level and bone fracture risk, with worst outcomes at both extremes (over-suppressed and over-stimulated PTH).
+    \item \textbf{Calcification threshold}: Vascular calcification incidence should accelerate non-linearly when serum phosphate $\times$ calcium product exceeds a critical value (the constraint overflow threshold).
+    \item \textbf{ESA resistance predictor}: Pre-treatment hepcidin level (a proxy for $C_{\mathrm{Fe}}$) should be the strongest individual predictor of ESA dose requirement.
+    \item \textbf{Dialysis oscillation harm}: Intradialytic weight gain (a proxy for $\Delta C$ between sessions) should correlate with cardiovascular mortality independently of mean fluid volume.
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL cascade model would be falsified if:
+\begin{itemize}
+    \item FGF23 rises after, not before, serum phosphate in prospective CKD cohorts.
+    \item Bone outcomes in CKD are unrelated to PTH level (no U-shaped curve).
+    \item Vascular calcification occurs equally across all CKD stages without threshold behaviour.
+    \item ESA resistance is uncorrelated with iron and inflammatory markers.
+    \item Frequent/nocturnal dialysis produces no cardiovascular benefit over conventional dialysis.
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Limitations}
+
+\begin{itemize}
+    \item CKD cascade involves dozens of mediators collapsed into four scalar constraints here.
+    \item Parameter values ($\alpha$, $\beta$) are not identified from patient data.
+    \item Diabetic CKD (the most common cause) involves simultaneous metabolic constraint accumulation (AFL MED-2) superimposed on renal constraint --- a two-axis AFL problem not fully modelled here.
+    \item Genetic CKD variants (ADPKD, Alport syndrome) may have constraint profiles distinct from the glomerulopathic model presented.
+\end{itemize}
+
+\textbf{Status: Open}
+
+
+\section{Deep Analysis: Stem Cell Systems and Erythropoiesis Failure as $C$ Drift}
+\subsection{Regeneration as controlled $C$ reduction}
+
+Stem cells maintain low $C_{\mathrm{regen}}$ as a latent capacity reserve. Regeneration represents controlled release of the biological flux that low $C$ permits:
+\begin{equation}
+J_{\mathrm{regen}} = J_{\mathrm{activ}} + J_{\mathrm{diff}} + J_{\mathrm{integr}} \leq \frac{\nabla X_{\mathrm{regen}}}{C_{\mathrm{regen}}(\Om, t)}
+\end{equation}
+where $C_{\mathrm{regen}}$ depends on $C_E$ (energetic state), $E_p$ (epigenetic flexibility, i.e., the ease with which $C$ can be reorganized for new lineage programmes), and $B_e$ (bioelectric patterning competence for tissue integration).
+
+\subsection{Age-related regenerative failure as progressive $C$ elevation}
+
+The slow dynamics equation (from \citep{MujjabiPartI2026}) governs the progressive $C$ drift with age:
+\begin{equation}
+\frac{dC_i}{dt} = -\lambda_i J + R_i < 0 \implies C_i \text{ rises progressively}
+\end{equation}
+Three parallel $C$ elevations reduce regenerative capacity: $C_E$ rises (mitochondrial efficiency declines through accumulated mtDNA mutations); $E_p$ rigidifies (epigenetic remodelling capacity is reduced, making $C$ harder to reorganize for new lineage programmes); and $B_e$ loses precision (bioelectric tissue patterning becomes less coherent, raising $C_T$ for tissue integration processes).
+
+CDFT predicts that age-related regenerative failure is not a fixed biological limit but a progressive adaptive medium stiffening --- elevated $C$ throughout the regenerative medium --- that can be partially reversed by interventions reducing $C$: mitochondrial biogenesis induction (reduces $C_E$) \citep{holloszy1967}, epigenetic reprogramming (reduces $E_p$-dependent $C$), and bioelectric pattern restoration (reduces $C_T$ for tissue integration).
+
+%% ────────────────────────────────────────────────────────────
+
+
+\subsection{Biological Translation of the Mujjabi Vacuum Memory Law \cite{MujjabiPartI2026}}
+Part I defines the Mujjabi Vacuum Memory Law \cite{MujjabiPartI2026} as the persistence of local constraint history with a finite recovery time $\tau_M$. Biologically, this is Structural Drift. When disease stress (high $\Phi$) elevates $C$, an impaired relaxation factor $\beta \to 0$ causes the constraint to persist long after the stress is removed. This memory mechanism locks tissues into chronic, irreversible states (e.g., Fibrosis, Type 2 Diabetes, Chronic Kidney Disease).
+
+
+
+\section{Translational Hypothesis: The AFL Renal Protocol for Anaemia and MBD}
+Current care for CKD-MBD and renal anaemia already recognizes that downstream symptoms are coupled to renal clearance, inflammation, mineral balance, marrow response, and cardiovascular risk. AFL restates this as a multi-constraint problem: increasing erythropoietic or mineral flux in a high-$C_{\mathrm{renal}}$ state may produce diminishing returns or expose a second bottleneck unless iron availability, inflammatory blockade, phosphate balance, vascular reserve, and dialysis adequacy are considered together.
+
+The framework therefore proposes an axis-matching rule rather than a prohibition: identify whether the limiting problem is insufficient drive, high constraint, poor responsiveness, or retained structural memory before escalating any single input. That proposal must remain subordinate to nephrology evidence, safety monitoring, and guideline-based care.
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3.0cm}p{3.5cm}p{4.5cm}}
+\toprule
+Symbol & Renal/erythropoietic meaning & Clinical proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Filtration flux / erythropoietic drive & eGFR, endogenous EPO level, reticulocyte count & If flux cannot be separated from constraint without controlled conditions, mapping is not testable \\
+$C$ & Renal constraint / erythropoietic constraint & 1/eGFR, HOMA-IR, CRP, ferritin/hepcidin, ESA resistance index & If ESA resistance is fully explained by iron alone, multi-axis $C$ adds nothing \\
+$M_s$ & Renal memory / glomerulosclerosis & Kidney fibrosis score, chronically elevated FGF23 & If $M_s$ reverses fully after AKI resolution, memory framing is unnecessary for that domain \\
+$\Psi_s$ & Renal/erythropoietic operating state & Computed from eGFR and creatinine production ratio & If trajectory matches eGFR slope alone, AFL adds no stratification \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+\begin{itemize}
+    \item \textbf{KDIGO 2024 CKD Guideline}: eGFR staging (G1--G5), albuminuria (A1--A3), CKD progression risk, CKD-MBD (FGF23, phosphate, PTH, calcium), cardiovascular risk, anaemia management.
+    \item ESA prescribing: haemoglobin targets, iron repletion, ESA resistance investigation — governed by clinical guidelines, not AFL framing.
+    \item Dialysis: modality selection, adequacy targets, fluid management — specialist decisions not informed by AFL toy outputs.
+    \item When AFL framing differs from KDIGO 2024 or ESA prescribing guidelines, the guideline takes precedence.
+\end{itemize}
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework. ESA dosing, iron therapy, dialysis regimen, mineral management (phosphate binders, cinacalcet, vitamin D), and CKD progression monitoring are specialist decisions governed by KDIGO 2024 and institutional protocols. AFL does not modify any of these decisions.
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_06.py}. Outputs in \texttt{outputs/paper\_06/}: \texttt{ckd\_cascade.csv}, \texttt{dialysis\_oscillation.csv}, \texttt{erythropoiesis\_constraints.csv}, \texttt{renal\_constraint\_cascade.png}, \texttt{summary.json}. All outputs are toy diagnostics anchored to KDIGO 2024 staging language.
+
+\section{Conclusion}
+
+CKD is a renal constraint cascade. The AFL framework unifies nephron loss, FGF23 compensation, CKD-MBD, anaemia of CKD, ESA resistance, and dialysis oscillation under a single constraint-propagation equation. Each stage follows from the AFL master equation. Multi-axis therapy prediction is a research hypothesis requiring longitudinal cohort validation anchored to KDIGO 2024 endpoints.
+
+\textbf{Status: Inferred}
+
+\section{Reproducibility Note}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_06.py} (NumPy + matplotlib; runtime $< 2$\,s).
+
+\textbf{Status: Derived}
+\clearpage
+\section*{Adaptive Flux Limitation in Erythropoiesis: Anaemia of Chronic Disease, ESA Resistance, and Multi-Constraint Haematopoietic Failure}
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

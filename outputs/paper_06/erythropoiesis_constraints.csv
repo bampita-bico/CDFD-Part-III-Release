@@ -1,0 +1,8 @@
+scenario,S_EPO,C_Fe,C_inflam,C_uraemia,C_marrow,C_total,final_psi,eri_proxy,regime,claim_status
+G1 healthy,2.0,0.5,0.2,0.3,0.5,1.5,10000.0,2.0114,overload,candidate ESA resistance proxy — not validated
+G2 CKD,1.8,0.8,0.5,0.6,0.6,2.5,10000.0,1.7792,overload,candidate ESA resistance proxy — not validated
+G3 CKD,1.4,1.2,1.0,1.0,0.8,4.0,0.1409,1.9338,constrained,candidate ESA resistance proxy — not validated
+G4 CKD,1.0,1.8,1.5,1.5,1.0,5.8,0.0162,3.9179,constrained,candidate ESA resistance proxy — not validated
+G5/dialysis,0.6,2.5,2.0,2.0,1.2,7.7,0.0025,8.6547,constrained,candidate ESA resistance proxy — not validated
+G5 + ESA,3.0,2.5,2.0,2.0,1.2,7.7,0.0725,1.729,constrained,candidate ESA resistance proxy — not validated
+G5 multi-Rx,3.0,1.0,0.8,1.8,0.9,4.5,3.4255,1.0158,overload,candidate ESA resistance proxy — not validated

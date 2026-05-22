@@ -1,0 +1,405 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-17: Adaptive Flux Limitation in Therapy and Medical Synthesis:\\ A CDFD Model for Testable Intervention Hypotheses}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Therapy and Medical Synthesis: A CDFD Model for Testable Intervention Hypotheses}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Conventional pharmacology targets specific molecules: receptor agonists increase flux, antagonists reduce it, enzyme inhibitors raise constraint at a specific step. The AFL framework provides a \textbf{meta-level intervention taxonomy} that classifies all treatments by their effect on the flux-constraint balance ($\Psi_s = (\Phi/C) \cdot S \cdot M_s$) rather than their molecular target.
+
+Three AFL intervention strategies exist: (1) \textbf{Flux enhancement} for $\Psi_s < 1$ states (under-delivery, under-function); (2) \textbf{Constraint reduction} for $C \uparrow$ states (resistant, fibrotic, inflammatory diseases); (3) \textbf{Flux limitation} for $\Psi_s > 1$ states (overload, toxicity, cancer). A fourth strategy --- \textbf{System stabilization} --- is applicable when $\Psi_s$ is oscillating (unstable) rather than statically displaced.
+
+We demonstrate that this taxonomy explains why certain treatment combinations are synergistic (they target different AFL axes), why monotherapy fails in multi-constraint diseases (only one axis targeted), and how dietary, lifestyle, and pharmacological interventions can be systematically designed for specific $\Psi_s$ states.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This synthesis paper gathers the therapeutic implications of the series while keeping a strict boundary: AFL can organize hypotheses about intervention axes, but it is not a treatment protocol. The four broad axes are increasing useful flow, reducing pathological constraint, improving responsiveness, and clearing maladaptive memory.
+
+The clinical value is in asking better questions. Is a patient under-driven, over-constrained, poorly responsive, or locked by history? Is a drug pushing the same axis as another drug, or does it relieve a different bottleneck? Is a plateau a sign of treatment failure, or the moment when the next constraint became dominant?
+
+The paper should be read as a research synthesis. Future work would need prospective studies, safety analysis, clinical endpoints, and comparison with standard care before any algorithmic use.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+Therapy is the deliberate alteration of a living system's operating state. A treatment may increase a missing flow, reduce a harmful driver, lower a pathological constraint, raise a protective constraint, restore responsiveness, or help a tissue shed maladaptive memory. The same drug can be useful or harmful depending on which axis is limiting the patient at that time.
+
+AFL offers a synthesis language for that problem. It asks whether the target state is under-delivery, overload, poor responsiveness, oscillation, or memory lock. It then asks whether an intervention acts on $\Phi$, $C$, $S$, $M_s$, or the recovery terms that move the system back toward stability. This is not a prescribing algorithm. It is a way to classify why combinations work, why monotherapy plateaus, and why an apparently logical escalation can fail.
+
+The medical standard is unchanged. Treatment decisions require diagnosis, staging, contraindication review, evidence hierarchy, patient preferences, specialist judgement, and monitoring for harm. AFL is useful only if it generates testable hypotheses about intervention timing, synergy, plateau interpretation, and recovery trajectories.
+
+This final paper therefore closes Part III as a research program rather than a therapeutic manifesto. It connects metabolism, CKD, inflammation, oncology, pharmacology, bioelectric regulation, biomarkers, and systems medicine under one question: which constraint axis is actually governing recovery?
+
+\textbf{Status: Derived}
+
+\begin{equation}
+    \text{Treatment goal:} \quad \Psi_{s,\mathrm{target}} \approx 1
+\end{equation}
+
+\begin{itemize}
+    \item If $\Psi_s < 1$ (under-delivered): increase $\Phi$ or decrease the limiting $C$.
+    \item If $\Psi_s > 1$ (overloaded): reduce the harmful flow, redistribute load, or relieve the compartment-specific constraint that traps flux.
+    \item If $\Psi_s$ oscillates: stabilize the dynamical system by reducing excessive gain or improving recovery.
+\end{itemize}
+
+\section{Strategy 1: Flux Enhancement ($\Psi_s < 1$ States)}
+
+\subsection{Clinical contexts}
+
+$\Psi_s < 1$ arises when physiological function is inadequate for demand:
+\begin{itemize}
+    \item Heart failure: $\Psi_{s,\mathrm{cardiac}} = \mathrm{CO}/\mathrm{SVR} < 1$ --- insufficient cardiac output
+    \item Hypothyroidism: $\Phi_{\mathrm{T3}} \downarrow$ --- insufficient metabolic flux
+    \item Type 1 diabetes: $\Phi_{\mathrm{insulin}} = 0$ --- no insulin flux
+    \item Anaemia (EPO deficiency): $\Phi_{\mathrm{EPO}} \downarrow$ --- insufficient erythropoietic drive
+    \item Adrenal insufficiency: $\Phi_{\mathrm{cortisol}} \downarrow$ --- insufficient stress flux
+\end{itemize}
+
+\subsection{Flux enhancement interventions}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Intervention & $\Phi$ increased & Mechanism \\
+\midrule
+Insulin replacement (T1DM) & $\Phi_{\mathrm{insulin}}$ & Direct flux restoration \\
+EPO/darbepoetin & $\Phi_{\mathrm{EPO}}$ & Signal amplification \\
+Levothyroxine & $\Phi_{\mathrm{T3}}$ & Hormone replacement \\
+Inotropes (dobutamine) & $\Phi_{\mathrm{cardiac}}$ & Myocardial flux drive \\
+Vasopressors (in low SVR states) & $\Phi_{\mathrm{perfusion}}$ & Vascular pressure restoration \\
+Blood transfusion & $\Phi_{\mathrm{O2}}$ & Direct flux delivery \\
+IV iron & $\Phi_{\mathrm{Fe}}$ & Removes constraint on erythropoiesis \\
+Corticosteroid replacement & $\Phi_{\mathrm{cortisol}}$ & Adrenal axis flux \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Derived}
+
+\section{Strategy 2: Constraint Reduction ($C \uparrow$ States)}
+
+\subsection{Clinical contexts}
+
+$C \uparrow$ arises when the system's resistance to normal flux has increased pathologically:
+\begin{itemize}
+    \item insulin resistance (chronic $C_E$ upregulation) (T2DM): $C_{\mathrm{met}} \uparrow$
+    \item CKD: $C_{\mathrm{renal}} \uparrow$
+    \item Hypertension: $C_{\mathrm{vascular}} \uparrow$ (elevated SVR)
+    \item Heart failure (HFpEF): $C_{\mathrm{myocardial}} \uparrow$ (diastolic stiffness)
+    \item Chronic inflammation (system-wide constraint $C$ amplification): $C_{\mathrm{system}} \uparrow$
+    \item COPD: $C_{\mathrm{airway}} \uparrow$ (airflow resistance)
+    \item Fibrotic disease: $C_{\mathrm{ECM}} \uparrow$
+\end{itemize}
+
+\subsection{Constraint reduction interventions}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Intervention & $C$ reduced & Mechanism \\
+\midrule
+ACE inhibitors / ARBs & $C_{\mathrm{vascular}}$ & Vasodilation, RAAS blockade \\
+Metformin & $C_{\mathrm{met}}$ (partial) & AMPK activation, reduces hepatic glucose output \\
+GLP-1 agonists & $C_{\mathrm{met}}$, $C_{\mathrm{liver}}$ & Reduces liver fat, appetite, gastric emptying \\
+Anti-inflammatory agents & $C_{\mathrm{inflam}}$ & Removes inflammation (system-wide constraint $C$ amplification)-imposed constraint \\
+Bronchodilators & $C_{\mathrm{airway}}$ & Reduces airflow resistance \\
+Diuretics (in oedema) & $C_{\mathrm{preload}}$ & Reduces ventricular wall stress \\
+Antifibrotic agents (pirfenidone) & $C_{\mathrm{ECM}}$ & Reduces fibrotic constraint progression \\
+Calcimimetics (in CKD) & $C_{\mathrm{PTH}}$ & Reduces PTH-driven bone constraint \\
+Iron chelation (overload) & $C_{\mathrm{Fe-toxicity}}$ & Removes iron-mediated constraint \\
+SGLT2 inhibitors & $C_{\mathrm{glucose-load}}$ & Reduces glycaemic constraint via glycosuria \\
+Statins & $C_{\mathrm{vascular}}$ (anti-inflammatory) & Lowers vascular constraint \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Derived}
+
+\section{Strategy 3: Flux Limitation ($\Psi_s > 1$ States)}
+
+\subsection{Clinical contexts}
+
+$\Psi_s > 1$ arises when flux exceeds the system's capacity to handle it safely:
+\begin{itemize}
+    \item Hypertensive crisis: $\Phi_{\mathrm{pressure}} / C_{\mathrm{vascular}} \gg 1$
+    \item Hyperglycaemia: $\Phi_{\mathrm{glucose}} > C_{\mathrm{met}}$ (T2DM decompensation)
+    \item Fluid overload (pulmonary oedema): $\Phi_{\mathrm{fluid}} > C_{\mathrm{ventricular}}$
+    \item Toxicity (drug overdose): $\Phi_{\mathrm{toxin}} > C_{\mathrm{hepatic/renal}}$
+    \item Cytokine storm: $J_{\mathrm{immune}} \gg C_{\mathrm{tissue}}$
+    \item Cancer (proliferative overload): $\Phi_{\mathrm{growth}} / C_{\mathrm{cell}} \gg 1$
+\end{itemize}
+
+\subsection{Flux limitation interventions}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Intervention & $\Phi$ limited & Mechanism \\
+\midrule
+Antihypertensives & $\Phi_{\mathrm{BP}}$ & Reduces vascular flux pressure \\
+Dietary restriction / fasting & $\Phi_{\mathrm{glucose}}$, $\Phi_{\mathrm{lipid}}$ & Reduces substrate flux input \\
+Dialysis & $\Phi_{\mathrm{toxins}} \downarrow$ (clearance $\uparrow$) & Removes accumulated flux products \\
+Antidotes / activated charcoal & $\Phi_{\mathrm{toxin}}$ (absorption) & Prevents flux entry \\
+Diuretics (in overload) & $\Phi_{\mathrm{fluid}}$ & Removes excess volume flux \\
+Chemotherapy (cytostatic) & $\Phi_{\mathrm{proliferation}}$ & Limits tumour growth flux \\
+IL-6 blockers (cytokine storm) & $\Phi_{\mathrm{cytokine}}$ & Limits immune flux signal \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Derived}
+
+\section{Strategy 4: System Stabilization (Oscillating $\Psi_s$)}
+
+Some disease states feature oscillating $\Psi_s$ rather than sustained displacement:
+\begin{itemize}
+    \item Cardiac arrhythmia: $\Psi_{s,\mathrm{cardiac}}$ oscillates due to electrical constraint instability
+    \item Epilepsy: $\Psi_{s,\mathrm{neural}}$ oscillates between excitatory ($\Psi_s > 1$) and post-ictal suppression ($\Psi_s < 1$) states
+    \item Intermittent claudication: $\Psi_{s,\mathrm{peripheral}}$ oscillates with activity
+    \item Hypoglycaemia episodes in T1DM: $\Psi_{s,\mathrm{met}}$ oscillates due to insulin timing
+\end{itemize}
+
+Stabilization interventions reduce the amplitude ($\Delta\Psi_s$) of oscillation rather than shifting the mean:
+\begin{itemize}
+    \item Anti-arrhythmics: increase $C_{\mathrm{cardiac-electrical}}$ stability
+    \item Anti-epileptics: raise the neural firing threshold ($C_{\mathrm{neural}} \uparrow$ or reduce $\Phi_{\mathrm{excitatory}}$)
+    \item Continuous glucose monitoring + closed-loop insulin: reduces glycaemic oscillation amplitude
+\end{itemize}
+
+\textbf{Status: Inferred}
+
+\section{The AFL Treatment Algorithm}
+
+\begin{verbatim}
+Step 1: Measure Psi (or best available proxy)
+Step 2: Identify dominant constraint(s) (elevated C markers)
+Step 3: Identify flux state (reduced or elevated Phi markers)
+Step 4: Select strategy:
+    if Psi < 1 AND C is normal: -> flux enhancement
+    if Psi < 1 AND C is elevated: -> constraint reduction FIRST,
+                                      then consider flux enhancement
+    if Psi > 1: -> flux limitation
+    if Psi oscillates: -> stabilization
+Step 5: Apply combination therapy targeting multiple axes
+Step 6: Monitor Psi trajectory (not just individual biomarkers)
+Step 7: Adjust as Psi evolves
+\end{verbatim}
+
+\textbf{Why Step 4 matters}: In CKD anaemia, Psi$_{\mathrm{erythro}} < 1$ but $C_{\mathrm{iron}} + C_{\mathrm{inflam}}$ are elevated. Flux enhancement (ESA alone) fails because $C$ remains high. The correct AFL strategy is constraint reduction first (IV iron, anti-inflammatory) then flux enhancement (ESA). This is precisely what evidence-based guidelines now recommend.
+
+\textbf{Status: Derived}
+
+\section{Synergy Prediction from AFL Axes}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Drug A & Drug B & AFL axes & Prediction \\
+\midrule
+ESA & IV iron & $\Phi \uparrow$ + $C_{\mathrm{Fe}} \downarrow$ & Synergistic (dual axis) \\
+Metformin & Exercise & $C_{\mathrm{met}} \downarrow$ + $\beta_{\mathrm{met}} \uparrow$ & Synergistic (different parameters) \\
+GLP-1 agonist & SGLT2i & $C_{\mathrm{liver}} \downarrow$ + $\Phi_{\mathrm{glucose}} \downarrow$ & Synergistic (complementary) \\
+ACE inhibitor & ARB & $C_{\mathrm{vascular}} \downarrow$ (same axis) & Additive (not synergistic; same axis) \\
+Platinum chemo & Anti-PD1 & $C_{\mathrm{tumour}} \uparrow$ + $C_{\mathrm{immune} \to \mathrm{tumour}} \downarrow$ & Synergistic (dual axis) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+AFL predicts: combinations that target different AFL axes are synergistic; combinations targeting the same axis are additive at best.
+
+\textbf{Status: Inferred}
+
+\section{Fasting and OMAD as the Universal AFL Reset}
+
+Fasting is a pure constraint recovery intervention: it reduces $\Phi_{\mathrm{metabolic}}$ to near-zero, allowing $\beta_{\mathrm{met}} C_{\mathrm{met}}$ to dominate Equation $\dot{C} = \alpha\Phi - \beta C$, driving $C_{\mathrm{met}} \to 0$ exponentially.
+
+Fasting benefits documented across diverse conditions:
+\begin{itemize}
+    \item T2DM: HOMA-IR improvement (metabolic $C \downarrow$)
+    \item Autoimmunity: reduced inflammatory markers ($C_{\mathrm{immune}} \downarrow$)
+    \item Cancer (adjunct): improved chemotherapy sensitivity (reduces tumour ATP flux)
+    \item Neurological: improved cognitive function (reduces neuroinflammatory $C$)
+    \item CKD (mild): reduces uraemic toxin accumulation between meals
+\end{itemize}
+
+The AFL interpretation: fasting works broadly because it interrupts $\Phi$-driven constraint accumulation across \textit{all} organ systems simultaneously, allowing the universal $\beta C$ recovery term to act everywhere at once.
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+\begin{enumerate}
+    \item Drug combinations targeting different AFL axes should show synergistic (supraadditive) effect in clinical trials; same-axis combinations should show only additive effects.
+    \item Pre-treatment $\Psi_s$ profiling should predict individual drug response: patients with $C$-dominant disease state should respond better to constraint-reduction drugs; those with $\Phi$-deficit should respond better to flux-enhancement.
+    \item Fasting duration should correlate with multi-system $C$ reduction independently of caloric restriction, supporting therapeutic fasting protocols in non-metabolic diseases.
+    \item The AFL treatment algorithm (Step 1--7) applied to CKD anaemia should outperform empirical ESA dosing titration for time-to-target haemoglobin.
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL therapeutic framework would be falsified if: cross-axis drug combinations are not more synergistic than same-axis combinations; pre-treatment $\Psi_s$ profile does not predict drug class response; fasting shows no multi-system benefit in well-controlled clinical trials; or the AFL treatment algorithm underperforms empirical clinical titration.
+
+\textbf{Status: Open}
+
+
+\section{Deep Analysis: Derivation of the Universal Saturation Law and Bridge Function Family}
+\noindent\textit{Detailed derivation placeholder retained for future expansion in this preprint release.}
+
+
+\subsection{Biological Translation of Mujjabi Hysteresis and Alpha-Jitter Tests}
+To empirically validate AFL in clinical settings, we map the Mujjabi Hysteresis Test and Alpha-Jitter Test to therapeutic outcomes. Hysteresis appears as disease states requiring significantly lower $\Phi$ to maintain the pathology than was required to trigger it. The Alpha-Jitter equates to residual structural shifts in $C$ driven by high-frequency flux intensity spikes, measurable via continuous biomarker monitoring.
+
+
+\section{Biological Mujjabi Laws \& Discoveries}
+
+\subsection{The Mujjabi Cycling-Retention Test \cite{MujjabiPartII2026} (Biology)}
+Translating the Part II environmental fluctuation theorems, the \textbf{Mujjabi Cycling-Retention Test \cite{MujjabiPartII2026}} proposes that biological resilience depends not only on peak steady-state throughput, but also on retention or clearance of structural memory ($M_s$) across repeated stress-recovery cycles.
+
+\subsubsection{Runtime Diagnostic: Cycling and Recovery}
+Release-local runtime diagnostics compare cyclic and chronic toy loads. The useful result is qualitative: recovery windows can change retained memory and the operating ratio. The diagnostic does not prove that any fasting, exercise, or treatment schedule is required for health.
+
+
+
+\section{Translational Medicine: The "AFL Intervention" Algorithm}
+To translate these model hypotheses into researchable clinical workflows, we outline a therapeutic decision tree based on the proposed operating ratio $\Psi_s$:
+
+\begin{itemize}
+    \item \textbf{State A (Drive Overload):} If $\Psi_s > 1$ due to excessive input $\Phi$ (e.g., hypercaloric feeding), the strict intervention axis is \textit{Deprescribing} or \textit{Fasting} (Reduce $\Phi$). Escalating pharmacological clearance forces the system into higher constraint.
+    \item \textbf{State B (Constraint Saturation):} If $\Psi_s > 1$ due to high constraint $C$ with normal $\Phi$ (e.g., sarcopenia, heart failure), the intervention axis is \textit{Hormetic Pulsing}. Intermittent, controlled spikes in $\Phi$ (Exercise) must be applied to stimulate $\beta$ relaxation and expand the $C$ capacity boundaries.
+    \item \textbf{State C (Pharmacological Masking):} A formal warning: Any intervention that suppresses a symptomatic readout of $\Phi$ without addressing the underlying $M_s$ structural drift violates the Mujjabi Capacity Law and will inevitably trigger the Flux-Shunting cascade.
+\end{itemize}
+
+\section{Clinical Mapping of Symbols}
+
+\begin{table}[h!]
+\centering
+\caption{AFL symbol map for therapy and intervention systems.}
+\begin{tabular}{llll}
+\toprule
+\textbf{Symbol} & \textbf{Therapeutic meaning} & \textbf{Measurable proxy} & \textbf{Invalidation condition} \\
+\midrule
+$\Phi$ & Physiological drive targeted by intervention & Disease-specific function metric (GFR, VO2, FEV1) & If baseline flux does not predict response \\
+$C$ & Therapeutic constraint / pathway resistance & Biomarker of disease-specific barrier (e.g., fibrosis, resistance) & If constraint is intervention-independent \\
+$M_s$ & Structural memory / chronicity & Duration of disease, epigenetic load, tissue remodelling markers & If duration does not affect intervention response \\
+$\Psi_s$ & Therapeutic operating ratio & Clinical composite score, response index & If $\Psi_s$ state does not predict intervention class response \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Known Medicine Baseline}
+
+The following guidelines and frameworks take absolute clinical precedence over any AFL therapy taxonomy:
+\begin{itemize}
+  \item \textbf{National Institute for Health and Care Excellence (NICE) Clinical Guidelines}: Evidence-based treatment guidance for each disease domain are mandatory; AFL intervention-axis classification is a supplementary conceptual layer only.
+  \item \textbf{FDA Drug Approval and Labelling}: All pharmacological interventions must follow approved indications and labelling; AFL taxonomy does not constitute prescribing authority.
+  \item \textbf{ADA Standards of Medical Care in Diabetes (2026)}: Metabolic intervention sequencing follows ADA guidelines; AFL metabolic-flux framing is a hypothesis for future alignment only.
+  \item \textbf{KDIGO 2024 CKD Guidelines}: Renal intervention management follows KDIGO; AFL renal-constraint framing is a modelling hypothesis.
+  \item \textbf{Surviving Sepsis Campaign (SSC) 2021}: Immune/inflammatory intervention follows SSC bundles; AFL immune-throughput framing is supplementary.
+\end{itemize}
+
+\textbf{No AFL therapy output should guide drug selection, combination therapy, dietary intervention, or lifestyle plan without guideline-concordant clinical assessment, specialist oversight, and patient-specific safety evaluation.}
+
+\section{Intervention-Axis Map}
+
+The AFL therapy taxonomy maps interventions to the axis they primarily target, without implying that axis-mapping alone is sufficient for prescribing. The four candidate intervention axes are:
+
+\begin{enumerate}
+  \item \textbf{Flux enhancement}: Candidate when $\Psi_s < 1$ due to under-delivery (e.g., EPO supplementation for erythropoietic deficit, insulin in absolute deficiency). Requires confirmation that constraint is not the limiting factor.
+  \item \textbf{Constraint reduction}: Candidate when $C$ is the primary driver (e.g., SGLT2i for renal-tubular constraint, anti-inflammatory biologics for immune constraint). Requires assessment of whether flux can safely increase.
+  \item \textbf{Flux limitation}: Candidate when $\Psi_s > 1$ due to drive overload (e.g., caloric restriction, beta-blockade in tachyarrhythmia). Requires ruling out compensatory over-drive.
+  \item \textbf{System stabilisation}: Candidate when $\Psi_s$ oscillates (e.g., pacemaker therapy, mood-stabiliser, anticonvulsant). Requires biomarker evidence of oscillation rather than static displacement.
+\end{enumerate}
+
+All four axes are candidate hypotheses. Synergy is predicted when a combination targets different axes; empirical validation is required before clinical use.
+
+\section{Experiments and Future Validation}
+
+\begin{enumerate}
+  \item \textbf{Step 1 --- Mathematical consistency}: Verify intervention-axis toy simulations and cycling-recovery diagnostics (complete --- \texttt{AFL\_Biological\_Mujjabi\_Tests.py}, outputs in \texttt{outputs/}).
+  \item \textbf{Step 2 --- Synthetic perturbation}: Reproduce known drug synergy curves (e.g., RAAS + SGLT2i in CKD) as AFL cross-axis combinations; test whether same-axis combinations show predicted redundancy.
+  \item \textbf{Step 3 --- Retrospective dataset}: Apply AFL axis classification to published combination therapy RCT data; test whether cross-axis combinations show superior outcomes to same-axis combinations across disease domains.
+  \item \textbf{Step 4 --- Prospective observational}: Track $\Psi_s$ proxies before and after intervention in a multimorbidity cohort; test whether baseline AFL state predicts treatment response class.
+  \item \textbf{Step 5 --- Pilot intervention study}: AFL-guided combination selection versus empirical clinical selection in a randomised pilot; primary endpoint: time to therapeutic target, adverse events, axis-orthogonality score.
+  \item \textbf{Step 6 --- Regulatory alignment}: Engage with FDA Project Optimus and NICE health-technology-assessment frameworks to define the evidence standard required for AFL-informed prescribing tools.
+\end{enumerate}
+
+Validation ladder status: Step 1 complete; Steps 2--6 open.
+
+\section{Clinical Safety Boundary}
+
+This paper provides a mathematical taxonomy of intervention axes. It contains no prescribing instructions, drug recommendations, dietary plans, or dosing guidance. The ``AFL Intervention Algorithm'' sections in this paper describe candidate research hypotheses, not clinical protocols. Specifically:
+\begin{itemize}
+  \item \textbf{State A (Drive Overload)} suggestions (fasting, deprescribing) are candidate research hypotheses; actual de-escalation decisions require clinical assessment of competing risks and guideline review.
+  \item \textbf{State B (Constraint Saturation)} suggestions (hormetic pulsing, exercise) are candidate research hypotheses; actual exercise plans require cardiac, renal, and musculoskeletal safety assessment.
+  \item \textbf{State C (Pharmacological Masking)} is a theoretical warning concept; it does not authorise medication discontinuation without specialist oversight.
+\end{itemize}
+
+\section{Runtime Diagnostic}
+
+The release-local therapy synthesis script is \texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py}. It simulates intervention-axis comparisons, cycling-recovery diagnostics, and combination-synergy toy scenarios, producing trajectory plots and a \texttt{summary.json} in \texttt{outputs/}.
+
+All outputs carry the label ``toy diagnostic --- not a clinical recommendation.''
+
+\section{Conclusion}
+
+AFL provides a meta-level intervention taxonomy that classifies treatments by their effect on flux--constraint balance rather than by molecular target alone. The framework predicts synergy from axis-orthogonality, explains monotherapy failure in multi-constraint disease, and positions dietary, lifestyle, and pharmacological interventions within a single mathematical language.
+
+Clinical translation requires prospective validation across multiple disease domains, regulatory engagement, and subspecialist review before any AFL intervention-axis output influences prescribing. This paper establishes the taxonomy and generates testable hypotheses; clinical validity remains fully open.
+
+\section{Reproducibility Note}
+
+Release-local script: \texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py}. Dependencies: NumPy, matplotlib. Runtime $< 2$\,s. All parameters are set in-file. Outputs written to \texttt{outputs/}. No proprietary data required.
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

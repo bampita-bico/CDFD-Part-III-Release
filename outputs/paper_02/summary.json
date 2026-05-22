@@ -1,0 +1,39 @@
+{
+  "claim_status": "candidate mappings \u2014 not validated measurements",
+  "domains_modelled": 10,
+  "falsification_target": "If domain-specific mechanisms require fundamentally different constraint dynamics (not captured by dC/dt = alpha*Phi - beta*C), the universal skeleton breaks down for that domain.",
+  "paper": "02",
+  "results": [
+    {
+      "Metabolic": 10000.0
+    },
+    {
+      "Renal": 10000.0
+    },
+    {
+      "Immune": 10000.0
+    },
+    {
+      "Oncologic": 10000.0
+    },
+    {
+      "Neurologic": 10000.0
+    },
+    {
+      "Developmental": 10000.0
+    },
+    {
+      "Microbial": 10000.0
+    },
+    {
+      "Cardiovascular": 10000.0
+    },
+    {
+      "Hepatic": 10000.0
+    },
+    {
+      "Pulmonary": 10000.0
+    }
+  ],
+  "title": "Adaptive Flux Limitation Across Living Domains"
+}

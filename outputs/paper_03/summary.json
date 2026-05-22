@@ -1,0 +1,16 @@
+{
+  "claim_status": "toy diagnostic \u2014 candidate validation target",
+  "falsification": "If organ constraint coupling is statistically absent in ICU time-series after controlling for shared haemodynamic drivers, the transfer model adds no value.",
+  "paper": "03",
+  "scenarios": [
+    "sepsis_cascade",
+    "cardiorenal_transfer",
+    "post_icu_recovery"
+  ],
+  "title": "Adaptive Flux Limitation in Clinical Translation",
+  "validation_targets": [
+    "Longitudinal ICU time-series: lactate, vasopressor dose, creatinine, urine output",
+    "Post-ICU sequelae cohorts: PICS, persistent Psi elevation as M_s proxy",
+    "Cardiorenal registry data: eGFR decline vs cardiac output drop correlation"
+  ]
+}

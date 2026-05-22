@@ -1,0 +1,363 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-16: Adaptive Flux Limitation in Biomarkers and Clinical Readouts:\\ A CDFD Model for Measuring Flux, Constraint, Recovery, and Validity}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Biomarkers and Clinical Readouts: A CDFD Model for Measuring Flux, Constraint, Recovery, and Validity}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Clinical medicine generates vast quantities of biomarker data but interprets it primarily through static threshold comparisons: ``is this value above or below normal?'' The AFL framework offers a fundamentally different interpretation: biomarkers should be read as flux ($\Phi$), constraint ($C$), or system ratio ($\Psi_s$) signals, and disease is best characterized by their dynamic relationships rather than isolated values.
+
+We develop a comprehensive AFL biomarker framework that maps commonly available laboratory tests to their AFL roles, defines measurable $\Psi_s$ proxies for key organ systems, introduces the principle that early disease is detectable as hidden constraint accumulation before frank decompensation, and proposes dynamic testing protocols that reveal flux-constraint relationships invisible to static sampling.
+
+Key results: (1) most existing biomarkers are either pure flux markers (lactate, creatinine clearance, urine output), pure constraint markers (fasting insulin, CRP, ferritin/hepcidin, BNP), or mixed; (2) $\Psi_s$ proxies can be constructed from available pairs (e.g., $\Psi_{s,\mathrm{met}} \approx \mathrm{VO}_2/\mathrm{lactate}$, $\Psi_{s,\mathrm{renal}} \approx \mathrm{GFR}/\mathrm{creatinine}$, $\Psi_{s,\mathrm{cardiac}} \approx \mathrm{CO}/\mathrm{SVR}$); (3) the AFL trajectory (rising $C$ before $\Phi$ falls) predicts that constraint markers will abnormalize before functional markers in early disease.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper asks how AFL could ever touch real medicine: it must map to measurable readouts. A symbol that cannot be connected to data remains a metaphor. The paper therefore treats routine biomarkers as imperfect proxies for flow, constraint, responsiveness, or memory.
+
+A static value is often less informative than a trajectory. Creatinine, glucose, insulin, CRP, lactate, ferritin, phosphate, haemoglobin, cytokines, imaging, functional tests, and wearable signals may all carry more information when their slopes and recovery rates are tracked. AFL predicts that some diseases announce themselves as rising constraint before overt flux failure.
+
+This is the paper where validation discipline matters most. Any proposed $\Psi_s$ score must be benchmarked against accepted tools, calibrated, externally validated, and assessed for harm before clinical use.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+Clinical medicine is rich in measurements and poor in context when those measurements are read as isolated thresholds. A creatinine value, CRP, lactate, ferritin, insulin, BNP, phosphate, haemoglobin, cytokine panel, or imaging measurement becomes clinically meaningful only when interpreted against production, clearance, reserve, timing, body composition, treatment exposure, and recovery rate.
+
+AFL turns that clinical intuition into a measurement discipline. Some biomarkers are closer to flow $\Phi$, some to constraint $C$, some to responsiveness $S$, and some to retained memory $M_s$. A single value may be less important than the slope, the response to perturbation, or the time needed to return toward baseline. Disease can therefore appear as hidden constraint accumulation before obvious flux failure.
+
+This paper is the strictest validation gate in the series. A proposed $\Psi_s$ proxy is not a biomarker because it has a formula. It becomes useful only after calibration, external validation, comparison with accepted tools, missing-data analysis, bias assessment, and harm analysis. Any clinical readout must improve prediction or explanation beyond standard models.
+
+The framework should fail publicly where it deserves to fail. If static thresholds, existing risk scores, or standard longitudinal models explain the outcome as well as AFL proxies, the AFL score should not be used. The burden of proof belongs to the new notation.
+
+\textbf{Status: Hypothesis}
+
+\section{Biomarker Classification: Flux, Constraint, and $\Psi_s$}
+
+\subsection{Flux Biomarkers ($\Phi$ proxies)}
+
+Flux biomarkers measure the rate of a biological process --- the intensity of throughput:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Biomarker & $\Phi$ measured & System \\
+\midrule
+$\mathrm{VO}_2$ (oxygen consumption) & Oxidative metabolic flux & Whole body \\
+Cardiac output (CO) & Haemodynamic flux & Cardiovascular \\
+GFR (measured) & Renal filtration flux & Renal \\
+Urine output & Fluid excretion flux & Renal \\
+$\mathrm{T}_3$ (free triiodothyronine) & Metabolic rate flux & Thyroid \\
+Erythropoietin (endogenous) & Erythropoietic drive flux & Bone marrow \\
+Insulin (C-peptide) & Insulin secretion flux & Pancreas \\
+Reticulocyte count & Active RBC production flux & Erythropoiesis \\
+LH/FSH (pulsatile) & Hypothalamic axis flux & Reproductive \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Derived}
+
+\subsection{Constraint Biomarkers ($C$ proxies)}
+
+Constraint biomarkers measure resistance to or limitation of a biological process:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Biomarker & $C$ measured & System \\
+\midrule
+Serum creatinine (steady state) & Renal clearance constraint & Renal \\
+Fasting insulin & Insulin signalling constraint & Metabolic \\
+HOMA-IR & Metabolic constraint ratio & Metabolic \\
+CRP / IL-6 & Inflammatory constraint & Multi-organ \\
+Ferritin / hepcidin & Iron availability constraint & Haematopoietic \\
+BNP / NT-proBNP & Ventricular wall constraint & Cardiac \\
+Troponin (chronic elevation) & Myocardial constraint & Cardiac \\
+HbA1c & Chronic glycaemic constraint & Metabolic \\
+LDL-cholesterol & Vascular constraint risk & Cardiovascular \\
+Systemic vascular resistance & Vascular constraint & Cardiovascular \\
+ANCA / ANA & Autoimmune constraint signal & Immune \\
+Phosphate & Mineral flux constraint indicator & Renal/Bone \\
+PTH & Secondary hormonal constraint & Mineral metabolism \\
+FGF23 & Early renal constraint sensor & Renal/Mineral \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Derived}
+
+\subsection{$\Psi_s$ Proxies (Flux/Constraint Ratios)}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+$\Psi_s$ proxy & Formula & System \\
+\midrule
+$\Psi_{s,\mathrm{met}}$ & $\mathrm{VO}_2 / \mathrm{lactate}$ & Oxidative metabolism \\
+$\Psi_{s,\mathrm{renal}}$ & $\mathrm{GFR} / \mathrm{creatinine\ production\ rate}$ & Renal \\
+$\Psi_{s,\mathrm{cardiac}}$ & $\mathrm{CO} / \mathrm{SVR}$ & Cardiovascular \\
+$\Psi_{s,\mathrm{erythro}}$ & $\mathrm{reticulocyte\ index} / \mathrm{(hepcidin \times CRP)}$ & Erythropoiesis \\
+$\Psi_{s,\mathrm{glucose}}$ & $1 / \mathrm{HOMA\text{-}IR}$ & Insulin sensitivity \\
+$\Psi_{s,\mathrm{thyroid}}$ & $\mathrm{T}_3 / \mathrm{TSH}$ & Thyroid axis \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred} (proxy constructions require validation)
+
+\section{The AFL Trajectory: $C$ Rises Before $\Phi$ Falls}
+
+A fundamental AFL prediction is that constraint markers abnormalize \textit{before} flux markers in early disease:
+
+\begin{equation}
+    \frac{dC}{dt} = \alpha |\Phi| - \beta C > 0 \quad \text{at onset} \Rightarrow C \uparrow \text{ while } \Phi \approx \text{normal}
+\end{equation}
+
+Clinical implications:
+\begin{itemize}
+    \item \textbf{CKD}: FGF23 (constraint sensor) rises before serum phosphate (overflow marker) or creatinine (functional marker)
+    \item \textbf{Type 2 diabetes}: fasting insulin (constraint marker) rises years before fasting glucose (flux overflow marker)
+    \item \textbf{Heart failure}: BNP (constraint marker, ventricular wall stress) rises before ejection fraction falls
+    \item \textbf{Anaemia of inflammation (system-wide constraint $C$ amplification)}: ferritin and hepcidin (iron constraint markers) rise before haemoglobin falls
+\end{itemize}
+
+Early disease is therefore detectable as an isolated constraint marker elevation with normal flux markers. This is the AFL basis for screening programmes that measure insulin (not just glucose), BNP (not just ejection fraction), and FGF23 (not just phosphate).
+
+\textbf{Status: Inferred}
+
+\section{Dynamic Testing: Revealing Flux-Constraint Relationships}
+
+Static biomarker measurement captures a single point in $\Psi_s$ space. Dynamic tests reveal the \textbf{response} of the system to perturbation --- the AFL equivalent of a phase portrait.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Dynamic test & AFL interpretation & What it measures \\
+\midrule
+OGTT (oral glucose tolerance) & $\Phi_{\mathrm{glucose}}$ bolus + $\Psi_{s,\mathrm{met}}(t)$ & Metabolic constraint recovery rate $\beta_{\mathrm{met}}$ \\
+Exercise stress test (VO$_2$) & $\Phi_{\mathrm{O2}}$ ramp + cardiac $\Psi_s(t)$ & Cardiac flux-constraint reserve \\
+ISSI-2 (insulin secretion/sensitivity) & $\Phi_{\mathrm{insulin}} / C_{\mathrm{met}}$ & Pancreatic AFL coupling \\
+GFR with iohexol clearance & Renal $\Phi_{\mathrm{clearance}}$ vs creatinine $C$ & Renal reserve \\
+Iron absorption test & Enteric $\Phi_{\mathrm{Fe}}$ vs hepcidin $C_{\mathrm{Fe}}$ & Iron AFL coupling \\
+Isokinetic muscle testing & Muscle $\Phi_{\mathrm{work}} / C_{\mathrm{fatigue}}$ & Neuromuscular $\Psi_s$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\section{Multi-System $\Psi_s$ Profiling}
+
+Individual $\Psi_s$ values can be combined into a \textbf{multi-system AFL health score}:
+\begin{equation}
+    \Psi_{s,\mathrm{composite}} = w_1 \Psi_{s,\mathrm{met}} + w_2 \Psi_{s,\mathrm{renal}} + w_3 \Psi_{s,\mathrm{cardiac}} + w_4 \Psi_{s,\mathrm{erythro}} + \cdots
+\end{equation}
+
+where weights $w_i$ reflect clinical context (a post-cardiac surgery patient has $w_3$ weighted highest; a CKD patient has $w_2$ weighted highest).
+
+The composite $\Psi_{s,\mathrm{composite}}$ should outperform individual scores for overall survival prediction --- the AFL equivalent of a multi-organ frailty index.
+
+\textbf{Status: Inferred}
+
+\section{The Inflammation Cross-Link}
+
+Inflammation is the universal $C$ amplifier. Any patient with elevated CRP or IL-6 has an elevated $C_{\mathrm{system}}$ that suppresses $\Psi_s$ in every downstream system. This explains why CRP independently predicts outcomes in diabetes, CKD, heart failure, and cancer --- it is a proxy for the cross-system constraint elevation that limits all organ $\Psi_s$ values simultaneously.
+
+AFL prediction: CRP + HOMA-IR + BNP + reticulocyte index should together outperform any single biomarker for multi-system health prediction, because together they cover the four major $\Psi_s$ domains (metabolic, cardiovascular, haematopoietic) that inflammation (system-wide constraint $C$ amplification) degrades.
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+\begin{enumerate}
+    \item Fasting insulin abnormalization should precede fasting glucose abnormalization by $\geq 5$ years in longitudinal pre-diabetic cohorts.
+    \item Dynamic OGTT-derived $\beta_{\mathrm{met}}$ (constraint recovery rate, approximated by the slope of insulin decline from peak to 2h) should predict T2DM onset better than fasting glucose or peak glucose.
+    \item $\Psi_{s,\mathrm{composite}}$ should predict 5-year all-cause mortality better than any single-system score.
+    \item FGF23 should rise before creatinine, phosphate, or GFR decline in prospective CKD cohorts.
+    \item The correlation between CRP and HOMA-IR should be stronger than the correlation between BMI and HOMA-IR, because CRP captures the constraint pathway (inflammation (system-wide constraint $C$ amplification)) while BMI captures only the substrate pathway.
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL diagnostic framework would be falsified if: constraint markers do not precede flux markers in early disease across multiple organ systems; dynamic testing shows no advantage over static sampling for prediction; or the composite $\Psi_s$ score performs no better than validated single-score tools (e.g., SOFA, eGFR).
+
+\textbf{Status: Open}
+
+
+\section{Biomarker Qualification Framework}
+
+Every proposed AFL diagnostic requires a stated \textbf{context of use (COU)} before validation can be designed. Following FDA Biomarker Qualification Program principles, each AFL biomarker candidate must specify:
+\begin{enumerate}
+    \item \textbf{COU}: is this a risk stratification marker, monitoring marker, enrichment marker, response-prediction marker, safety marker, or mechanistic readout?
+    \item \textbf{Analytical validation}: assay precision, accuracy, interference, reference range.
+    \item \textbf{Clinical validation}: does the marker correlate with the clinical endpoint of interest?
+    \item \textbf{Discrimination}: AUC, sensitivity, specificity relative to current standard.
+    \item \textbf{Calibration}: agreement between predicted and observed event rates.
+    \item \textbf{Fairness}: performance across sex, age, ancestry, comorbidity.
+    \item \textbf{Limitations}: population for which the COU does NOT apply.
+\end{enumerate}
+
+None of the AFL $\Psi_s$ proxies in this paper have completed this qualification pathway. They are candidate constructs for research hypothesis generation.
+
+\section{New Discovery Constructs}
+
+The following constructs are proposed as research hypotheses. Each is labeled as a candidate biomarker requiring the full qualification pathway described above.
+
+\subsection{Constraint Reserve Index (CRI)}
+
+\textbf{Construct}: estimated unused regulatory capacity before overload. $\mathrm{CRI} = C_{\mathrm{max}} - C_{\mathrm{current}}$, where $C_{\mathrm{max}}$ is the constraint level at which $\Psi_s$ crosses into the overload regime.
+
+\textbf{Candidate domains}: heart failure (cardiac reserve before decompensation), renal reserve (nephron capacity before eGFR decline), immune reserve (regulatory T cell capacity before cytokine storm), insulin reserve (beta-cell capacity before diabetes).
+
+\textbf{COU}: risk stratification — which patients are closest to decompensation.
+
+\textbf{Measurement hypothesis}: CRI for renal domain $\approx$ iohexol GFR minus creatinine clearance ratio; for cardiac domain $\approx$ peak VO$_2$ minus resting VO$_2$; for immune domain $\approx$ Treg/effector T-cell ratio at rest.
+
+\textbf{Status: Hypothesis. Requires longitudinal cohort validation.}
+
+\subsection{Constraint Recovery Half-Time (CRHT)}
+
+\textbf{Construct}: time for $C$, $S$, or $\Psi_s$ to return toward baseline after a standardised perturbation. $\mathrm{CRHT} = \ln(2) / \beta_{\mathrm{effective}}$ in the linear approximation.
+
+\textbf{Candidate domains}: glucose challenge (OGTT-derived insulin recovery slope), exercise recovery (VO$_2$ kinetics post-peak), cytokine resolution (CRP half-life after source control), dialysis rebound (C\_renal rise between sessions).
+
+\textbf{COU}: monitoring — tracking whether a patient's recovery rate is improving or worsening over time.
+
+\textbf{Status: Hypothesis. OGTT-derived insulin recovery is testable with existing data; others require prospective protocols.}
+
+\subsection{Multi-Axis Orthogonality Score (MAOS)}
+
+\textbf{Construct}: whether two interventions act on independent Phi/C axes rather than stacking on one pathway. If drug A reduces $\Phi$ and drug B reduces $C$, their axes are orthogonal ($\mathrm{MAOS} \approx 1$). If both reduce $\Phi$, axes overlap ($\mathrm{MAOS} \approx 0$).
+
+\textbf{Candidate domains}: oncology combinations (Phi-axis: anti-proliferative; C-axis: immune checkpoint), diabetes polytherapy (Phi-axis: GLP-1; C-axis: SGLT2 renal deloading), antibiotics plus source control.
+
+\textbf{COU}: mechanistic readout for combination therapy design.
+
+\textbf{Status: Hypothesis. Requires in vitro synergy assays with orthogonal mechanism controls (FDA Project Optimus framing).}
+
+\subsection{Boundary Error Score (BES)}
+
+\textbf{Construct}: degree to which a system misclassifies self, pathogen, tumour, or commensal flux as threat, leading to inappropriate $C$ amplification. $\mathrm{BES} = J_{\mathrm{immune,self}} / J_{\mathrm{immune,total}}$.
+
+\textbf{Candidate domains}: autoimmunity (anti-self immune drive), allergy (environmental antigen misclassified as threat), cancer immune evasion (tumour misclassified as self).
+
+\textbf{Status: Hypothesis. No direct measurement currently available; requires TCR/BCR repertoire sequencing and antigen-specificity assays.}
+
+\subsection{Memory-Locking Index (MLI)}
+
+\textbf{Construct}: persistence of maladaptive tissue state after the original flux insult is removed. $\mathrm{MLI} = M_s(t_{\mathrm{post}}) / M_s(t_{\mathrm{peak}})$, measured at a defined time after insult removal.
+
+\textbf{Candidate domains}: fibrosis (collagen deposition persisting after injury), epigenetic silencing (methylation patterns persisting after metabolic insult), CKD (glomerulosclerosis after acute kidney injury), metabolic syndrome (adipose inflammation persisting after weight loss), chronic pain (central sensitisation after tissue healing).
+
+\textbf{COU}: monitoring — tracking maladaptive tissue memory after acute treatment.
+
+\textbf{Status: Hypothesis. Fibrosis imaging (MRI elastography, FIB-4) provides a testable proxy in hepatic and renal domains.}
+
+\subsection{Cross-Organ Constraint Transfer (COCT)}
+
+\textbf{Construct}: how stress in one organ raises constraint burden in another. $\mathrm{COCT}_{A \to B} = \Delta C_B / \Delta C_A$ measured during a standardised perturbation of organ A.
+
+\textbf{Candidate domains}: cardiorenal syndrome (cardiac output fall $\to$ renal C rise), hepatorenal syndrome (hepatic C rise $\to$ renal C rise), gut-liver axis (dysbiosis $\to$ hepatic inflammatory C), sepsis (immune C $\to$ multi-organ C).
+
+\textbf{Status: Hypothesis. Cardiorenal COCT is testable with simultaneous cardiac output and eGFR monitoring.}
+
+\section{Experiments and Future Validation}
+
+\begin{enumerate}
+    \item \textbf{Mathematical consistency}: finite Psi\_s at all parameter values; trajectory monotonicity checks for CRI and CRHT constructs.
+    \item \textbf{Synthetic perturbation}: release-local script (\texttt{supplementary/AFL\_Biomarker\_Horizon\_Summary.py}) — normalized trajectories for healthy, early-disease, and decompensated toy scenarios.
+    \item \textbf{Retrospective}: All of Us Research Program data (EHR, physical measurements, wearables, genomics) — test whether CRI proxies predict hospitalisation at 1 year after controlling for age and comorbidity.
+    \item \textbf{Retrospective}: UKBB / NHANES — CRHT from OGTT insulin recovery slope vs 10-year T2DM incidence.
+    \item \textbf{Prospective observational}: longitudinal multi-system Psi\_s profiling in a defined cohort with 5-year follow-up.
+    \item \textbf{Clinical utility}: TRIPOD+AI reporting framework; decision-curve analysis vs existing risk scores; fairness across subgroups.
+    \item \textbf{External validation}: independent cohort before any clinical translation.
+\end{enumerate}
+
+\textbf{Success criterion}: CRI independently predicts decompensation after adjusting for established risk scores. \textbf{Failure criterion}: CRI provides no AUC improvement over existing tools.
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework for hypothesis generation, not a diagnostic device.
+\begin{itemize}
+    \item No AFL $\Psi_s$ proxy should be used to guide clinical decisions without completing the FDA Biomarker Qualification pathway.
+    \item TRIPOD+AI reporting standards apply to any predictive model derived from these constructs.
+    \item External validation in independent cohorts is required before any clinical use.
+    \item Fairness analysis across sex, age, ancestry, and comorbidity is mandatory before any clinical translation.
+    \item Existing validated risk tools (SOFA, eGFR, HEART score, HbA1c, UKPDS) take precedence over AFL proxies for current clinical decisions.
+\end{itemize}
+
+\section{Conclusion}
+
+AFL biomarker interpretation proposes a framework for reading routine laboratory data as dynamic flux-constraint signals. The central hypothesis is that constraint markers may abnormalize before flux markers in early disease, that dynamic testing may reveal recovery rates, and that multi-system $\Psi_s$ profiling and the new discovery constructs (CRI, CRHT, MAOS, BES, MLI, COCT) may add information beyond single-organ assessment. None of these claims are validated; all require the full biomarker qualification pathway before clinical use.
+
+\textbf{Status: Inferred}
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/AFL\_Biomarker\_Horizon\_Summary.py}. Outputs in \texttt{outputs/paper\_16/}: \texttt{biomarker\_horizon.png}, \texttt{biomarker\_horizon\_timeseries.csv}, \texttt{summary.json}. All outputs illustrate the constraint-before-flux temporal pattern under stated toy assumptions. No clinical inference should be drawn from them.
+
+\textbf{Status: Derived}
+
+\section{Reproducibility Note}
+\begin{itemize}
+    \item \textbf{Script}: \texttt{supplementary/AFL\_Biomarker\_Horizon\_Summary.py} (NumPy; runtime $< 2$\,s)
+    \item \textbf{Dependencies}: NumPy, matplotlib (Agg backend)
+\end{itemize}
+\textbf{Status: Derived}
+\clearpage
+\section*{Biological Scaling Laws from Flux Constraints: An Adaptive Flux Limitation Perspective on Allometry and Transport Efficiency}
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

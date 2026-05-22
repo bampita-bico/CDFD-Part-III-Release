@@ -1,0 +1,16 @@
+{
+  "claim_status": "toy diagnostic \u2014 candidate framework for spatial constraint mapping",
+  "falsification": "If spatial patterning outcomes are fully determined by morphogen concentration alone without constraint memory (M_s), the spatial AFL scaffold adds no value.",
+  "paper": "12",
+  "simulations": [
+    "normal_patterning",
+    "disrupted_patterning"
+  ],
+  "title": "Adaptive Flux Limitation in Developmental Biology",
+  "validation_targets": [
+    "Organoids: morphogen gradient perturbation and tissue patterning readout",
+    "Embryoid body models: transient insult and recovery of spatial C field",
+    "HuBMAP / Human Cell Atlas: spatial single-cell Phi/C proxy measurement",
+    "Congenital anomaly registries: patterning failure classes as C disruption events"
+  ]
+}

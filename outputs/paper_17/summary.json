@@ -1,0 +1,99 @@
+{
+  "chronic_final": {
+    "C": {
+      "all_finite": true,
+      "max": 12.719936402081638,
+      "mean": 12.71993640208164,
+      "min": 12.719936402081638
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.126000000000026,
+      "mean": 1.126000000000026,
+      "min": 1.126000000000026
+    },
+    "S": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "meta": {
+      "life_number": 515049.38616182044,
+      "ool_C_electron": 0.03930837263605926,
+      "ool_C_input": 25.0,
+      "ool_C_proton": 1000000.0,
+      "ool_C_stability": 0.5241116348727638,
+      "ool_J_max": 0.03930837263605926,
+      "ool_S_stability": 1.907990461312246,
+      "ool_sigma_e": 0.03930837263605926,
+      "ool_sigma_p": 1000000.0,
+      "ool_transport_factor": 0.0,
+      "throughput_J": 20.60197542916717
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 24.94411082470851,
+      "mean": 24.944110824708506,
+      "min": 24.94411082470851
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 2.2081139323956003,
+      "mean": 2.2081139323956007,
+      "min": 2.2081139323956003
+    },
+    "regime": "overload",
+    "t": 7.18
+  },
+  "clinical_status": "toy model; not a fasting, exercise, or therapy recommendation",
+  "cyclic_final": {
+    "C": {
+      "all_finite": true,
+      "max": 14.88954760240247,
+      "mean": 14.889547602402471,
+      "min": 14.88954760240247
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "S": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "meta": {
+      "life_number": 375885.65216387575,
+      "ool_C_electron": 0.03358060388076019,
+      "ool_C_input": 25.0,
+      "ool_C_proton": 1000000.0,
+      "ool_C_stability": 0.4477413848763302,
+      "ool_J_max": 0.03358060388076019,
+      "ool_S_stability": 2.2334321413603706,
+      "ool_sigma_e": 0.03358060388076019,
+      "ool_sigma_p": 1000000.0,
+      "ool_transport_factor": 0.0,
+      "throughput_J": 15.035426073925285
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 24.94736198709219,
+      "mean": 24.94736198709219,
+      "min": 24.94736198709219
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 1.6754949615169548,
+      "mean": 1.6754949615169548,
+      "min": 1.6754949615169548
+    },
+    "regime": "overload",
+    "t": 7.18
+  },
+  "diagnostic": "cycling_retention",
+  "interpretation": "Equal qualitative stress can diverge depending on recovery windows and memory retention."
+}

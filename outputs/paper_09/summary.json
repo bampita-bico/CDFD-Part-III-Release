@@ -1,0 +1,108 @@
+{
+  "cross_axis": {
+    "clinical_status": "toy model; not a drug recommendation or safety model",
+    "diagnostic": "cross_axis_flux_relaxation",
+    "drugs": [
+      {
+        "effect": -0.08,
+        "target": "phi"
+      },
+      {
+        "effect": 0.055,
+        "target": "beta"
+      }
+    ],
+    "final_state": {
+      "C": {
+        "all_finite": true,
+        "max": 1.45,
+        "mean": 1.4499999999999995,
+        "min": 1.45
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "ischemia_warning": false,
+        "synergy_status": "ORTHOGONAL SYNERGY: Optimal Psi_s recovery."
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 0.35999999999999943,
+        "mean": 0.35999999999999943,
+        "min": 0.35999999999999943
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 0.24827586206896513,
+        "mean": 0.24827586206896513,
+        "min": 0.24827586206896513
+      },
+      "regime": "constrained",
+      "t": 7.95
+    },
+    "status": "ORTHOGONAL SYNERGY: Optimal Psi_s recovery."
+  },
+  "same_axis": {
+    "clinical_status": "toy model; not a drug recommendation or safety model",
+    "diagnostic": "same_axis_flux_reduction",
+    "drugs": [
+      {
+        "effect": -0.12,
+        "target": "phi"
+      },
+      {
+        "effect": -0.1,
+        "target": "phi"
+      }
+    ],
+    "final_state": {
+      "C": {
+        "all_finite": true,
+        "max": 1.45,
+        "mean": 1.4499999999999995,
+        "min": 1.45
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "ischemia_warning": true,
+        "synergy_status": "REDUNDANT: Dangerous Phi collapse risk."
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 0.01,
+        "mean": 0.01,
+        "min": 0.01
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 0.006896551724137932,
+        "mean": 0.006896551724137932,
+        "min": 0.006896551724137932
+      },
+      "regime": "constrained",
+      "t": 7.95
+    },
+    "status": "REDUNDANT: Dangerous Phi collapse risk."
+  }
+}

@@ -1,0 +1,501 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newenvironment{cdftbox}{\begin{center}\begin{minipage}{0.95\linewidth}\hrule\vspace{0.5em}}{\vspace{0.5em}\hrule\end{minipage}\end{center}}
+\newenvironment{masterbox}{\begin{center}\begin{minipage}{0.95\linewidth}\hrule\vspace{0.5em}}{\vspace{0.5em}\hrule\end{minipage}\end{center}}
+\newcommand{\maybeincludegraphics}[2][]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{\parbox{0.9\linewidth}{\centering Missing figure asset: \texttt{\detokenize{#2}}}}}}
+
+\title{\textbf{Paper BIO-01: Adaptive Flux Limitation in Living Systems:\\ A CDFD Model for Biological Throughput}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Biological systems exchange energy, matter, and information under continuous throughput. Models that emphasize concentrations and molecular catalogs alone often under-represent saturation, bottlenecks, and adaptive regulation seen across physiology and disease.
+
+We introduce \textbf{Adaptive Flux Limitation (AFL)}: living systems dynamically adjust constraints that bound throughput in order to remain in a regulable regime across an active, memory-bearing biological surface. We align AFL with the extended CDFD convention in which \textbf{flow intensity} is denoted $\Phi$, \textbf{constraint} by $C$, \textbf{surface responsiveness} by $S$, and \textbf{surface memory} by $M_s$. The operating regime is summarized by the adaptive ratio $\Psi_s=(\Phi/C) \cdot S \cdot M_s$. A minimal spatial toy model illustrates how biological surfaces dynamically integrate load, and how conditions such as disease emerge as surface dysregulation when memory ($M_s$) locks tissues into chronic constraint states.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This opening paper should be read as the dictionary for the medical series. The central move is simple: a living system is not only a collection of molecules, but a regulated surface that must move substrates, signals, heat, charge, cells, and information without losing structure. In that language, $\Phi$ is the demand placed on the system, $C$ is the resistance or capacity burden that limits that demand, $S$ is the ability of the tissue to respond, and $M_s$ is the retained history of prior stress.
+
+For a clinician, the useful question is not whether $\Psi_s$ is a ready-made diagnostic number. It is not. The useful question is whether a bedside or laboratory pattern is behaving like a flux problem, a constraint problem, a responsiveness problem, or a memory problem. The same patient can contain several of these at once: anaemia can be limited by iron availability, inflammatory blockade, marrow capacity, renal signalling, or vascular tolerance. AFL is meant to keep those axes visible instead of collapsing them into one label.
+
+The paper therefore distinguishes three layers. The first layer is notation and bookkeeping. The second is a toy dynamical model that shows how constraint can rise under sustained load. The third is the clinical hypothesis that similar geometry may appear in metabolic, renal, immune, oncological, developmental, and pharmacological systems. Only the first two are internal to the paper; the third must be tested with ordinary biomedical evidence.
+
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+\subsection{Formal Symbol Rigor: The Extended CDFD Paradigm}
+In strict alignment with the Fundamental Physics (Part I) and Origins of Life (Part II) archives, this biological translation formally preserves the exact Mujjabi transport tensor structure:
+\begin{itemize}
+    \item $\Phi$ (\textbf{Flow Intensity}): The physiological or biochemical drive (e.g., nutrient flux, signaling rate).
+    \item $C$ (\textbf{Constraint / Pathway Resistance}): The biological resistance regulating the flow. It dynamically evolves via the standard closure: $dC/dt = \alpha \Phi - \beta C$.
+    \item $S$ (\textbf{Surface Responsiveness}): The active response capability of the biological medium.
+    \item $M_s$ (\textbf{Surface Memory}): Structural hysteresis or maladaptive drift (e.g., chronic scarring, epigenetic locking) with a finite recovery time $\tau_M$.
+    \item $\Psi_s = (\Phi/C) \cdot S \cdot M_s$ (\textbf{Operating State Ratio}): The dimensionless index of biological health. $\Psi_s \approx 1$ defines homeostasis ($\Psi_s \approx 1.0$); $\Psi_s \gg 1$ defines pathological overload.
+\end{itemize}
+
+Biological function is inherently dynamic: cells, tissues, and organisms transport substrates, signals, and heat. Across domains, similar qualitative patterns recur: response saturation at high input, bottleneck formation under stress, redistribution among parallel pathways, and stabilization near operating thresholds.
+
+We propose that many such patterns are compatible with a single organizing picture: \textbf{throughput limited by constraints that themselves adapt to throughput}. This paper (AFL-1) states definitions, a compact dynamical model, and numerical verification for one illustrative implementation. It closes by mapping methodological alignment with the physics manuscript track without claiming new fundamental constants.
+
+\textbf{Open gap for AFL-2:} whether the same mathematical skeleton appears across disparate biological domains with only reinterpretation of $(\Phi,C)$.
+
+\textbf{Cross-link (multi-channel bioenergetics):} When several transport modes co-limit throughput, the same public bookkeeping can be written as $J=\Phi\sigma_e\sigma_p/S$ with capacities $C_{\mathrm{input}}, C_{\mathrm{electron}}, C_{\mathrm{proton}}$, and $C_{\mathrm{stability}}$. In later papers this bridge is used only as a functional analogy: energy capture, electron transport, proton coupling, and stabilization may be carried by different biomaterials in different biological settings.
+
+\textbf{Status: Hypothesis}
+
+\section{Model and Assumptions}
+
+\subsection{Biological Translation of the Mujjabi Capacity Law \cite{MujjabiPartI2026}}
+In Part I, the Mujjabi Capacity Law \cite{MujjabiPartI2026} dictates that local transport becomes non-linear as the flux-to-constraint ratio approaches unity ($J/C \to 1$). In the biological realm, this explains metabolic saturation: as nutrient flow $\Phi$ scales up, the mitochondrial and enzymatic constraint $C$ adapts upward, capping the throughput and triggering bottleneck responses (e.g., insulin resistance (chronic $C_E$ upregulation)).
+
+
+\subsection{Notation bridge}
+Throughout this series, $C$ denotes the operative biological constraint and
+$\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the extended \emph{adaptive
+operating ratio}. We use $\varphi$ for a \textbf{transport potential}
+(chemical, electrical, or mechanical) when gradients appear, to avoid
+conflating potential with flow intensity $\Phi$.
+
+\textbf{Status: Derived}
+
+\subsection{Constitutive relation}
+For a local transport flux $\mathbf{J}_{\mathrm{flux}}$ driven by potential gradients, a linear resistive closure is
+\begin{equation}
+  \mathbf{J}_{\mathrm{flux}} = -\frac{1}{C}\,\nabla \varphi .
+\end{equation}
+We define scalar \textbf{throughput intensity} $\Phi$ as an aggregate of transport magnitude appropriate to the subsystem (e.g.\ pathway flux, perfusion rate, signaling rate). Thus $\Phi$ is the biological analogue of ``how much is moving,'' not the potential $\varphi$.
+
+\textbf{Status: Hypothesis}
+
+\subsection{Adaptive constraint dynamics (AFL core)}
+Constraints are not fixed: they stiffen under high throughput and relax when load falls:
+\begin{equation}
+  \frac{dC}{dt} = \alpha \,\Phi - \beta C,
+  \label{eq:aflode}
+\end{equation}
+with $\alpha,\beta\ge 0$. This is the AFL \textbf{adaptation} clause: $C$ is a state variable coupled to $\Phi$.
+
+\textbf{Status: Derived} (given the postulated ODE)
+
+\subsection{Adaptive operating ratio and surface integration}
+Define the extended operating ratio:
+\begin{equation}
+  \Psi_s = \left(\frac{\Phi}{C}\right) \cdot S \cdot M_s.
+\end{equation}
+We use $\Psi_s$ to represent the fully adaptive state of the biological surface. Interpretive bands (illustrative, not universal thresholds): $\Psi_s<1$ constrained (tissues under-perfused or restricted); $\Psi_s\approx 1$ balanced (healthy homeostasis ($\Psi_s \approx 1.0$)); $\Psi_s>1$ overload relative to the chosen scaling. Under this paradigm, disease is interpreted as \emph{surface dysregulation}, where a breakdown in surface responsiveness ($S$) or rigid accumulation of maladaptive memory ($M_s$) locks the tissue outside the $\Psi_s \approx 1$ attractor.
+
+\textbf{Status: Derived}
+
+\subsection{Assumptions A1--A4}
+\begin{itemize}
+  \item \textbf{A1} A single effective throughput $\Phi$ and constraint $C$ capture the phenomenon of interest at the chosen scale.
+  \item \textbf{A2} Linear resistance in $\nabla\varphi$ is adequate locally (nonlinear extensions are open).
+  \item \textbf{A3} Constraint adaptation follows the two-parameter form \eqref{eq:aflode} with effective $(\alpha,\beta)$; the spatial extension adds diffusion and redistribution as stated in Numerical Verification.
+  \item \textbf{A4} Spatial coupling (if used) enters only through conservative redistribution of $\Phi$ as specified in the supplement.
+\end{itemize}
+
+\textbf{Status: Open} (domain validity of A1--A4 must be tested per system)
+
+
+\section{Deep Theoretical Foundations: From CDFT to Adaptive Media}
+\subsection{The classical diffusion coefficient and its failure}
+
+Standard diffusion is governed by Fick's first law (Equation~\ref{eq:fick}). The diffusion coefficient $D$ is treated as a material constant --- a property of the medium that does not depend on the flux passing through it. This assumption, imported from physics into biology, captures some biological phenomena but fails systematically whenever the medium responds to the flux it carries.
+
+We replace this assumption with a single, far-reaching upgrade.
+
+\begin{cdftbox}
+\begin{equation}
+F = \frac{\nabla X}{C(\Om,\, x,\, t)}
+\label{eq:cdft}
+\end{equation}
+\vspace{-4pt}
+{\small $F$ = flux; $\nabla X$ = thermodynamic driving gradient; $C(\Om,x,t)$ = adaptive constraint function (system state $\Om$, position $x$, time $t$).}
+\end{cdftbox}
+
+\vspace{4pt}
+The effective diffusion coefficient becomes:
+\begin{equation}
+D_{\mathrm{eff}}(\Om,x,t) = \frac{1}{C(\Om,x,t)}
+\label{eq:D_adaptive}
+\end{equation}
+
+This is not a cosmetic change. It converts the governing equation from describing a passive, fixed-background medium to describing a \textbf{nonlinear adaptive medium} --- one in which:
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+\item The medium evolves in response to the flux it carries ($C$ depends on $F$ through $\Om$)
+\item Transport is history-dependent (past flux patterns reshape current transport capacity)
+\item High-flux regions develop different transport properties than low-flux regions
+\item The system reshapes itself around its own flow patterns
+\end{itemize}
+
+Figure~\ref{fig:adaptive_medium} illustrates the contrast between classical ($D = \mathrm{const}$) and adaptive ($D = 1/C(\Om,x,t)$) diffusion.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig2_adaptive_medium.png}
+  \caption{\textbf{From Passive to Adaptive Medium: The Core CDFT/AFL Upgrade.}
+  \textbf{(A)} Classical diffusion with $D = \mathrm{const}$: transport is symmetric,
+  predictable, and history-independent. The medium is passive.
+  \textbf{(B)} AFL adaptive diffusion with $D = 1/C(\Om,x,t)$: transport is
+  asymmetric, history-dependent, and nonlinear. The medium reshapes itself.
+  \textbf{(C)} The effective diffusivity $D_{\mathrm{eff}} = 1/C(x,t)$ as a
+  space-time contour: high-flux regions build up constraints (low $D$, red);
+  relaxed regions remain open (high $D$, green). The medium has memory.
+  \textbf{KEY:} The replacement $D = \mathrm{const} \to D = 1/C(\Om,x,t)$
+  is the single most important upgrade the CDFT/AFL framework makes over classical physics.
+  All other properties of the framework follow from this.}
+  \label{fig:adaptive_medium}
+\end{figure}
+
+\subsection{The constraint function $C(\Omega, x, t)$}
+
+The constraint function $C$ is not a fixed material property but a dynamic state variable encoding the system's current resistance to flux. In biological systems, $C$ depends on:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+\item \textbf{System state} $\Om$: metabolic configuration, redox balance, energetic capacity, epigenetic state, bioelectric patterning, signalling networks. A mitochondrially depleted cell has high $C$ for energetic processes; a well-oxygenated cell has low $C$.
+\item \textbf{Flux history} $F$: constraints respond bidirectionally to flux --- both protective upregulation when flux is high and capacity erosion when flux chronically exceeds repair. This is the bidirectional dynamics formalized in Section~\ref{sec:bidir}.
+\item \textbf{Position} $x$: constraints vary spatially --- a stenosed artery has high $C$ at the stenosis; healthy vascular endothelium has low $C$; developing tissues have spatially patterned $C$ governed by bioelectric fields.
+\item \textbf{Time} $t$: on fast timescales (seconds--hours), $C$ responds acutely to flux changes. On slow timescales (years), $C$ drifts through aging and chronic disease.
+\end{itemize}
+
+\subsection{Generality: CDFT subsumes classical transport laws}
+
+Classical transport laws are special cases of CDFT under the limiting assumption $C = \mathrm{const}$:
+\begin{align}
+\text{Fick's Law:}& \quad C = 1/D \quad \Rightarrow \quad F = D\,\nabla C \label{eq:fick}\\
+\text{Ohm's Law:}& \quad C = 1/\sigma \quad \Rightarrow \quad F = \sigma\,E \\
+\text{Darcy's Law:}& \quad C = \mu/k \quad \Rightarrow \quad F = (k/\mu)\,\nabla P \\
+\text{Newton's viscosity:}& \quad C = 1/\nu \quad \Rightarrow \quad F = \nu\,\nabla v
+\end{align}
+
+CDFT therefore contains classical transport theory as its passive limit. What it adds is the physics of adaptive media: systems where $C$ itself evolves. Table~\ref{tab:cdft_scope} summarizes the scope across domains.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{CDFT Scope: Classical Laws as Passive Special Cases.}
+All classical transport laws arise from CDFT under the assumption $C = \mathrm{const}$.
+AFL extends these to the biological adaptive medium where $C = f(\Om, F, t)$.}
+\label{tab:cdft_scope}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{>{\bfseries}lXXXX}
+\toprule
+Domain & Classical Law & $\nabla X$ & $C = \mathrm{const}$ & AFL Extension: $C(\Om,t)$ \\
+\midrule
+Biology (general) & AFL/CDFT & Chemical potential / voltage / pressure & Constraint architecture & Adaptive: state, flux, time-dependent \\[2pt]
+Diffusion (physics) & Fick's law & Concentration gradient & $1/D$ & $C = f(\mathrm{tissue\,state})$ \\[2pt]
+Electrical & Ohm's law & Voltage gradient & $1/\sigma$ (resistance) & $C = f(\mathrm{channel\,density})$ \\[2pt]
+Fluid flow & Darcy's law & Pressure gradient & $\mu/k$ (viscosity/permeability) & $C = f(\mathrm{vascular\,tone})$ \\[2pt]
+Heat & Fourier's law & Temperature gradient & $1/\kappa$ (thermal resistance) & $C = f(\mathrm{metabolic\,state})$ \\[2pt]
+Information & Shannon-Hartley & Signal gradient & $1/C$ (channel capacity) & $C = f(\mathrm{noise, bandwidth})$ \\[2pt]
+Economics & Price dynamics & Price/utility gradient & $1/\mathrm{liquidity}$ & $C = f(\mathrm{market\,state})$ \\[2pt]
+Ecology & Logistic growth & Resource gradient & $1/K$ (carrying capacity) & $C = f(\mathrm{ecosystem\,state})$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{AFL: The Biological Specification of CDFT}
+\subsection{Biological flux and the system state vector}
+
+We define biological flux as $J_i = dS_i/dt$ where $S_i$ is any relevant substrate, signal, or state variable. The system state vector:
+\begin{equation}
+\Om = (M,\, R,\, E_n,\, E_p,\, B_e,\, S)
+\label{eq:state}
+\end{equation}
+encodes metabolic configuration $M$, redox state $R$, energetic capacity $E_n$, epigenetic state $E_p$, bioelectric state $B_e$, and signalling configuration $S$. Each component contributes to the adaptive constraint function $C(\Om,x,t)$ in CDFT. Maximum achievable flux follows the smooth aggregation:
+\begin{equation}
+\Jmax(\Om) = \left[\sum_i J_i(\Om)^{-\alpha}\right]^{-1/\alpha}
+\label{eq:jmax}
+\end{equation}
+In the limit $\alpha \to \infty$ this recovers $\Jmax = \min_i\{C_i\}$; for finite $\alpha$ it produces smooth transitions between constraint-dominated regimes.
+
+\subsection{From CDFT to the AFL master equation}
+
+The constraint function $C$ in CDFT (Equation~\ref{eq:cdft}) is specified biologically through constraint stresses:
+\begin{equation}
+C_i = \frac{f(\Om)}{C_i(\Om)} \implies \sigma_i \equiv \frac{J}{C_i(\Om)}
+\label{eq:lambda_bio}
+\end{equation}
+where $C_i(\Om)$ is the capacity of constraint domain $i$. Constructing the system instability potential as the weighted sum of squared constraint stresses:
+\begin{equation}
+V(\Om) = \sum_i \alpha_i \left[\frac{f(\Om)}{C_i(\Om)}\right]^2
+\label{eq:potential}
+\end{equation}
+and applying the CDFT gradient-descent principle $d\Om/dt = -\nabla V(\Om)$, we obtain the AFL master equation:
+
+\begin{masterbox}
+\begin{equation}
+\frac{d\Om}{dt} = -\nabla\!\left[\sum_i \alpha_i \left(\frac{f(\Om)}{C_i(\Om)}\right)^{\!2}\right]
+\label{eq:master}
+\end{equation}
+{\small $\Om$ = system state (Eq.~\ref{eq:state}); $f(\Om)$ = biological flux;
+$C_i(\Om)$ = constraint capacities; $\alpha_i$ = biological importance weights.
+This is CDFT (Eq.~\ref{eq:cdft}) with $C = \sum_i\alpha_i[f(\Om)/C_i(\Om)]^2$.}
+\end{masterbox}
+
+\subsection{Lyapunov stability argument}
+
+\begin{theorem}[AFL Stability]
+The equilibria $\Om^*$ of the AFL dynamical system are Lyapunov stable, and trajectories converge to $\{\Om : \nabla V(\Om) = 0\}$ as $t \to \infty$.
+\end{theorem}
+\noindent\textit{Argument.}
+$V(\Om) \geq 0$ for all $\Om$ (sum of squared terms), with $V(\Om^*) = 0$. Computing the time derivative:
+\begin{equation}
+\frac{dV}{dt} = \nabla V \cdot \frac{d\Om}{dt} = \nabla V \cdot (-\nabla V) = -\|\nabla V\|^2 \leq 0
+\label{eq:lyapunov}
+\end{equation}
+By Lyapunov's theorem \citep{lyapunov1992}, equilibria $\Om^*$ satisfying $\nabla V(\Om^*) = 0$ are stable. If $V$ is radially unbounded, LaSalle's invariance principle ensures convergence. $\square$
+
+\subsection{The recursive $\Om$--$J$ loop and timescale separation}
+\label{sec:bidir}
+
+Flux modifies the constraint function $C$ through the recursive coupling:
+\begin{equation}
+\Om_{t+1} = F\!\left(\Om_t,\, f(\Om_t)\right)
+\label{eq:recursive}
+\end{equation}
+This self-referential loop --- state generates flux, flux modifies $C$, modified $C$ reshapes future flux --- is the mechanism by which biological media adapt. In CDFT language: the flux carried by the medium gradually changes the medium's own transport coefficients.
+
+Timescale separation governs how quickly this occurs:
+\begin{align}
+\frac{dJ}{dt} &= f(\Om, \Jreq) \qquad \text{[fast: seconds--minutes; flux adaptation]} \label{eq:fast}\\
+\frac{d\Om}{dt} &= \varepsilon \cdot F(\Om, J),\quad 0 < \varepsilon \ll 1 \quad \text{[slow: hours--generations; structural drift]} \label{eq:slow}
+\end{align}
+The coupling loop $B_e \to S \to E_p \to \mathrm{Enz} \to J \to \Om \to B_e$ governing adaptation, homeostasis ($\Psi_s \approx 1.0$), disease, and developmental coordination is illustrated in Figure~\ref{fig:omega_loop}.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig3_omega_loop.png}
+  \caption{\textbf{The AFL $\Om$--$J$ Recursive Loop and Timescale Hierarchy.}
+  \textbf{(A)} The closed regulatory cycle $B_e \to S \to E_p \to \mathrm{Enz} \to J \to \Om \to B_e$.
+  In CDFT terms: flux modifies $C$, which modifies future flux capacity.
+  \textbf{(B)} Timescale separation: flux adapts fast ($\varepsilon \ll 1$); structural state
+  $\Om$ evolves slowly. Chronic constraint exposure produces structural shifts that persist
+  after the acute constraint resolves.
+  \textbf{KEY:} The adaptive medium \emph{remembers} its flux history through $\Om$.
+  This history-dependence is what makes biological transport fundamentally different from
+  classical diffusion.}
+  \label{fig:omega_loop}
+\end{figure}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Thermodynamic Foundation}
+\subsection{Biological systems as nonequilibrium adaptive media}
+
+Living systems operate far from thermodynamic equilibrium \citep{schrodinger1944,prigogine1984}. In linear nonequilibrium thermodynamics \citep{onsager1931,prigogine1967}, flux arises from thermodynamic forces:
+\begin{equation}
+J_i = L_i X_i
+\label{eq:onsager}
+\end{equation}
+where $L_i$ is a transport coefficient and $X_i$ is the conjugate thermodynamic driving force. In CDFT language: $L_i = 1/C_i$. The key insight is that in biological systems, $L_i$ is not a material constant --- it is a dynamical variable that responds to flux, state, and history.
+
+Entropy production:
+\begin{equation}
+\dot{S} = \sum_i J_i X_i \geq 0
+\label{eq:entropy}
+\end{equation}
+defines the thermodynamic cost of maintaining biological organization. The structural limits on this entropy export translate into AFL constraint capacities. Living systems maintain internal order by exporting entropy --- and it is the architecture of this export machinery that defines $C$.
+
+\subsection{The Nernst grounding and bioelectric constraints}
+
+The bioelectric component of $\Om$ provides the clearest example of a thermodynamically grounded constraint:
+\begin{equation}
+E = \frac{RT}{zF} \ln\!\left(\frac{[\mathrm{ion}]_{\mathrm{out}}}{[\mathrm{ion}]_{\mathrm{in}}}\right)
+\label{eq:nernst}
+\end{equation}
+Ion gradients represent stored free energy driving electrical signalling, membrane transport, and tissue-level coordination \citep{Levin2021,Levin2012}. In CDFT terms, the membrane potential sets $C_{\mathrm{electric}}$: a depolarized membrane has high $C$ for ion-dependent signalling; a hyperpolarized membrane has low $C$ and high transport efficiency.
+
+\subsection{Maximum entropy and the AFL potential}
+
+The AFL potential $V(\Om)$ admits interpretation as constraint stress --- the degree to which the system's free energy processing capacity is being utilized. Connection to maximum entropy production \citep{martyushev2006}: while thermodynamics drives systems toward higher flux along free energy gradients, the AFL constraint architecture defines the ceiling $\Jmax$ that limits this drive. The master equation describes the biological system's trajectory as it maximizes entropy production subject to its constraint architecture.
+
+%% ────────────────────────────────────────────────────────────
+
+\section{The Dimensionless Constraint Utilization Index $\Phi$}
+\subsection{$\Phi$ as the AFL Reynolds number}
+
+For each constraint domain:
+\begin{equation}
+\Phi_i = \frac{J}{C_i(\Om)} \equiv \frac{F}{C_i^{-1}} = F \cdot C_i
+\label{eq:phi}
+\end{equation}
+$\Phi$ is the AFL analogue of the Reynolds number in fluid dynamics: a dimensionless predictor of regime transitions. The system-level index $\Phi_{\mathrm{sys}} = \max_i \Phi_i$. At $\Phi = 1$ (the constraint boundary), the system undergoes a pitchfork bifurcation:
+\begin{equation}
+\frac{dx}{dt} = a(1 - \Phi)x - bx^3
+\label{eq:bifurcation}
+\end{equation}
+For $\Phi < 1$: stable functional states. For $\Phi > 1$: only collapsed state remains. This is the mathematical signature of sudden clinical decompensation after prolonged apparent stability.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig4_phi_bifurcation.png}
+  \caption{\textbf{The AFL Dimensionless Index $\Phi$ and Phase Transition at $\Phi = 1$.}
+  \textbf{(A)} The $\Phi$ gauge. In CDFT language: $\Phi$ measures how close the flux
+  is to the constraint ceiling $1/C$. $\Phi = 0$ means $C \to 0$ (open medium);
+  $\Phi = 1$ means $C$ has risen to match the driving gradient; $\Phi > 1$ means
+  the constraint ceiling has been exceeded (system in violation).
+  \textbf{(B)} Pitchfork bifurcation at $\Phi = 1$: stable functional states exist for
+  $\Phi < 1$; at $\Phi = 1$ a phase transition occurs; only collapsed state $x^* = 0$
+  remains for $\Phi > 1$.
+  \textbf{KEY:} $\Phi$ is the AFL analogue of Reynolds number ($\mathrm{Re}$) in fluid
+  dynamics and $R_0$ in epidemiology --- a single dimensionless number predicting regime transitions.}
+  \label{fig:phi}
+\end{figure}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Main Results}
+
+\subsection{AFL definition}
+\textbf{Adaptive Flux Limitation} is the joint dynamics of throughput and constraint such that $C$ co-evolves with $\Phi$ according to \eqref{eq:aflode}, producing regulable $\Psi_s$. Equation~\eqref{eq:aflode} is the \textbf{0D AFL closure}; spatial extensions add redistribution terms as in the supplement.
+
+\textbf{Status: Derived}
+
+\subsection{Bottleneck (informal)}
+When multiple serial constraints $C_i$ limit throughput, the effective ceiling is often set by the tightest link; a minimal representation is $\Phi_{\mathrm{sys}} \lesssim \min_i C_i$ in appropriate units.
+
+\textbf{Status: Inferred}
+
+\subsection{Saturation}
+As external drive increases, measured throughput may plateau because $C$ rises with load or because $\Phi$ approaches a hard capacity; both are consistent with AFL-style regulation.
+
+\textbf{Status: Inferred}
+
+\section{Numerical Verification}
+The deterministic numerical check is a 2D lattice toy model with fixed seed \texttt{42}. A public supplementary script should be released under active paper numbering; the model itself is specified by conservative redistribution of $\Phi/C$ and constraint update
+\begin{equation}
+  \partial_t C = \alpha\,|\text{redistribution}| - \beta C + \gamma \nabla^2 C,
+\end{equation}
+discretized explicitly (details in-file). Tables T1--T3 report: final mean $\Psi_s$ with AFL on vs.\ $\alpha=0$ control; regime labels; spatial standard deviation of $C$ as a proxy for channeling.
+
+\textbf{Status: Derived}
+
+\section{Interpretation}
+Metabolic, vascular, and signaling examples fit the pattern ``drive $\rightarrow$ throughput $\rightarrow$ adaptive surface integration,'' but each domain requires its own measurement map from observables to the 4-state variables $(\Phi, C, S, M_s)$. Diseases may present as persistent mismatch driven by surface dysregulation: elevated $C$ (fibrosis (maladaptive $C$ elevation), inflammation (system-wide constraint $C$ amplification)), insufficient $\Phi$ (ischemia (severe $\Phi$ collapse)), or runaway $\Psi_s$ in cytokine storm--like caricatures driven by unconstrained memory feedback.
+
+\textbf{Status: Inferred}
+
+\section{Limitations and Open Problems}
+\begin{itemize}
+  \item Single-field reductions omit compartmental structure and control loops.
+  \item Parameters $(\alpha,\beta,\gamma)$ are not identified from data here.
+  \item Bands for $\Psi_s$ are interpretive, not universal diagnostic cutoffs.
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3.2cm}p{3.8cm}p{4.5cm}}
+\toprule
+Symbol & Clinical meaning & Measurement proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Physiological flux intensity & Substrate flux, perfusion rate, signaling rate & If $\Phi$ cannot be distinguished from driving gradient $\nabla\varphi$, mapping is not useful \\
+$C$ & Constraint / pathway resistance & Dynamic: lab markers of resistance; static: enzyme capacity & If $C$ does not respond to $\Phi$ changes (i.e., $\alpha \approx 0$), AFL adds nothing over static models \\
+$S$ & Surface responsiveness & Tissue adaptation score; receptor density index & If $S$ is constant across all patients, it can be absorbed into scaling \\
+$M_s$ & Surface memory / structural hysteresis & Biomarker of locked state: fibrosis score, epigenetic age & If $M_s$ relaxes to baseline instantly, memory framing is unnecessary \\
+$\Psi_s$ & Operating state ratio & Computed from pairs of flux/constraint markers; not a direct assay & If $\Psi_s$ is indistinguishable from a simple Phi/C ratio without $S \cdot M_s$, the extended model adds no value \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+AFL is layered on top of established physiology, not a replacement for it:
+\begin{itemize}
+    \item Adaptive regulation is well established: insulin secretion adapts to chronic glycaemic load; the kidney adjusts filtration and tubular function with sodium load; the heart remodels under chronic pressure overload.
+    \item AFL proposes a common mathematical language for these adaptations, not a new mechanism.
+    \item The $\Psi_s \approx 1$ homeostatic attractor is an interpretive framework, not a clinically validated threshold.
+    \item When AFL framing differs from standard clinical interpretation, standard clinical interpretation takes precedence.
+\end{itemize}
+
+\section{Experiments and Future Validation}
+
+\begin{enumerate}
+    \item \textbf{Mathematical consistency}: finite $\Psi_s$ at all parameters; stable equilibrium check; sensitivity to $\alpha$, $\beta$, $\gamma$.
+    \item \textbf{Synthetic perturbation}: release-local script (\texttt{supplementary/supplementary\_afl\_01.py}) — adaptive vs control 2-D lattice; metabolic channeling signature.
+    \item \textbf{In vitro}: perfused tissue challenge — does adaptive constraint formation produce channel-like heterogeneity in a controlled perfusion assay?
+    \item \textbf{Ex vivo}: organ-on-chip flow challenge — repeated load/recovery cycle; measurement of spatial constraint heterogeneity.
+    \item \textbf{Retrospective}: longitudinal biomarker datasets — does constraint marker elevation precede flux marker decline?
+    \item \textbf{Prospective}: cell atlas mapping of candidate $C(x,t)$ regions using HuBMAP spatial data.
+\end{enumerate}
+
+\textbf{Falsification}: if challenge response is fully explained by a single static concentration without adaptive constraint dynamics, AFL adds no mechanistic value.
+
+\section{Clinical Safety Boundary}
+
+This paper establishes a notation framework. It does not provide diagnostic thresholds, treatment guidance, or clinical decision tools. $\Psi_s$ values computed from the toy model are not patient measurements.
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_01.py}. Outputs in \texttt{outputs/paper\_01/}: \texttt{afl\_scenarios.csv}, \texttt{surface\_response.csv}, \texttt{adaptive\_vs\_control.png}, \texttt{summary.json}. All outputs are toy diagnostics. Claim status: mathematical demonstration only.
+
+\section{Conclusion}
+AFL-1 reframes a slice of physiology as coupled throughput--constraint dynamics governed by the adaptive operating ratio $\Psi_s=(\Phi/C) \cdot S \cdot M_s$. The toy model supports a minimal spatial demonstration of adaptive channeling vs.\ non-adaptive control, illustrating how biological surfaces dynamically integrate load. Clinical interpretation requires domain-specific measurement maps and validation.
+
+\textbf{Status: Inferred}
+
+\section{Relation to the CDFD physics manuscripts}
+The CDFD physics manuscripts and the OOL rewrite track share the same \textbf{claim discipline}: explicit assumptions, separation of derivation vs.\ interpretation, and script-backed numerics. AFL applies the notation layer $(\Phi, C, S, M_s, \Psi_s)$ to biology and clinic; it does not assert new vacuum or particle predictions.
+
+\textbf{Status: Inferred}
+
+\section{Reproducibility Note}
+\begin{itemize}
+  \item \textbf{Script:} \texttt{supplementary/supplementary\_afl\_01.py} (NumPy + matplotlib; seed 42; runtime $< 2$\,s).
+  \item \textbf{Outputs:} \texttt{outputs/paper\_01/} — CSV tables, PNG figure, summary JSON.
+\end{itemize}
+\textbf{Status: Derived}
+
+\section*{Conflict of Interest} The author declares no conflict of interest.
+\section*{Funding} This research received no external funding.
+\section*{Author Contributions} Conceptualization, formal analysis, runtime engineering, and manuscript preparation: S.B.M.
+\section*{Data Availability} All computational models, Python scripts, and numerical verifications are available in the \texttt{supplementary/} directory.
+
+\section{Reference Layer}
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

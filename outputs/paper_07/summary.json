@@ -1,0 +1,52 @@
+{
+  "clinical_status": "toy model; candidate analogy for oncology, viral foci, or biofilm systems only",
+  "diagnostic": "parasitic_drain",
+  "final_state": {
+    "C": {
+      "all_finite": true,
+      "max": 10.253074617871928,
+      "mean": 1.4714777090018476,
+      "min": 1.061830176394531
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "S": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 0.9577551020408164,
+      "min": 0.08
+    },
+    "meta": {
+      "life_number": 0.09442536870530449,
+      "ool_C_electron": 0.442758781132648,
+      "ool_C_input": 2.345579872896103,
+      "ool_C_proton": 0.47195053808516696,
+      "ool_C_stability": 0.19265256434511419,
+      "ool_J_max": 0.19265256434511419,
+      "ool_S_stability": 5.1906913536256845,
+      "ool_sigma_e": 0.442758781132648,
+      "ool_sigma_p": 0.47195053808516696,
+      "ool_transport_factor": 0.33972169001537644,
+      "throughput_J": 5.00551530229754
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 25.0,
+      "mean": 2.3454523218756944,
+      "min": 1.2541027245183942
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 1.1810765529161444,
+      "mean": 1.1148782107996615,
+      "min": 0.19486837602033313
+    },
+    "regime": "stable",
+    "t": 5.98
+  },
+  "interpretation": "A high-flow, low-responsiveness node perturbs the surrounding operating ratio."
+}

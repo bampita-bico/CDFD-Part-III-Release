@@ -1,0 +1,374 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newcommand{\maybeincludegraphics}[2][]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{\parbox{0.9\linewidth}{\centering Missing figure asset: \texttt{\detokenize{#2}}}}}}
+
+\title{\textbf{Paper BIO-03: Adaptive Flux Limitation in Erythropoiesis and Anaemia:\\ A CDFD Model of Blood Production Under Constraint}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Anemia of chronic disease, including in chronic kidney disease (CKD), is often explained by erythropoietin deficiency, iron restriction, and inflammation (system-wide constraint $C$ amplification). Clinical responses are nonlinear: erythropoiesis-stimulating agents (ESAs) show diminishing returns, and single-modality therapy frequently underperforms.
+
+We model erythropoiesis as an AFL system: \textbf{throughput} $\Phi$ is erythropoietic output (red-cell production intensity), \textbf{constraint} $C$ aggregates iron availability, inflammatory load, and marrow capacity, and $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ is a dimensionless adequacy ratio in normalized units. An active-numbered public supplement should contrast healthy, CKD, ESA-only, and multi-modality scenarios, illustrating ESA resistance when $C$ remains elevated.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper is the first direct bridge from notation to clinical reasoning. It frames disease trajectories as movements through a state space rather than as isolated abnormal laboratory values. In practice, a clinician sees this every day: patients worsen because a compensatory loop that once protected them becomes exhausted, rigid, or misdirected.
+
+In AFL terms, the bedside question becomes: what is the patient trying to move, what is blocking it, what response surface is still flexible, and what previous stress has become retained memory? This is why a single input escalation can fail. More erythropoietin, more insulin, more vasopressor, or more immunosuppression can be rational in one state and harmful or futile in another.
+
+The paper's translational claim is deliberately falsifiable. If $\Phi$, $C$, $S$, and $M_s$ proxies do not improve risk stratification, timing, or treatment matching beyond standard clinical variables, then AFL remains only a metaphor. The value of the framework depends on measurable trajectories.
+
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+\subsection{Formal Symbol Rigor: The Extended CDFD Paradigm}
+In strict alignment with the Fundamental Physics (Part I) and Origins of Life (Part II) archives, this biological translation formally preserves the exact Mujjabi transport tensor structure:
+\begin{itemize}
+    \item $\Phi$ (\textbf{Flow Intensity}): The physiological or biochemical drive (e.g., nutrient flux, signaling rate).
+    \item $C$ (\textbf{Constraint / Pathway Resistance}): The biological resistance regulating the flow. It dynamically evolves via the standard closure: $dC/dt = \alpha \Phi - \beta C$.
+    \item $S$ (\textbf{Surface Responsiveness}): The active response capability of the biological medium.
+    \item $M_s$ (\textbf{Surface Memory}): Structural hysteresis or maladaptive drift (e.g., chronic scarring, epigenetic locking) with a finite recovery time $\tau_M$.
+    \item $\Psi_s = (\Phi/C) \cdot S \cdot M_s$ (\textbf{Operating State Ratio}): The dimensionless index of biological health. $\Psi_s \approx 1$ defines homeostasis ($\Psi_s \approx 1.0$); $\Psi_s \gg 1$ defines pathological overload.
+\end{itemize}
+
+Erythropoiesis integrates EPO signaling, iron trafficking, marrow reserve, oxygen demand, and energy supply. Reductionist single-factor explanations miss coupled failures: ESA escalation with partial hemoglobin response, functional iron deficiency despite adequate stores, and inflammatory blunting.
+
+AFL-2 argued that diverse biological domains admit a shared $(\Phi, C, S, M_s, \Psi_s)$ skeleton. \textbf{Open gap addressed here:} whether a \emph{clinical} pathway exhibits the same qualitative coupling---especially ESA resistance driven by non-EPO constraints.
+
+\textbf{Status: Hypothesis}
+
+\section{Model and Assumptions}
+
+\subsection{Variables}
+\begin{itemize}
+  \item $\Phi$: erythropoietic throughput (production intensity), driven in part by EPO analogue $S_{\mathrm{EPO}}$ in the supplement.
+  \item $C$: effective constraint combining iron burden $\chi_{\mathrm{Fe}}$, inflammatory load $\chi_{\mathrm{inf}}$, and marrow cap $\chi_{\mathrm{mar}}$ (positive numbers; larger means tighter limitation in the toy normalization).
+  \item $\Psi_s=(\Phi/C) \cdot S \cdot M_s$: adequacy ratio; bands in the script mirror AFL-1--2 conventions for labeling only.
+\end{itemize}
+The scalar $C$ is therefore an aggregate marrow constraint, not a single assay or
+single molecular pathway.
+
+\textbf{Status: Derived} (definitions)
+
+\subsection{0D coupled dynamics used in the supplement}
+The script integrates
+\begin{align}
+  \dot{\Phi} &= S_{\mathrm{EPO}} - \Phi\, C, \\
+  \dot{C} &= \alpha\,|\dot{\Phi}| - \beta C,
+\end{align}
+with nonnegative $\alpha,\beta$ and scenario-dependent initial effective $C$ from $(\chi_{\mathrm{Fe}},\chi_{\mathrm{inf}},\chi_{\mathrm{mar}})$. This is a minimal caricature, not a marrow agent-based model.
+
+\textbf{Status: Hypothesis}
+
+\subsection{Assumptions C1--C3}
+\begin{itemize}
+  \item \textbf{C1} A single $\Phi$ represents net erythropoietic output adequate for comparing scenarios at cohort scale.
+  \item \textbf{C2} Iron and inflammation (system-wide constraint $C$ amplification) enter primarily through effective $C$, not separate state variables, in this toy.
+  \item \textbf{C3} ESA acts by increasing $S_{\mathrm{EPO}}$ without automatically lowering $C$.
+\end{itemize}
+
+\textbf{Status: Open}
+
+
+\section{Deep Analysis: Biological Implications of the CDFT/AFL Framework}
+\subsection{Homeostasis as $C$ management}
+
+Within CDFT/AFL, homeostasis ($\Psi_s \approx 1.0$) is continuous management of $C$ to keep $\Phi < 1$ across all constraint domains. AMPK \citep{hardie2014}, mTOR, HIF-1$\alpha$ \citep{semenza2012}, and the baroreceptor reflex are distributed sensors of $\Phi_i$ that trigger the fast dynamics (Eq.~\ref{eq:fast_constraint}) to reduce $C$ or $\Jreq$ when $\Phi_i$ rises. Disease begins when these mechanisms exhaust their capacity to keep $\Phi < 1$.
+
+\subsection{Resistance as adaptive $C$ upregulation}
+
+AFL reframes biological resistance as the system's correct response: adaptive $C$ upregulation when flux approaches the constraint ceiling. ESA hyporesponsiveness \citep{macdougall1995,vaziri2004}, insulin resistance (chronic $C_E$ upregulation) \citep{DeFronzo2009,PetersenShulman2018}, T-cell exhaustion \citep{ONeill2016,buck2015}, and antimicrobial resistance \citep{davies2010,AnderssonHughes2010} all represent states where demand has approached or exceeded $\Jmax$, and the system has raised $C$ (through fast dynamics) or allowed $C_i$ to erode (slow dynamics) to maintain structural integrity.
+
+In ESA hyporesponsiveness: $J_{\mathrm{erythropoiesis}} \leq \min\{J_{\mathrm{methyl}}, J_{\mathrm{energy}}, J_{\mathrm{redox}}\}$. Escalating EPO dose increases $\Jreq$ without expanding $C_i$ or reducing $C$, deepening constraint stress without restoring output.
+
+\subsection{Cancer as $C$ bypass}
+
+Malignant transformation represents partial escape from AFL through coordinated modification of the constraint architecture: the Warburg effect \citep{Warburg1956,VanderHeiden2009} raises glycolytic $C_{\mathrm{energy}}$; NRF2 activation expands redox $C_{\mathrm{redox}}$ \citep{schieber2014}; epigenetic deregulation reduces transcriptional $C$. In CDFT terms, cancer cells engineer themselves to have lower $C$ for proliferative processes --- operating near $\Phi \approx 1$ with minimal reserve, generating vulnerability to multi-constraint perturbation.
+
+\subsection{Disease dynamics across contexts}
+
+Figure~\ref{fig:disease} illustrates CDFT/AFL dynamics across four disease contexts.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig6_disease.png}
+  \caption{\textbf{CDFT/AFL Dynamics across Disease Contexts.}
+  All four panels can be read in CDFT language as $D_{\mathrm{eff}} = 1/C$ changing over time.
+  \textbf{(A)} Aging: $C$ rises as $C_i$ erodes ($dC_i/dt = -\lambda_i J + R_i$);
+  $D_{\mathrm{eff}}$ falls; transport capacity declines.
+  \textbf{(B)} insulin resistance (chronic $C_E$ upregulation): $C_{\mathrm{metabolic}}$ rises progressively;
+  $D_{\mathrm{eff,glucose}}$ falls; glucose uptake decouples from insulin signal.
+  \textbf{(C)} Differential stress response: cancer cells (\emph{engineered low $C$,
+  high $\Phi$}) collapse under dual-constraint perturbation; normal cells (high $C$
+  reserve) tolerate it.
+  \textbf{(D)} Pharmacological saturation: drug effect is limited by the system's
+  processing $C$; escalating dose cannot overcome a raised $C$.
+  \textbf{KEY:} All four panels are consequences of the same CDFT governing equation
+  $F = \nabla X/C(\Om,t)$ under domain-specific parameterization.}
+  \label{fig:disease}
+\end{figure}
+
+\subsection{Aging as $C$ drift}
+
+Aging is progressive, asymmetric drift of $C$ upward --- the slow dynamics operating without adequate repair:
+\begin{equation}
+\frac{dC_i}{dt} = -\lambda_i J + R_i < 0 \implies \frac{dC_i}{dt} > 0
+\label{eq:aging}
+\end{equation}
+$D_{\mathrm{eff}} = 1/C$ falls across all constraint domains. The rate of functional aging is determined not by chronological time but by the cumulative integral of $\Phi(t) \cdot \lambda_i$ --- a prediction with direct implications for longevity interventions \citep{longo2014,mattson2017}.
+
+\subsection{Embryological development as $C$-governed flux coordination}
+
+Embryological development requires sustained high flux across multiple constraint domains simultaneously \citep{Levin2021,Levin2012,tseng2013}:
+\begin{equation}
+J_{\mathrm{dev}} = J_{\mathrm{prolif}} + J_{\mathrm{diff}} + J_{\mathrm{migr}} + J_{\mathrm{pattern}} \leq \frac{\nabla X_{\mathrm{dev}}}{C_{\mathrm{dev}}(\Om, x, t)}
+\label{eq:jdev}
+\end{equation}
+In CDFT terms, the embryo is an adaptive medium in which bioelectric fields ($B_e$ component of $\Om$) establish spatial patterns of $C$ that guide tissue organization. Bioelectric patterning is not separate from mechanical development --- it is the mechanism by which the embryo sets its own $C(x)$ landscape, establishing which regions are ``open'' (low $C$, high flux permitted) and which are ``closed'' (high $C$, flux restricted). Neural Tube Defects reflect $\Phi_M \to 1$ in the methylation domain during the closure window, when $C_M$ is too high for the flux required for coordinated proliferation.
+
+\subsection{Stem cell regeneration and neural plasticity as $C$-reserve systems}
+
+Stem cells maintain low $C_{\mathrm{regen}}$ as a latent capacity reserve. Age-related regenerative failure occurs as the slow dynamics erode this reserve:
+\begin{equation}
+J_{\mathrm{regen}} \leq \frac{\nabla X_{\mathrm{regen}}}{C_{\mathrm{regen}}(\Om, t)}
+\end{equation}
+Neural plasticity is governed by $P(\Om) = g(E_n, B_e, E_p) = 1/C_{\mathrm{plasticity}}$: learning is biologically possible only when the medium is sufficiently ``open'' (low $C_{\mathrm{plasticity}}$) for synaptic reorganization.
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Bidirectional Constraint Dynamics in Clinical Settings}
+\label{sec:bidir}
+
+\subsection{The two-timescale model}
+
+Classical AFL (previous versions of this framework) included only the slow structural erosion equation. This captured chronic disease and aging but missed the acute protective upregulation that is the first line of biological defence against constraint saturation. We now formally introduce both:
+
+\textbf{Fast timescale (seconds--hours): Protective upregulation}
+\begin{equation}
+\frac{dC}{dt} = \alpha F - \beta C
+\label{eq:fast_lambda}
+\end{equation}
+When flux $F$ rises acutely, the system actively increases $C$ as a protective response --- enzyme product inhibition, baroreceptor reflex, immune negative feedback, autophagy induction, stress-activated protein kinase pathways. $\beta C$ is the relaxation term: when flux normalizes, $C$ decays back toward baseline with time constant $1/\beta$.
+
+At quasi-steady state of Equation~\eqref{eq:fast_lambda}:
+\begin{equation}
+C^* = \frac{\alpha}{\beta} F
+\label{eq:lambda_steady}
+\end{equation}
+Substituting into the CDFT law $F = \nabla X / C$: $F = \nabla X\beta / (\alpha F)$, giving $F^2 = (\beta/\alpha)\nabla X$, or $F = \sqrt{(\beta/\alpha)\nabla X}$. This is the \textbf{square-root flux law} --- a nonlinear relationship between driving gradient and flux that emerges from the adaptive medium, absent in any classical transport theory.
+
+\textbf{Slow timescale (years--decades): Structural erosion}
+\begin{equation}
+\frac{dC_i}{dt} = -\lambda_i \cdot J + R_i
+\label{eq:slow_erosion}
+\end{equation}
+When chronic flux damage $\lambda_i J$ exceeds repair capacity $R_i$, the constraint ceiling $C_i$ declines progressively. This is the aging and chronic disease trajectory, predicting decompensation at time $t^* = (C_i^0 - C_i^{\mathrm{threshold}})/(\lambda_i J - R_i)$.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig9_bidirectional.png}
+  \caption{\textbf{Bidirectional Constraint Dynamics: Fast Protective Upregulation and Slow Structural Erosion.}
+  \textbf{(A)} Fast timescale ($dC/dt = \alpha F - \beta C$): constraints rise
+  protectively when flux spikes; they relax when flux normalizes (time constant $1/\beta$).
+  In CDFT terms: the medium temporarily increases its own resistance to protect structural integrity.
+  \textbf{(B)} Slow timescale ($dC_i/dt = -\lambda_i J + R_i$): when cumulative damage
+  exceeds repair, the constraint ceiling erodes progressively. Predicts age of decompensation
+  from the patient's chronic flux history.
+  \textbf{(C)} Combined two-timescale system: fast acute homeostatic oscillations on slow
+  structural drift. $D_{\mathrm{eff}} = 1/C(t)$ integrates both timescales.
+  \textbf{KEY:} The two equations describe different mechanisms at different timescales.
+  They operate simultaneously, and together they account for both acute resilience and
+  chronic vulnerability.}
+  \label{fig:bidirectional}
+\end{figure}
+
+\subsection{The combined two-equation system}
+
+Together, Equations~\eqref{eq:fast_lambda} and \eqref{eq:slow_erosion} constitute the complete CDFT/AFL temporal dynamics:
+
+\begin{equation}
+\text{Flux law:} \quad F = \frac{\nabla X}{C}
+\label{eq:flux_law}
+\end{equation}
+\begin{equation}
+\text{Fast constraint adaptation:} \quad \frac{dC}{dt} = \alpha F - \beta C
+\label{eq:fast_constraint}
+\end{equation}
+\begin{equation}
+\text{Slow capacity erosion:} \quad \frac{dC_i}{dt} = -\lambda_i F + R_i
+\label{eq:slow_capacity}
+\end{equation}
+
+This three-equation system (flux law + fast dynamics + slow dynamics) describes growth, stabilization, acute adaptation, chronic erosion, and ultimate collapse:
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+\item \textbf{Homeostasis:} $C$ quickly adjusts to sustain $\Phi < 1$; $C_i$ stable when $\lambda_i F < R_i$
+\item \textbf{Acute stress:} $C$ rises protectively (Eq.~\ref{eq:fast_constraint}); flux temporarily suppressed; resolves when stress removed
+\item \textbf{Chronic disease:} $C_i$ erodes slowly (Eq.~\ref{eq:slow_capacity}); $C^*$ must rise to compensate; $\Phi$ creeps toward 1
+\item \textbf{Decompensation:} $C_i$ falls below critical threshold; $C$ can no longer compensate; $\Phi \to 1$ and bifurcation occurs
+\end{itemize}
+
+\subsection{Biological examples of fast protective upregulation}
+
+The fast dynamics (Eq.~\ref{eq:fast_constraint}) describe mechanisms that are well-documented but not previously unified under a single framework:
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+\item \textbf{Enzyme product inhibition:} High flux products inhibit upstream enzymes --- classic negative feedback. In CDFT: the enzyme acts as a $C$ transducer that increases resistance when output is high.
+\item \textbf{Baroreceptor reflex:} High arterial pressure triggers vasodilation and heart rate reduction --- reducing $F$ by increasing vascular $C$.
+\item \textbf{Immune negative feedback:} IL-10, TGF-$\beta$, regulatory T cells suppress immune activation when effector flux is high --- increasing immunological $C$.
+\item \textbf{Metabolic AMPK activation:} High AMP/ATP ratio activates AMPK, which suppresses anabolic processes --- reducing metabolic demand $\Jreq$ to match declining $\Jmax$.
+\item \textbf{Autophagy induction under nutrient stress:} When substrate flux falls, autophagy recycles intracellular components to maintain energetic flux --- an adaptive reduction of $C_E$ through internal resource mobilization.
+\end{itemize}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Main Results}
+
+\subsection{Multi-constraint anemia}
+When $\chi_{\mathrm{inf}}$ and $\chi_{\mathrm{Fe}}$ elevate $C$, the same $S_{\mathrm{EPO}}$ yields lower $\Psi_s$: anemia as \textbf{regulated} low throughput under high constraint, not only ``low EPO.''
+
+\textbf{Status: Inferred}
+
+\subsection{ESA resistance mechanism in the model}
+Boosting $S_{\mathrm{EPO}}$ raises $\dot{\Phi}$ transiently, but if $C$ adapts upward or remains large from iron/inflammation (system-wide constraint $C$ amplification), $\Phi$ plateaus: diminishing returns consistent with clinical ESA resistance \emph{in this toy parameterization}.
+
+\textbf{Status: Inferred}
+
+\subsection{Multi-modality advantage}
+Lowering $\chi_{\mathrm{Fe}}$ and $\chi_{\mathrm{inf}}$ in tandem with raised $S_{\mathrm{EPO}}$ increases final $\Psi_s$ more than ESA alone in the script's Table~2 comparison.
+
+\textbf{Status: Derived} (from supplied numerics)
+
+\section{Numerical Verification}
+Use an active-numbered public supplement. Table~1 lists scenarios (Healthy; CKD stages; ESA; ESA+iron; ESA+iron+anti-inflammatory) with final $\Psi_s$ and a discrete regime tag. Table~2 quantifies the percentage improvement in final $\Psi_s$ for combination vs.\ ESA-only under the stated parameters.
+
+\textbf{Status: Derived}
+
+\section{Interpretation}
+The framework reframes anemia of chronic disease as \textbf{coupled} throughput--constraint pathology: therapies that only move $\Phi$ while leaving $C$ high are predicted to underperform. This is consistent with guideline emphasis on iron repletion and inflammation (system-wide constraint $C$ amplification) control, but the model does not replace trials or individualized physiology.
+
+\textbf{Status: Inferred}
+
+\section{Limitations and Open Problems}
+\begin{itemize}
+  \item No patient-level calibration; units are normalized.
+  \item Hepcidin dynamics, hypoxia sensing, and stem-cell niches are collapsed into $C$.
+  \item Safety (ESA cardiovascular risk) is not modeled.
+\end{itemize}
+
+\textbf{Status: Open}
+
+
+\section{Biological Mujjabi Laws \& Discoveries}
+
+\subsection{The Mujjabi Boundary-Covariance Test \cite{MujjabiPartII2026}}
+Derived from the Origin of Life boundary conditions, the \textbf{Mujjabi Boundary-Covariance Test \cite{MujjabiPartII2026}} states that tissue health requires internal metabolic flux ($\Phi$) to strictly covary with boundary integrity ($S$). If flux scales up while boundary responsiveness drops (e.g., leaky gut, endothelial dysfunction), the adaptive ratio $\Psi_s$ decouples. Diagnosis of disease must verify this covariance, treating the boundary not as a passive wall, but as an active regulatory tensor.
+
+
+
+\section{Translational Medicine: The AFL Flux-Shunting Theorem in Sepsis and ICU Cascades}
+Ward-level medicine frequently encounters multi-organ failure. The CDFD framework mathematically models this via the \textbf{AFL Flux-Shunting Theorem}. 
+
+When a primary organ's constraint hits a critical threshold (e.g., $C_{renal} \to \infty$), the unresolvable physiological drive ($\Phi$) is not destroyed; it is topologically shunted to parallel vascular and tissue networks. This forced redirection of $\Phi$ into the cardiovascular system triggers systemic hypertension, vascular shearing, and subsequent heart failure. Intensive care unit (ICU) decompensation is thus modeled not as a sequence of independent organ failures, but as a topological cascade of overflowing $\Psi_s$ forcing adjacent systems past their Mujjabi Capacity limits.
+
+\section{Conclusion}
+AFL-3 applies the AFL contract to erythropoiesis: ESA resistance emerges when constraints remain high. The supplement provides deterministic contrasts aligned with Tables T1--T2.
+
+\textbf{Status: Inferred}
+
+\section{Reproducibility Note}
+\begin{itemize}
+  \item \textbf{Script packaging:} active-numbered public supplement.
+  \item \textbf{Dependencies:} NumPy; runtime $\ll 1$\,s.
+  \item \textbf{Outputs:} console Tables~1--2; improvement percentage in Table~2 footer.
+\end{itemize}
+
+\textbf{Status: Derived}
+
+
+\section{Clinical Translation Layer}
+The clinical translation of AFL begins with patient-level mapping. A disease state is not represented as one number, but as coupled axes: flux demand, constraint reserve, relaxation capacity, and compensatory cost. In anaemia of chronic disease, for example, erythropoietic flux cannot be interpreted without iron handling, inflammation (system-wide constraint $C$ amplification), renal signaling, marrow reserve, and oxygen demand. In metabolic disease, glucose flux cannot be interpreted without mitochondrial capacity, adipose buffering, inflammatory tone, and hepatic handling.
+
+\section{Patient-Level Workflow}
+A practical workflow has four steps. First, identify the dominant flux: oxygen delivery, glucose throughput, inflammatory signaling, phosphate handling, drug exposure, or cell-proliferation drive. Second, identify the active constraint: renal reserve, mitochondrial redox capacity, hepcidin-mediated iron restriction, receptor saturation, vascular stiffness, immune regulation, or tissue perfusion. Third, estimate whether the patient is in compensation, saturation, or collapse. Fourth, choose an intervention that changes the relevant axis rather than simply pushing more flux through a constrained system.
+
+\section{Clinical Prediction}
+The central clinical prediction is that failed therapy often reflects a mismatched axis. Increasing flux when constraint is the dominant problem should produce diminishing returns or toxicity. Reducing constraint when flux is absent should produce little benefit. Multi-modal therapy works when each intervention targets a different limiting axis: source reduction, constraint relief, relaxation enhancement, or redistribution of load.
+
+\section{Medical Falsifiability}
+AFL clinical translation fails if it cannot improve stratification beyond standard disease categories, if proposed constraint variables do not track outcome, or if predicted multi-axis interventions do not outperform single-axis escalation in appropriately matched patients. The framework should be tested against clinical trajectories, not anecdotes.
+
+
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{2.8cm}p{3.5cm}p{5cm}}
+\toprule
+Symbol & Clinical meaning & ICU / clinical proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Physiological flux (e.g., cardiac output, oxygen delivery) & Lactate, vasopressor dose, urine output & If $\Phi$ proxy cannot be separated from haemodynamic drivers, mapping collapses \\
+$C$ & Multi-organ constraint load & CRP, creatinine, endothelial leak markers & If $C$ is indistinguishable from severity scores (SOFA, APACHE), AFL adds no stratification \\
+$S$ & Organ responsiveness reserve & Pre-illness organ function; frailty index & If $S$ is uncorrelated with recovery trajectory, the surface framing adds nothing \\
+$M_s$ & Post-ICU memory / PICS & Persistent inflammatory markers; cognitive testing at 6 months & If $M_s$ decays to baseline within 24h, memory framing is not needed \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework for ICU cascade framing, not a clinical protocol.
+\begin{itemize}
+    \item Sepsis management: SSC 2021 guidelines take precedence — antimicrobials, source control, fluid assessment, vasopressors. AFL framing does not replace any SSC 2021 recommendation.
+    \item Multi-organ failure: organ support decisions (dialysis, ventilation, vasopressor titration) are made by specialist teams using established monitoring, not Psi\_s values.
+    \item Post-ICU sequelae: PICS rehabilitation is an active clinical field; AFL memory framing is a hypothesis, not a rehabilitation protocol.
+\end{itemize}
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_03.py}. Outputs in \texttt{outputs/paper\_03/}: \texttt{sepsis\_cascade.csv}, \texttt{cardiorenal\_transfer.csv}, \texttt{post\_icu\_recovery.csv}, \texttt{icu\_organ\_coupling.png}, \texttt{summary.json}. All outputs are toy diagnostics under stated assumptions.
+
+\section*{Conflict of Interest} The author declares no conflict of interest.
+\section*{Funding} This research received no external funding.
+\section*{Author Contributions} Conceptualization, formal analysis, runtime engineering, and manuscript preparation: S.B.M.
+\section*{Data Availability} All computational models and scripts are in the \texttt{supplementary/} directory.
+
+\section{Reference Layer}
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

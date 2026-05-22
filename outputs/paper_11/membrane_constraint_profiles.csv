@@ -1,0 +1,12 @@
+V_m_mV,C_mem,Psi_s,state,regime
+-90,4.0774,0.2453,hyperpolarised,constrained
+-80,2.4731,0.4044,hyperpolarised,constrained
+-70,1.5,0.6667,resting,constrained
+-60,0.9098,1.0991,partially depolarised,balanced
+-50,0.5518,1.8122,partially depolarised,overload
+-40,0.3347,2.9878,partially depolarised,overload
+-30,0.203,4.926,depolarised (tumour-like),overload
+-20,0.1231,8.1217,depolarised (tumour-like),overload
+-10,0.0747,13.3904,depolarised (tumour-like),overload
+0,0.0453,22.077,depolarised (tumour-like),overload
+10,0.0275,36.3988,depolarised (tumour-like),overload

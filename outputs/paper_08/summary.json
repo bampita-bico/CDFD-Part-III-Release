@@ -1,0 +1,81 @@
+{
+  "clinical_status": "toy model; not an autoimmune treatment protocol",
+  "diagnostic": "autoimmune_boundary",
+  "global_final": {
+    "C": {
+      "all_finite": true,
+      "max": 1.9600000000000009,
+      "mean": 1.9600000000000009,
+      "min": 1.9600000000000009
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.12,
+      "mean": 1.1200000000000003,
+      "min": 1.12
+    },
+    "S": {
+      "all_finite": true,
+      "max": 0.5199999999999996,
+      "mean": 0.5199999999999996,
+      "min": 0.5199999999999996
+    },
+    "meta": {
+      "autoimmune_state_active": true,
+      "treatment_type": "global_immunosuppression"
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 0.2971428571428568,
+      "mean": 0.2971428571428567,
+      "min": 0.2971428571428568
+    },
+    "regime": "constrained",
+    "t": 4.78
+  },
+  "interpretation": "The model contrasts global responsiveness suppression with a memory-targeted toy intervention.",
+  "targeted_final": {
+    "C": {
+      "all_finite": true,
+      "max": 1.9600000000000009,
+      "mean": 1.9600000000000009,
+      "min": 1.9600000000000009
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "S": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "meta": {
+      "autoimmune_state_active": true,
+      "treatment_type": "afl_targeted_clearance"
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 0.5102040816326529,
+      "mean": 0.5102040816326527,
+      "min": 0.5102040816326529
+    },
+    "regime": "constrained",
+    "t": 4.78
+  }
+}

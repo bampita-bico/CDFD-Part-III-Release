@@ -1,0 +1,564 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newenvironment{corebox}{\begin{center}\begin{minipage}{0.95\linewidth}\hrule\vspace{0.5em}}{\vspace{0.5em}\hrule\end{minipage}\end{center}}
+\newcommand{\maybeincludegraphics}[2][]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{\parbox{0.9\linewidth}{\centering Missing figure asset: \texttt{\detokenize{#2}}}}}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-04: Adaptive Flux Limitation in Mainstream Systems Medicine:\\ A CDFD Model of Insulin Resistance, CKD-MBD, and Multi-Constraint Disease}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Mainstream Systems Medicine: A CDFD Model of Insulin Resistance, CKD-MBD, and Multi-Constraint Disease}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+The central claim is conservative: chronic disease often progresses because one overloaded surface transfers burden to another. Insulin resistance, CKD-MBD, anaemia, vascular calcification, and cardiometabolic decline are treated here as interacting constraint states rather than isolated labels. This permits a structured reading of why single-axis treatment can plateau, why compensation has a cost, and why clinical interpretation must preserve guideline primacy.
+
+The paper maps $\Phi$, $C$, $S$, $M_s$, and $\Psi_s$ to metabolic and renal proxies, then states explicit invalidation conditions. Runtime outputs are used only as candidate AFL translations and falsification targets; they are not clinical measurements, prescribing guidance, or proof of disease mechanism.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper places AFL inside mainstream medicine rather than outside it. The aim is not to replace standard physiology, epidemiology, or evidence-based practice. The aim is to make visible a pattern that appears across chronic disease: systems often fail because burden is transferred from one compensatory layer to the next until reserve is gone.
+
+For a doctor, this is familiar in multimorbidity. A kidney problem becomes a bone-mineral problem, then a vascular problem, then an anaemia problem, then a cardiac risk problem. A metabolic problem becomes hepatic, vascular, inflammatory, renal, and neurological. AFL gives those transitions one shared vocabulary: load, constraint, response, retained memory, and redistribution.
+
+The practical standard is conservative. Any AFL-derived clinical proposal must be compared against current guidelines, validated risk scores, and patient-safety constraints. The framework can suggest why a protocol fails or where a bottleneck sits; it cannot by itself authorize a treatment.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+Mainstream medicine already sees chronic illness as a systems problem. A patient with type 2 diabetes is rarely only hyperglycaemic; the same person may carry hepatic fat, vascular stiffness, renal risk, inflammation, sleep disruption, frailty, neuropathy, and medication trade-offs. A patient with CKD is rarely only losing filtration; phosphate handling, FGF23, PTH, vitamin D, erythropoiesis, vascular calcification, and cardiac load move together. The clinical challenge is not the absence of facts. It is the difficulty of tracking how burden transfers from one physiological surface to another.
+
+AFL is used here as a notation for that transfer. $\Phi$ names the relevant physiological drive, $C$ the limiting constraint, $S$ the tissue response, and $M_s$ the retained memory of prior stress. The operating ratio $\Psi_s=(\Phi/C)\cdot S\cdot M_s$ is not a bedside score in this paper. It is a disciplined way to ask whether a system is under-delivered, overloaded, poorly responsive, or locked into maladaptive memory.
+
+This matters clinically because compensations can look like stability. Hyperinsulinaemia can hide metabolic overload. Bone and hormonal buffering can hide renal mineral stress. Higher cardiac output can temporarily hide vascular resistance. The plateau appears only later, when a second constraint becomes dominant. AFL therefore treats chronic disease progression as a sequence of revealed bottlenecks rather than a collection of unrelated failures.
+
+The safety boundary is explicit. This paper does not alter ADA diabetes guidance, KDIGO CKD guidance, cardiovascular risk management, or individualized specialist care. It proposes a research language for mapping burden, prioritizing measurable proxies, and stating where the framework would fail.
+
+\textbf{Status: Hypothesis}
+
+\section{Metabolism as a Flux System}
+
+Define metabolic flux:
+
+\begin{equation}
+J_{met} = \text{rate of substrate utilization}
+\end{equation}
+
+Driven by:
+
+\begin{equation}
+J_{met} = \frac{\nabla \Phi}{C_{met}}
+\end{equation}
+
+Where:
+
+\begin{itemize}
+    \item $\Phi$ = metabolic potential (nutrient gradient)
+    \item $C_{met}$ = metabolic constraints
+\end{itemize}
+
+\section{Metabolic Constraints}
+
+Key constraints include:
+
+\subsection{Mitochondrial Capacity}
+
+Limits oxidative phosphorylation:
+
+\begin{equation}
+C_{mito} \uparrow \Rightarrow J_{met} \downarrow
+\end{equation}
+
+\subsection{Redox Balance}
+
+NADH/NAD$^+$ ratio constrains flux.
+
+\subsection{Substrate Overload}
+
+Excess glucose or lipids increase intracellular stress.
+
+\subsection{Enzymatic Saturation}
+
+Glycolytic and oxidative enzymes have finite capacity.
+
+\section{Insulin as a Flux Regulator}
+
+Insulin increases glucose flux:
+
+\begin{equation}
+\Phi \uparrow \Rightarrow J_{glucose} \uparrow
+\end{equation}
+
+However, when constraints are exceeded:
+
+\begin{equation}
+C_{met} \uparrow
+\end{equation}
+
+Result:
+
+\begin{equation}
+J_{met} \text{ plateaus}
+\end{equation}
+
+\section{insulin resistance (chronic $C_E$ upregulation) as AFL}
+
+We define insulin resistance (chronic $C_E$ upregulation) as:
+
+\begin{center}
+\textit{An adaptive increase in metabolic constraints to limit substrate flux under overload}
+\end{center}
+
+Mathematically:
+
+\begin{equation}
+\frac{dC_{met}}{dt} = \alpha J_{met} - \beta C_{met}
+\end{equation}
+
+Interpretation:
+
+\begin{itemize}
+    \item high nutrient flux increases constraints
+    \item cells reduce glucose uptake to prevent damage
+\end{itemize}
+
+\section{Tissue-Specific Behavior}
+
+Different tissues exhibit different constraint profiles:
+
+\subsection{Muscle}
+
+Primary site of glucose disposal.
+
+Constraint:
+
+\begin{itemize}
+    \item mitochondrial capacity
+\end{itemize}
+
+\subsection{Liver}
+
+Controls glucose production.
+
+Constraint:
+
+\begin{itemize}
+    \item gluconeogenesis regulation
+\end{itemize}
+
+\subsection{Adipose Tissue}
+
+Stores excess energy.
+
+Constraint:
+
+\begin{itemize}
+    \item lipid storage capacity
+\end{itemize}
+
+\section{Type 2 Diabetes}
+
+In Type 2 diabetes:
+
+\begin{itemize}
+    \item chronic nutrient excess increases $J_{met}$
+    \item constraints rise progressively
+\end{itemize}
+
+Result:
+
+\begin{equation}
+C_{met} \uparrow \Rightarrow J_{glucose} \downarrow
+\end{equation}
+
+Outcome:
+
+\begin{itemize}
+    \item hyperglycemia
+    \item compensatory hyperinsulinemia
+\end{itemize}
+
+\section{Type 1 Diabetes}
+
+Type 1 diabetes differs fundamentally:
+
+\begin{itemize}
+    \item insulin production is absent
+    \item flux is not properly regulated
+\end{itemize}
+
+Thus:
+
+\begin{equation}
+\Phi \text{ dysregulated} \Rightarrow J_{met} \text{ uncontrolled}
+\end{equation}
+
+Constraints still exist, but:
+
+\begin{itemize}
+    \item glucose cannot enter cells efficiently
+    \item alternative pathways dominate (ketosis)
+\end{itemize}
+
+\section{Fasting and OMAD}
+
+Fasting reduces flux:
+
+\begin{equation}
+J_{met} \downarrow \Rightarrow C_{met} \downarrow
+\end{equation}
+
+This restores sensitivity:
+
+\begin{itemize}
+    \item insulin response improves
+    \item metabolic flexibility increases
+\end{itemize}
+
+OMAD (One Meal A Day) produces:
+
+\begin{itemize}
+    \item low baseline flux
+    \item transient high flux
+    \item improved regulation
+\end{itemize}
+
+\section{Metabolic Flexibility}
+
+Defined as the ability to switch between substrates:
+
+\begin{equation}
+\text{flexibility} \propto \frac{1}{C_{met}}
+\end{equation}
+
+High constraint reduces flexibility.
+
+\section{Flux–Constraint Regime}
+
+\begin{equation}
+\Psi_{s,met} = \frac{J_{met}}{C_{met}}
+\end{equation}
+
+\begin{itemize}
+    \item $\Psi_s < 1$: suppressed metabolism
+    \item $\Psi_s \approx 1$: optimal balance
+    \item $\Psi_s > 1$: overload and instability
+\end{itemize}
+
+\section{Clinical Implications}
+
+\subsection{Dietary Strategies}
+
+\begin{itemize}
+    \item reduce chronic flux (caloric restriction)
+    \item increase metabolic capacity (exercise)
+\end{itemize}
+
+\subsection{Pharmacology}
+
+Drugs act by:
+
+\begin{itemize}
+    \item increasing flux capacity
+    \item reducing substrate load
+\end{itemize}
+
+\subsection{Integrated Therapy}
+
+Effective treatment must address:
+
+\begin{itemize}
+    \item substrate load
+    \item mitochondrial function
+    \item hormonal regulation
+\end{itemize}
+
+\section{Predictions}
+
+AFL predicts:
+
+\begin{itemize}
+    \item insulin resistance (chronic $C_E$ upregulation) emerges with sustained nutrient excess
+    \item fasting improves insulin sensitivity
+    \item metabolic flexibility correlates with constraint reduction
+\end{itemize}
+
+\section{Numerical Verification}
+This installment's toy deterministic checks should be packaged as an active-numbered public supplement (NumPy; seed and parameters in-file). Console tables illustrate the adopted AFL closure; they do not substitute for cohort or experimental validation.
+
+\textbf{Status: Derived}
+
+\section{Interpretation}
+Domain-specific narratives above map mechanisms to $(\Phi, C, S, M_s, \Psi_s)$ within the AFL working model. Interpretive claims are model-mediated; claim strengths follow the public status labels used throughout this paper.
+
+\textbf{Status: Inferred}
+
+\section{Limitations and Open Problems}
+
+\begin{itemize}
+    \item simplified representation of complex metabolic networks
+    \item requires quantitative validation
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+AFL would be invalid if:
+
+\begin{itemize}
+    \item insulin resistance (chronic $C_E$ upregulation) occurs without increased metabolic flux
+    \item fasting does not improve metabolic sensitivity
+    \item constraints do not correlate with metabolic dysfunction
+\end{itemize}
+
+\textbf{Status: Open}
+
+
+\section{Deep Analysis: Constraint Hierarchy and Sequential Limitation}
+\subsection{The formal constraint hierarchy as $C$ architecture}
+
+The five principal constraint domains form a thermodynamic hierarchy:
+\begin{equation}
+C_{\mathrm{energy}} \supseteq C_{\mathrm{redox}} \supseteq C_{\mathrm{enz}} \supseteq C_{\mathrm{electric}} \supseteq C_{\mathrm{info}}
+\label{eq:hierarchy}
+\end{equation}
+In CDFT terms, each constraint domain contributes a component of $C$:
+\begin{equation}
+C(\Om, t) = C_E(\Om) + C_R(\Om) + C_M(\Om) + C_T(\Om) + C_S(\Om)
+\label{eq:lambda_decomp}
+\end{equation}
+The hierarchy means that $C_E$ (energetic component) is the deepest --- all other $C$ components depend on it. A mitochondrially depleted cell has uniformly high $C$ across all domains because all other constraint capacities require ATP.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig2_hierarchy.png}
+  \caption{\textbf{AFL Constraint Hierarchy as $C$ Architecture.}
+  Each horizontal band = one constraint domain, one component of the total $C(\Om,t)$.
+  The ordering $C_{\mathrm{energy}} \supseteq C_{\mathrm{redox}} \supseteq \ldots \supseteq C_{\mathrm{info}}$
+  means deeper constraints contribute to $C$ globally; surface constraints contribute locally.
+  Measurement proxies are annotated for each domain.
+  \textbf{KEY:} In CDFT language, failing the deepest constraint raises $C$ system-wide;
+  failing a surface constraint raises $C$ for specific processes only.
+  OCR = oxygen consumption rate; GSH/GSSG = glutathione redox ratio;
+  SAM/SAH = methylation index; TEER = transepithelial electrical resistance.}
+  \label{fig:hierarchy}
+\end{figure}
+
+Table~\ref{tab:hierarchy_proxies} characterizes each constraint domain with biological basis and measurement proxies.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{AFL Constraint Hierarchy: Biological Characterization and Measurement Proxies.}
+Each constraint domain is one component of $C(\Om,t)$ in CDFT. A composite
+constraint index $C_\Om$ constructed from normalized $\Phi_i$ values is predicted to
+outperform single-domain biomarkers in predicting disease risk and therapeutic response.}
+\label{tab:hierarchy_proxies}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{>{\bfseries}lXXX}
+\toprule
+Constraint / $C$ component & Biological Basis & Representative Proxies & Disease when $C_i \downarrow$ \\
+\midrule
+$C_{\mathrm{energy}}$ ($C_E$) & Mitochondrial oxidative phosphorylation; ATP production & ATP/ADP ratio; OCR (Seahorse XF); $\Delta\Psi_m$; lactate/pyruvate & Heart failure; sepsis; growth restriction \\[2pt]
+$C_{\mathrm{redox}}$ ($C_R$) & Antioxidant buffering; ROS tolerance threshold & GSH/GSSG; NADH/NAD$^+$; 8-OHdG; isoprostanes & Oxidative disorders; neurodegeneration; developmental anomalies \\[2pt]
+$C_{\mathrm{enz}}$ ($C_M$) & Catalytic turnover; active enzyme concentration & Rate-limiting enzyme activity; isotope tracer flux & Inborn errors; drug-metabolizing deficiencies \\[2pt]
+$C_{\mathrm{electric}}$ ($C_T$) & Membrane potential; ion gradients; gap junctions & Membrane potential imaging; ion flux; TEER & Epilepsy; cardiac arrhythmias; patterning defects \\[2pt]
+$C_{\mathrm{info}}$ ($C_S$) & One-carbon metabolism; signalling fidelity & SAM/SAH; erythrocyte folate; plasma homocysteine & CKD anaemia; neural tube defects; epigenetic disease \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Sequential limitation as predictable $C$ revelation}
+
+Because throughput is governed by the most restrictive effective constraint, interventions targeting one constraint domain reduce that component of $C$ while leaving others unchanged. The next most restrictive constraint becomes visible as a new plateau. Each sequential plateau is not treatment failure --- it is the architecture of $C$ revealing its next dominant component. This is the mechanistic rationale for the superiority of multi-constraint capacity-expansion strategies over single-target interventions.
+
+\subsection{Nested hierarchical flux cascades}
+
+Biological systems are organized in nested spatial hierarchies where $C$ propagates:
+\begin{equation}
+J_{\mathrm{sys}} = \min_k C^{(k)}, \qquad J^{(k+1)} = \beta_k \cdot J^{(k)}
+\label{eq:cascade}
+\end{equation}
+where $\beta_k \approx 0.1$ across trophic levels (thermodynamic efficiency loss per level). This mirrors turbulent energy cascades \citep{kolmogorov1991,richardson1922} and the Constructal Law \citep{West1997}: transport networks at every scale are organized to minimize the aggregate $C$ cost of sustaining required flux.
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Network Representation and the Constructal Law}
+\subsection{Graph-theoretic formulation}
+
+Biological networks $G = (V, E)$ with edge flux $J_{ij} \leq C_{ij}$ and node conservation. Network stress:
+\begin{equation}
+V(G) = \sum_{ij} \alpha_{ij} \left(\frac{J_{ij}}{C_{ij}}\right)^2 = \sum_{ij} \alpha_{ij} C_{ij}^2
+\label{eq:network_stress}
+\end{equation}
+AFL dynamics: $dJ_{ij}/dt = -2\alpha_{ij} J_{ij}/C_{ij}^2$, directing flux away from high-$C$ edges.
+
+\subsection{Network efficiency evolution: the Constructal Law in biology}
+
+In classical AFL (previous versions of this framework), edge capacities $C_{ij}$ were treated as fixed or only subject to downward erosion under constraint stress. This misses the complementary upward direction: \textbf{sustained high-flux paths develop higher capacity over time}.
+
+We introduce the network efficiency evolution equation:
+\begin{equation}
+\frac{dC_{ij}}{dt} = \beta J_{ij} - \delta C_{ij}
+\label{eq:constructal}
+\end{equation}
+where $\beta$ is the capacity growth rate (dependent on sustained flux) and $\delta$ is the decay rate (use-it-or-lose-it principle). At equilibrium:
+\begin{equation}
+C_{ij}^* = \frac{\beta}{\delta} J_{ij}
+\label{eq:constructal_eq}
+\end{equation}
+
+\begin{corebox}
+\textbf{The Constructal Law as AFL:} Equation~\eqref{eq:constructal} is the biological implementation of the Constructal Law \citep{bejan2000}: flow architectures evolve to minimize the global $C$ cost of sustaining required flux. High-flux paths develop lower $C_{ij}$ over time; low-flux paths become more constrained. The network reshapes itself around its own flow patterns.
+\end{corebox}
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig10_network_evolution.png}
+  \caption{\textbf{Network Efficiency Evolution: The Constructal Law as Universal AFL Network Dynamics.}
+  \textbf{(A)} Initial network with uniform capacities.
+  \textbf{(B)} After 20 adaptation steps: high-flux paths have gained capacity
+  (edge thickness $\propto C_{ij}$; colour $\propto J_{ij}$).
+  \textbf{(C)} Capacity evolution over time: high-flux paths grow ($dC_{ij}/dt > 0$);
+  low-flux paths decay ($dC_{ij}/dt < 0$); the network reorganizes around dominant flows.
+  \textbf{KEY:} $dC_{ij}/dt = \beta J_{ij} - \delta C_{ij}$.
+  This single equation unifies neural plasticity (synaptic potentiation), vascular remodelling
+  (VEGF-driven dilation), bone remodelling (Wolff's law), and metabolic enzyme induction.
+  All are special cases of AFL network efficiency evolution.}
+  \label{fig:network_evolution}
+\end{figure}
+
+\subsection{Biological manifestations of network efficiency evolution}
+
+Equation~\eqref{eq:constructal} unifies several biological phenomena previously described in isolation:
+
+\textbf{Neural plasticity.} The plasticity law $dw_{ij}/dt = \eta x_i x_j P(\Om)$ is a special case of Equation~\eqref{eq:constructal} where $\beta = \eta x_i x_j P(\Om)$ and $\delta$ is the synaptic decay rate \citep{Feldman2009}. The plasticity modulation function $P(\Om) = g(E_n, B_e, E_p)$ is the $C$-governed capacity for network reorganization.
+
+\textbf{Vascular remodelling.} Arteries subjected to sustained high flow upregulate VEGF, dilate, and hypertrophy their walls --- increasing $C_{ij}$ along high-flux vascular paths. Low-flow vessels atrophy. This is Equation~\eqref{eq:constructal} with $\beta \propto$ shear stress and $\delta \propto$ apoptotic rate \citep{West1997}.
+
+\textbf{Bone remodelling (Wolff's Law).} Bone deposits along mechanical loading axes and resorbs from unloaded regions. Load = mechanical flux; bone density = $C_{ij}$. Wolff's Law is Equation~\eqref{eq:constructal} applied to structural tissue.
+
+\textbf{Metabolic enzyme induction.} Pathways carrying sustained high substrate flux upregulate their rate-limiting enzymes, increasing $C_{\mathrm{enz}}$. Unused pathways are downregulated. This is the AFL network efficiency evolution principle applied at the biochemical scale.
+
+\textbf{New cross-system prediction:} High-flux biological networks should show measurable capacity expansion markers (vascular VEGF upregulation, synaptic AMPA receptor insertion, metabolic enzyme mRNA, osteoid deposition) proportional to sustained $J_{ij}$. These markers should correlate across systems in patients with high metabolic flux states (exercise, chronic inflammation (system-wide constraint $C$ amplification), cancer). Falsification: no correlation between sustained flux markers and capacity expansion indicators.
+
+%% ────────────────────────────────────────────────────────────
+
+
+\subsection{Biological Translation of the Mujjabi Vacuum Memory Law \cite{MujjabiPartI2026}}
+Part I defines the Mujjabi Vacuum Memory Law \cite{MujjabiPartI2026} as the persistence of local constraint history with a finite recovery time $\tau_M$. Biologically, this is Structural Drift. When disease stress (high $\Phi$) elevates $C$, an impaired relaxation factor $\beta \to 0$ causes the constraint to persist long after the stress is removed. This memory mechanism locks tissues into chronic, irreversible states (e.g., Fibrosis, Type 2 Diabetes, Chronic Kidney Disease).
+
+
+
+\section{Translational Hypothesis: The AFL Renal Protocol for Anaemia and MBD}
+CKD-MBD and renal anaemia are examples of systems burden: mineral, vascular, inflammatory, erythropoietic, and renal-clearance constraints interact. AFL frames this as a multi-axis problem rather than a reason to abandon existing protocols. Escalating a single input may expose a second bottleneck when the upstream constraint remains high.
+
+The proposed contribution is interpretive and testable: map which constraint is dominant before expecting a linear response. It does not override nephrology guidelines, trial evidence, or patient-specific risk assessment.
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3.0cm}p{3.5cm}p{4.5cm}}
+\toprule
+Symbol & Metabolic/comorbidity meaning & Clinical proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Metabolic flux (glucose, insulin secretion) & C-peptide, VO$_2$, substrate oxidation rate & Cannot be separated from energy intake without controlled conditions \\
+$C$ & Insulin resistance / metabolic constraint & HOMA-IR, fasting insulin, HbA1c & If HOMA-IR and CKD staging together explain all variance, AFL adds nothing \\
+$M_s$ & Metabolic memory (adipose, epigenetic) & FIB-4 (liver), HbA1c trend, epigenetic age & If M\_s relaxes to baseline within weeks of weight loss, long-term framing is unnecessary \\
+$\Psi_s$ & Metabolic operating state & Computed proxy; not a direct assay & If trajectory matches a simple BMI-adjusted risk score, AFL framework adds no value \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+This paper layers AFL on top of established metabolic and CKD medicine:
+\begin{itemize}
+    \item \textbf{ADA Standards of Care 2026}: obesity, pharmacologic treatment, cardiovascular risk, kidney risk, retinopathy/neuropathy/foot care, pregnancy, older adults.
+    \item \textbf{KDIGO 2024 CKD}: eGFR staging, albuminuria, CKD-MBD, cardiovascular comorbidity.
+    \item When AFL interpretation of diabetes or CKD contradicts ADA 2026 or KDIGO 2024, the guideline takes precedence.
+    \item AFL does not modify prescribing decisions for GLP-1, SGLT2, metformin, or CKD mineral management.
+\end{itemize}
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework, not clinical care guidance.
+\begin{itemize}
+    \item Diabetes management follows ADA Standards of Care 2026. AFL framing does not change glycaemic targets, drug selection, or monitoring intervals.
+    \item CKD management follows KDIGO 2024. AFL does not replace eGFR-based staging or albuminuria thresholds.
+    \item Obesity and frailty management requires specialist assessment. AFL comorbidity matrix is a research hypothesis.
+    \item Pregnancy constraints require obstetric and endocrine specialist care — not AFL framing.
+\end{itemize}
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_04.py}. Outputs in \texttt{outputs/paper\_04/}: \texttt{metabolic\_tissues.csv}, \texttt{ckd\_mbd\_cascade.csv}, \texttt{insulin\_resistance\_afl.png}, \texttt{summary.json}. All outputs are candidate AFL translations — not validated clinical measurements.
+
+\section{Conclusion}
+
+AFL provides a unified constraint-based language for metabolic comorbidity burden. Insulin resistance, CKD-MBD, and cardiovascular-kidney-metabolic syndrome share the property of progressive constraint accumulation with memory locking. This is a research hypothesis; clinical decisions follow ADA 2026 and KDIGO 2024 guidelines.
+
+\textbf{Status: Inferred}
+
+\section{Reproducibility Note}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_04.py} (NumPy + matplotlib; runtime $< 2$\,s).
+
+\textbf{Status: Derived}
+\clearpage
+\section*{Adaptive Flux Limitation in Chronic Kidney Disease: A Systems-Level Interpretation of Mineral and Bone Disorder}
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

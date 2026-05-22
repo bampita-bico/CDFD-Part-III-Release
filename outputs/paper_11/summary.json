@@ -1,0 +1,19 @@
+{
+  "claim_status": "toy diagnostic \u2014 experimental framework only",
+  "falsification": "If membrane potential change does not correlate with metabolic flux rate after controlling for direct ion current effects, C_mem as AFL constraint provides no additional explanatory power.",
+  "paper": "11",
+  "safety_note": "Bioelectric therapeutic claims require clinical trial evidence. This model is a research framing tool, not a treatment guide.",
+  "simulations": [
+    "voltage_table",
+    "pacemaker",
+    "spatial_field",
+    "therapeutic_reset"
+  ],
+  "title": "Adaptive Flux Limitation in Bioelectric Regulation",
+  "validation_targets": [
+    "Patch clamp: C_mem proxy across hyperpolarised vs depolarised cells",
+    "Voltage-sensitive dyes / optogenetics: spatial bioelectric field mapping",
+    "ECG/EEG: rhythm vs AFL pacemaker coupling analogy",
+    "Organoid bioelectric assays: gap junction manipulation and Psi change"
+  ]
+}

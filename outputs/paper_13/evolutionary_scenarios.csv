@@ -1,0 +1,13 @@
+lineage,alpha,beta,phi0,final_psi,fitness_proxy,regime,claim_status
+low-alpha (slow constraint growth),0.04,0.03,1.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+moderate-alpha,0.06,0.03,1.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+high-alpha (rapid constraint),0.1,0.03,1.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+low-beta (slow relaxation),0.06,0.01,1.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+high-beta (fast relaxation),0.06,0.05,1.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+low-phi (resource-poor),0.06,0.03,0.8,10000.0,0.0001,overload,candidate fitness proxy — not validated
+high-phi (resource-rich),0.06,0.03,2.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+baseline,0.06,0.03,1.5,10000.0,0.0001,overload,candidate fitness proxy — not validated
+balanced (near Psi~1 attractor),0.04,0.04,1.2,10000.0,0.0001,overload,candidate fitness proxy — not validated
+"trade-off: high load, slow repair",0.1,0.01,2.0,10000.0,0.0001,overload,candidate fitness proxy — not validated
+"trade-off: low load, fast repair",0.03,0.06,0.9,10000.0,0.0001,overload,candidate fitness proxy — not validated
+aging proxy (M_s accumulator),0.07,0.02,1.8,10000.0,0.0001,overload,candidate fitness proxy — not validated

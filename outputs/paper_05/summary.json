@@ -1,0 +1,106 @@
+{
+  "constraint_memory": {
+    "clinical_status": "toy model; not CKD, fibrosis, or metabolic disease validation",
+    "diagnostic": "constraint_memory",
+    "final_state": {
+      "C": {
+        "all_finite": true,
+        "max": 25.0,
+        "mean": 3.9349600961056206,
+        "min": 1.0876197589824435
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0794999999999613,
+        "mean": 1.008833333333329,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "life_number": 0.1081258865147193,
+        "ool_C_electron": 0.39057373239940024,
+        "ool_C_input": 4.049601484232682,
+        "ool_C_proton": 0.5467163150607841,
+        "ool_C_stability": 0.12504096826954184,
+        "ool_J_max": 0.12504096826954184,
+        "ool_S_stability": 7.997378889808114,
+        "ool_sigma_e": 0.39057373239940024,
+        "ool_sigma_p": 0.5467163150607841,
+        "ool_transport_factor": 0.4736371184683911,
+        "throughput_J": 1.9476684116330543
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 24.975,
+        "mean": 4.046823706454905,
+        "min": 1.4233151756473459
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 1.3086514509252505,
+        "mean": 1.2284644018339723,
+        "min": 0.28968888550820776
+      },
+      "regime": "overload",
+      "t": 8.38
+    },
+    "interpretation": "A low-relaxation region retains elevated constraint and memory after a transient load."
+  },
+  "metabolic_saturation": {
+    "clinical_status": "toy model; not diabetes clinical guidance",
+    "diagnostic": "metabolic_saturation",
+    "final_state": {
+      "C": {
+        "all_finite": true,
+        "max": 19.23666397071161,
+        "mean": 10.664501278505867,
+        "min": 2.533482417339506
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "life_number": 0.9308004493218208,
+        "ool_C_electron": 0.05608848091968199,
+        "ool_C_input": 23.765816866193223,
+        "ool_C_proton": 4.6703418986094345,
+        "ool_C_stability": 0.14951387083987744,
+        "ool_J_max": 0.05608848091968199,
+        "ool_S_stability": 6.688342655986444,
+        "ool_sigma_e": 0.05608848091968199,
+        "ool_sigma_p": 4.6703418986094345,
+        "ool_transport_factor": 0.5211637710502698,
+        "throughput_J": 6.358700707661823
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 24.975,
+        "mean": 23.74220575508211,
+        "min": 2.783118041345088
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 2.4698382473730796,
+        "mean": 2.2474508713999333,
+        "min": 0.6827808367591885
+      },
+      "regime": "overload",
+      "t": 7.18
+    },
+    "interpretation": "Sustained substrate drive raises local constraint and produces a plateau-like operating ratio."
+  }
+}

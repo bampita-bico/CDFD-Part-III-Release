@@ -1,0 +1,67 @@
+cff-version: 1.2.0
+message: "If you use this archive, cite this Part III release and also cite the CDFD Runtime DOI when using runtime-linked CDFL diagnostics."
+title: "CDFD Part III: Adaptive Flux Limitation Biology and Medicine - Constraint-Driven Flux Dynamics"
+version: "1.0.0"
+date-released: 2026-05-22
+license: CC-BY-4.0
+authors:
+  - family-names: Mujjabi
+    given-names: Steve Bico
+    name-suffix: MD
+    affiliation: Independent Researcher
+    orcid: "https://orcid.org/0009-0001-0556-5516"
+abstract: "Public Part III biology-and-medicine archive for the Constraint-Driven Flux Dynamics project, including a seventeen-paper manuscript spine, supplementary scripts, generated model diagnostics, bibliography, claim-status notes, named biology laws/tests, and reproducibility instructions. The archive translates CDFL and Adaptive Flux Limitation into clinical systems language while keeping runtime diagnostics separate from empirical clinical validation."
+keywords:
+  - CDFD
+  - CDFL
+  - CDFD Runtime
+  - Adaptive Flux Limitation
+  - AFL
+  - systems biology
+  - network medicine
+  - clinical systems medicine
+  - systems medicine
+  - computational medicine
+  - metabolism
+  - insulin resistance
+  - chronic kidney disease
+  - CKD-MBD
+  - erythropoiesis
+  - immunology
+  - oncology
+  - pharmacology
+  - bioelectric regulation
+  - developmental biology
+  - microbial resistance
+  - biomarkers
+  - model diagnostics
+  - falsification
+  - therapeutic strategy
+  - reproducible research
+  - open science
+  - preprint
+references:
+  - type: software
+    title: "CDFD Runtime: Constraint-Driven Flux Dynamics and CDFL Execution Engine"
+    authors:
+      - family-names: Mujjabi
+        given-names: Steve Bico
+        name-suffix: MD
+    doi: "10.5281/zenodo.20343160"
+    year: 2026
+  - type: software
+    title: "CDFD Part I: Fundamental Physics"
+    authors:
+      - family-names: Mujjabi
+        given-names: Steve Bico
+        name-suffix: MD
+    doi: "10.5281/zenodo.20250821"
+    year: 2026
+  - type: software
+    title: "CDFD Part II: Origins of Life and Tri-Regime Bioenergetics"
+    authors:
+      - family-names: Mujjabi
+        given-names: Steve Bico
+        name-suffix: MD
+    doi: "10.5281/zenodo.20264779"
+    year: 2026

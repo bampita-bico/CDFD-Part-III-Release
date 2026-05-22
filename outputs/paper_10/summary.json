@@ -1,0 +1,99 @@
+{
+  "clinical_status": "toy model; not a validated endothelial, epithelial, or gut-barrier test",
+  "diagnostic": "boundary_covariance",
+  "failing_final": {
+    "C": {
+      "all_finite": true,
+      "max": 7.409740877336381,
+      "mean": 7.409740877336381,
+      "min": 7.409740877336381
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "S": {
+      "all_finite": true,
+      "max": 0.40000000000001057,
+      "mean": 0.40000000000001057,
+      "min": 0.40000000000001057
+    },
+    "meta": {
+      "life_number": 1517793.5820786671,
+      "ool_C_electron": 0.06747874295163447,
+      "ool_C_input": 25.0,
+      "ool_C_proton": 1000000.0,
+      "ool_C_stability": 0.8997165718789695,
+      "ool_J_max": 0.06747874295163447,
+      "ool_S_stability": 1.111461132600457,
+      "ool_sigma_e": 0.06747874295163447,
+      "ool_sigma_p": 1000000.0,
+      "ool_transport_factor": 0.0,
+      "throughput_J": 60.711743232148855
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 24.961114611326003,
+      "mean": 24.961114611326003,
+      "min": 24.961114611326003
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 1.347475709315199,
+      "mean": 1.3474757093151992,
+      "min": 1.347475709315199
+    },
+    "regime": "overload",
+    "t": 4.78
+  },
+  "interpretation": "Matched flow produces different operating ratios when surface responsiveness diverges.",
+  "responsive_final": {
+    "C": {
+      "all_finite": true,
+      "max": 9.418732526001081,
+      "mean": 9.418732526001081,
+      "min": 9.418732526001081
+    },
+    "Ms": {
+      "all_finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "S": {
+      "all_finite": true,
+      "max": 1.2,
+      "mean": 1.1999999999999997,
+      "min": 1.2
+    },
+    "meta": {
+      "life_number": 939363.812721181,
+      "ool_C_electron": 0.053085699017326855,
+      "ool_C_input": 25.0,
+      "ool_C_proton": 1000000.0,
+      "ool_C_stability": 0.7078093197300306,
+      "ool_J_max": 0.053085699017326855,
+      "ool_S_stability": 1.4128098799001623,
+      "ool_sigma_e": 0.053085699017326855,
+      "ool_sigma_p": 1000000.0,
+      "ool_transport_factor": 0.0,
+      "throughput_J": 37.57455247728465
+    },
+    "phi": {
+      "all_finite": true,
+      "max": 24.964128098799,
+      "mean": 24.964128098799,
+      "min": 24.964128098799
+    },
+    "psi_s": {
+      "all_finite": true,
+      "max": 3.1805716571588056,
+      "mean": 3.1805716571588056,
+      "min": 3.1805716571588056
+    },
+    "regime": "overload",
+    "t": 4.78
+  }
+}

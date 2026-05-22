@@ -1,0 +1,64 @@
+{
+  "title": "CDFD Part III: Adaptive Flux Limitation Biology and Medicine - Constraint-Driven Flux Dynamics",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "Mujjabi, Steve Bico, MD",
+      "affiliation": "Independent Researcher",
+      "orcid": "0009-0001-0556-5516"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "keywords": [
+    "Constraint-Driven Flux Dynamics",
+    "CDFD",
+    "CDFL",
+    "CDFD Runtime",
+    "Adaptive Flux Limitation",
+    "AFL",
+    "systems biology",
+    "network medicine",
+    "clinical systems medicine",
+    "systems medicine",
+    "computational medicine",
+    "bioenergetics",
+    "metabolism",
+    "insulin resistance",
+    "chronic kidney disease",
+    "CKD-MBD",
+    "erythropoiesis",
+    "inflammation",
+    "immunology",
+    "oncology",
+    "pharmacology",
+    "bioelectric regulation",
+    "developmental biology",
+    "microbial resistance",
+    "biomarkers",
+    "diagnostics",
+    "model diagnostics",
+    "falsification",
+    "therapeutic strategy",
+    "reproducible research",
+    "open science",
+    "preprint"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.20250821",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.20264779",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.20343160",
+      "relation": "references",
+      "scheme": "doi"
+    }
+  ],
+  "description": "Public Part III biology-and-medicine archive for the Constraint-Driven Flux Dynamics project. The release includes a seventeen-paper manuscript spine, LaTeX sources, supplementary Python scripts, generated model diagnostics, bibliography, claim-status notes, named biology laws/tests, and reproducibility instructions. The archive is open preprint material; it is not peer reviewed, not medical advice, and does not by itself establish empirical clinical validation."
+}

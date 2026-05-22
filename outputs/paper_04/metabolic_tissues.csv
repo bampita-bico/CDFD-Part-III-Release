@@ -1,0 +1,10 @@
+scenario,Phi0,C0,Ms0,final_psi,regime,note,claim_status
+Healthy,2.0,0.6,0.2,10000.0,overload,baseline — no significant burden,candidate AFL translation — not validated
+Obesity,2.5,1.2,0.5,10000.0,overload,"increased metabolic flux, adipose constraint",candidate AFL translation — not validated
+T2DM,2.0,1.8,0.7,10000.0,overload,insulin resistance; ADA 2026 category,candidate AFL translation — not validated
+CKD-Metabolic,1.5,2.5,1.0,10000.0,overload,CKD-MBD + metabolic burden,candidate AFL translation — not validated
+Heart failure,1.2,2.8,1.2,10000.0,overload,"reduced cardiac Phi, high vascular C",candidate AFL translation — not validated
+MASLD,2.2,2.0,0.9,10000.0,overload,metabolic liver disease; hepatic C load,candidate AFL translation — not validated
+CKM Syndrome,1.2,3.5,1.5,10000.0,overload,cardiovascular-kidney-metabolic overlap,candidate AFL translation — not validated
+Frailty (elderly),0.8,3.0,1.8,10000.0,overload,"reduced Phi, high accumulated C and M_s",candidate AFL translation — not validated
+Pregnancy (complex),3.0,1.8,0.6,10000.0,overload,"elevated Phi demand, gestational constraints",candidate AFL translation — not validated

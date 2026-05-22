@@ -1,0 +1,376 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newenvironment{predbox}{\begin{center}\begin{minipage}{0.95\linewidth}\hrule\vspace{0.5em}}{\vspace{0.5em}\hrule\end{minipage}\end{center}}
+\newcommand{\maybeincludegraphics}[2][]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{\parbox{0.9\linewidth}{\centering Missing figure asset: \texttt{\detokenize{#2}}}}}}
+
+\title{\textbf{Paper BIO-02: Adaptive Flux Limitation Across Living Domains:\\ A CDFD Model of Flow, Constraint, Response, and Memory}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+AFL-1 defined Adaptive Flux Limitation using coupled throughput $\Phi$,
+constraint $C$, and ratio $\Psi_s=(\Phi/C) \cdot S \cdot M_s$. A remaining
+question is whether that \textbf{structure} is restricted to metabolism or
+recurs when $(\Phi,C)$ are reinterpreted across physiology.
+
+We show---at the level of a shared dynamical skeleton plus domain-specific parameter maps---that metabolism, neural excitation, circulation, immunity, development, and ecology can all be read as AFL systems: the \textbf{same} update pattern for $C$ coupled to transport of $\Phi$, with interpretation changing by domain. An active-numbered public supplement should run four stylized domains with identical equations and distinct $(\alpha,\beta)$ and boundary drives.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper asks whether AFL is only a metabolism story or whether it is a wider biological pattern. The intended reader should track what remains constant and what changes across domains. What remains constant is the relation between flow, constraint, response, and memory. What changes is the measurable proxy: glucose disposal in metabolism, erythropoietic throughput in anaemia, immune effector activity in inflammation, growth signalling in cancer, membrane potential in bioelectric regulation, or ecological exchange in networks.
+
+The clinical importance is classification. A conventional diagnosis tells the organ or disease family. AFL asks for the limiting axis. Two patients with different diagnoses may share a dominant constraint state; two patients with the same diagnosis may fail therapy for different reasons. The framework becomes useful only if it improves that stratification beyond standard disease labels.
+
+The paper should be read as a hypothesis map. It does not say that all biology is the same. It says that many biological systems may reuse a common control problem: how to sustain useful throughput without damaging the medium that carries it.
+
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+\subsection{Formal Symbol Rigor: The Extended CDFD Paradigm}
+In strict alignment with the Fundamental Physics (Part I) and Origins of Life (Part II) archives, this biological translation formally preserves the exact Mujjabi transport tensor structure:
+\begin{itemize}
+    \item $\Phi$ (\textbf{Flow Intensity}): The physiological or biochemical drive (e.g., nutrient flux, signaling rate).
+    \item $C$ (\textbf{Constraint / Pathway Resistance}): The biological resistance regulating the flow. It dynamically evolves via the standard closure: $dC/dt = \alpha \Phi - \beta C$.
+    \item $S$ (\textbf{Surface Responsiveness}): The active response capability of the biological medium.
+    \item $M_s$ (\textbf{Surface Memory}): Structural hysteresis or maladaptive drift (e.g., chronic scarring, epigenetic locking) with a finite recovery time $\tau_M$.
+    \item $\Psi_s = (\Phi/C) \cdot S \cdot M_s$ (\textbf{Operating State Ratio}): The dimensionless index of biological health. $\Psi_s \approx 1$ defines homeostasis ($\Psi_s \approx 1.0$); $\Psi_s \gg 1$ defines pathological overload.
+\end{itemize}
+
+Biology is partitioned into specialties with different vocabularies. Nevertheless, many systems show nonlinear saturation, bottlenecks, adaptive feedback, and stabilization bands. AFL-1 argued that throughput--constraint coupling is one parsimonious lens for those patterns in a single metabolic-style narrative.
+
+\textbf{Open gap addressed here:} Do analogous assignments of $(\Phi,C)$ produce \emph{isomorphic} update laws across domains? We answer ``model-level yes'' for the class of systems simulated here; empirical universality remains to be tested.
+
+\textbf{Status: Hypothesis}
+
+\section{Model and Assumptions}
+
+\subsection{Biological Translation of the Mujjabi Capacity Law \cite{MujjabiPartI2026}}
+In Part I, the Mujjabi Capacity Law \cite{MujjabiPartI2026} dictates that local transport becomes non-linear as the flux-to-constraint ratio approaches unity ($J/C \to 1$). In the biological realm, this explains metabolic saturation: as nutrient flow $\Phi$ scales up, the mitochondrial and enzymatic constraint $C$ adapts upward, capping the throughput and triggering bottleneck responses (e.g., insulin resistance (chronic $C_E$ upregulation)).
+
+
+\subsection{Shared transport and closure}
+Let $\varphi$ denote a local driving potential appropriate to the domain (chemical, electrical, mechanical, or informational). A linear resistive closure is
+\begin{equation}
+  \mathbf{J}_{\mathrm{flux}} = -\frac{1}{C}\,\nabla \varphi .
+\end{equation}
+Throughput intensity $\Phi$ denotes the domain-specific magnitude of transport (substrate flux, ion current magnitude, perfusion, signaling rate, trophic transfer). Constraints $C$ aggregate resistance, saturation, suppression, or environmental limits. Legacy manuscripts used $C$ for adaptive resistance; we continue to identify $C\equiv C$.
+
+\textbf{Status: Derived} (definition)
+
+\subsection{Adaptive constraint dynamics}
+The AFL closure used in AFL-1 and in the supplement is
+\begin{equation}
+  \frac{dC}{dt} = \alpha\,\Phi - \beta C,
+  \label{eq:afl2closure}
+\end{equation}
+with nonnegative effective $(\alpha,\beta)$. Spatial discretizations replace $\Phi$ by lattice-redistributed fields; see script.
+
+\textbf{Status: Derived} (given the adopted closure)
+
+\subsection{Assumptions B1--B3}
+\begin{itemize}
+  \item \textbf{B1} Each domain admits a reduction to effective $(\Phi,C)$ at the scale of interest.
+  \item \textbf{B2} Equation~\eqref{eq:afl2closure} (or its spatial analogue) is an adequate first-order model for comparative numerics.
+  \item \textbf{B3} Domain differences appear primarily in $(\alpha,\beta)$, boundary drives, and units---not in the functional form of the closure.
+\end{itemize}
+
+\textbf{Status: Open} (B1--B3 can fail where control is strongly nonlocal or digital)
+
+
+\section{Deep Analysis: Cross-System CDFT/AFL Manifestations}
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures2/p2_fig3_systems.png}
+  \caption{\textbf{CDFT/AFL Input--Output Dissociation Across Seven Classical Biological Systems.}
+  Six panels show $J_i(I) = J_{\mathrm{eff}}\cdot I/(K^{(i)}+I)$ for normal (solid) and
+  constrained/disease (dashed) states; shaded gap = dissociation zone.
+  In CDFT language: solid line = low $C$ (high $D_{\mathrm{eff}}$); dashed = elevated $C$
+  (reduced $D_{\mathrm{eff}}$); gap = the adaptive medium has become more resistive.
+  Microbiological panel: resistance cycling ODE dynamics.
+  Summary panel (bottom right): shared CDFT structure $F = \nabla X/C(\Om,t)$.
+  \textbf{KEY:} Dominant $C$ component annotated in italic per panel.}
+  \label{fig:systems}
+\end{figure}
+
+\subsection{Haematologic system: ESA hyporesponsiveness as $C_M$ dominance}
+
+Erythropoiesis requires high methylation capacity (rapid DNA synthesis through one-carbon metabolism \citep{stover2009}), energetic capacity, and redox balance \citep{vaziri2004}:
+\begin{equation}
+J_{\mathrm{RBC}} \leq \frac{\nabla X_{\mathrm{erythro}}}{C_M + C_E + C_R}
+\label{eq:erythro}
+\end{equation}
+In CKD, uraemia simultaneously increases $C$ (through mitochondrial dysfunction and oxidative stress) and raises $\Jreq$ (through inflammatory cytokine activity). ESA dose escalation increases $\nabla X$ (the hormonal driving gradient) without reducing any $C$ component. The Dissociation Theorem directly predicts $dJ_{\mathrm{RBC}}/dI \to 0$ at the haemoglobin plateau. A characteristic consequence is the serum--intracellular dissociation: normal circulating folate and B12 (normal $\nabla X_M$) while intracellular $C_M$ remains elevated because transport constraints prevent adequate one-carbon flux. Serum biomarkers measure $\nabla X$; AFL requires measurement of $C$.
+
+\subsection{Metabolic system: insulin resistance (chronic $C_E$ upregulation) as protective $C_E, C_R$ upregulation}
+
+Glucose utilization generates ATP but simultaneously produces ROS proportional to flux. When substrate flux approaches mitochondrial processing capacity, $C_E$ and $C_R$ rise protectively (fast dynamics: $dC/dt = \alpha F - \beta C$):
+\begin{equation}
+J_{\mathrm{glucose}} \leq \frac{\nabla X_{\mathrm{glucose}}}{C_E + C_R}
+\label{eq:glucose}
+\end{equation}
+GLUT4 internalization, IRS-1 serine phosphorylation, and ceramide accumulation \citep{PetersenShulman2018,SamuelShulman2016} are the molecular implementation of AFL fast dynamics --- the cellular mechanism by which $C$ is raised to protect structural integrity. They are not the origin of insulin resistance (chronic $C_E$ upregulation) but its molecular execution. In CDFT language: the medium has raised $C$ to reduce $D_{\mathrm{eff}}$ because the flux it was carrying was threatening structural damage. Chronic low-grade inflammation (system-wide constraint $C$ amplification) simultaneously raises $C$ through ROS production and inflammatory mediators \citep{Hotamisligil2006}, tightening the adaptive medium from both directions.
+
+\subsection{Oncologic system: $C$ bypass as the CDFT inverse}
+
+Cancer constitutes the adaptive medium bypass failure mode of CDFT. Malignant cells engineer themselves to lower $C$ for proliferative processes: the Warburg effect \citep{Warburg1956,VanderHeiden2009} lowers $C_E$ by switching to glycolysis; NRF2 activation lowers $C_R$ \citep{schieber2014}; epigenetic deregulation lowers $C_M$ for transcription \citep{cairns2011}. In CDFT terms: cancer cells lower $C$, raise $D_{\mathrm{eff}}$, and operate near $\Phi \approx 1$ (near the ceiling of what their modified $C$ architecture permits). This creates disproportionate vulnerability to multi-constraint perturbation: near-ceiling operation means there is no $C$ reserve to absorb additional constraint increases.
+
+\subsection{Immunologic system: T-cell exhaustion as fast $C$ upregulation}
+
+Immune activation drives T-cells toward aerobic glycolysis --- a configuration where $C_E$ and $C_R$ are near their maximum. Under chronic antigen stimulation, $\Jreq$ persistently exceeds $\Jeff = \nabla X/(C_E + C_R)$. T-cell exhaustion features --- PD-1, LAG-3, TIM-3 upregulation; reduced cytokine production; impaired proliferation --- are the molecular implementation of AFL fast dynamics: the immune medium raises $C$ (lowers $D_{\mathrm{eff}}$) to protect against energetic and redox catastrophe. Exhaustion-associated epigenetic marks \citep{bird2007,kaelin2013} represent slow dynamics ($dC_i/dt = -\lambda_i J + R_i$) progressively eroding the capacity to reverse this $C$ elevation. Figure~\ref{fig:immune} provides detailed analysis.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures2/p2_fig5_immune.png}
+  \caption{\textbf{T-Cell Exhaustion as AFL Adaptive $C$ Upregulation.}
+  \textbf{(A)} Effector flux: acute response (healthy, $C$ low) vs.\ chronic activation
+  (exhaustion, $C$ rising). Declining $J_{\max}$ (red dashed) reflects progressive
+  $C_E, C_R$ elevation; shaded = dissociation gap where $J_{\mathrm{req}} > J_{\max}$.
+  PD-1/LAG-3/TIM-3 = molecular fast-dynamics $C$ elevation mechanism.
+  \textbf{(B)} Immunometabolic trajectory through $C$ state space: Na\"ive ($C \ll 1$) $\to$
+  Effector ($C \to 0.7$) $\to$ Chronically activated ($C_R \to$ ceiling) $\to$
+  Exhausted ($C \gg J_{\mathrm{req}}$, $D_{\mathrm{eff}} \approx 0$).
+  \textbf{KEY:} $J_{\mathrm{eff}} = \nabla X_{\mathrm{immune}}/(C_E + C_R)$;
+  exhaustion = adaptive $C$ upregulation protecting energetic and redox structural integrity.}
+  \label{fig:immune}
+\end{figure}
+
+\subsection{Neurological system: dual-$C$ firing rate saturation}
+
+Neural firing rate is subject to two CDFT/AFL constraint components:
+\begin{equation}
+J_{\mathrm{neural}} \leq \frac{\nabla X_{\mathrm{neural}}}{C_T + C_E}
+\end{equation}
+$C_T$ governs ion channel refractory period (transport constraint), defining maximum firing frequency independently of stimulus intensity. $C_E$ governs ATP required for Na/K ATPase restoration of ion gradients --- one of the highest energy-density biological processes \citep{attwell2001,raichle2002}. The neural sigmoid activation function \citep{dayan2001} is a CDFT special case: $f(I) = 1/(1+e^{-I})$ is the saturation equation under simultaneous $C_T$ and $C_E$ constraints. The Shannon--Hartley information-theoretic limit \citep{shannon1948} is the CDFT ceiling when both $C$ components are simultaneously at maximum.
+
+\subsection{Endocrine system: GH resistance as $C_E$ dominance}
+
+GH drives anabolic processes requiring substantial energetic capacity. During fasting, $C_E$ rises as metabolic fuel availability decreases. GH signalling raises $\nabla X_{\mathrm{anabolic}}$ (the hormonal driving gradient) but the adaptive medium has simultaneously elevated $C_E$, such that $dC_E/dI_{\mathrm{GH}} = 0$:
+\begin{equation}
+J_{\mathrm{anabolic}} \leq \frac{\nabla X_{\mathrm{anabolic}}}{C_E}
+\end{equation}
+The hypothalamic-pituitary axis responds to low IGF-1 output by increasing $\nabla X_{\mathrm{GH}}$ (raising GH), without recognizing that $C_E$ is the binding constraint \citep{moller2009}. In CDFT language: the system is escalating the driving gradient in a medium whose $C$ is fixed by energetic state, not by the hormone.
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Cross-System Comparison}
+Table~\ref{tab:crosssystem} summarizes the CDFT/AFL architecture across all twelve biological systems.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Cross-System CDFT/AFL Architecture.} All twelve systems implement
+$F = \nabla X/C(\Om,t)$ with domain-specific $C$ architectures.
+In all systems, input--output dissociation occurs when the dominant $C$ component
+is independent of the input signal being escalated.}
+\label{tab:crosssystem}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\linewidth}{>{\bfseries\small}lXXX}
+\toprule
+System & Dominant $C$ & Dissociation mechanism & CDFT/AFL equation \\
+\midrule
+Haematologic & $C_M, C_E, C_R$ & EPO raises $\nabla X$ but not $C$ & $J_{\mathrm{RBC}} \leq \nabla X/(C_M+C_E+C_R)$ \\[3pt]
+Metabolic & $C_E, C_R$ & Insulin raises $\nabla X$; $C_{E,R}$ fixed & $J_{\mathrm{gluc}} \leq \nabla X/(C_E+C_R)$ \\[3pt]
+Oncologic & All $C$ lowered & $C$ bypassed; $D_{\mathrm{eff}}$ raised & $C^{\mathrm{cancer}} < C^{\mathrm{normal}}$; $\Phi \approx 1$ \\[3pt]
+Immunologic & $C_E, C_R$ & Cytokines raise $\nabla X$; $C$ fixed by state & Fast dynamics: $dC/dt = \alpha F - \beta C$ \\[3pt]
+Neurological & $C_T, C_E$ & Stimulus raises $\nabla X$; refractory/$C_E$ fixed & Dual: $C_T$ (refractory) + $C_E$ (ATP) \\[3pt]
+Endocrine & $C_E$ & GH raises $\nabla X$; $C_E$ fixed by energy state & $J_{\mathrm{anab}} \leq \nabla X/C_E$ \\[3pt]
+Microbiological & $C_M, C_E$ (cost) & Resistance raises $C$; removes when $U \to 0$ & $C^{\mathrm{resist}} = C_0 + C_{\mathrm{resist}}$ \\[3pt]
+Embryological & $C_E, C_R, C_T, C_S$ & Instructions present; $C_{\mathrm{dev}}(x,t)$ too high & $J_{\mathrm{dev}} \leq \nabla X/C_{\mathrm{dev}}(\Om,x,t)$ \\[3pt]
+Stem cell & $C_E, E_p, B_e$ & Injury signal present; $C_{\mathrm{regen}}$ elevated & Slow drift: $dC_i/dt = -\lambda_i J + R_i$ \\[3pt]
+Neural plasticity & $C_E, C_T, E_p$ & Learning signal present; $C_{\mathrm{plast}}$ elevated & $P(\Om) = 1/C_{\mathrm{plast}} = g(E_n, B_e, E_p)$ \\[3pt]
+Pharmacological & $C_S, C_E, C_M$ & Dose raises $\nabla X$; $C$ fixed by receptor state & Saturation + toxicity escalation \\[3pt]
+Ecological & $C_{\mathrm{env}}$ & Reproduction raises $\nabla X$; $C_{\mathrm{env}} = f(K)$ & $dN/dt = rN(1-N/K)$; $K = \nabla X/C_{\mathrm{env}}$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Cross-System Predictions}
+Figure~\ref{fig:predictions} illustrates the predicted patterns.
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures2/p2_fig6_predictions.png}
+  \caption{\textbf{Cross-System CDFT/AFL Predictions.}
+  \textbf{(P1)} $C_i$ co-elevation (high $\Phi_i$) across domains in multi-system disease.
+  \textbf{(P2)} Sequential $C$ relief staircase: each step reduces one dominant $C$
+  component, producing a new haemoglobin plateau.
+  \textbf{(P3)} $C$-profile PCA: patients cluster by dominant $C$ mechanism
+  ($C_E+C_R$ vs.\ $C_M$ vs.\ $C_T$ dominant), not by organ system.
+  \textbf{KEY:} All predictions are CDFT/AFL predictions: measure $C$, not $\nabla X$;
+  reduce $C$, not escalate $\nabla X$.}
+  \label{fig:predictions}
+\end{figure}
+
+\begin{predbox}
+\textbf{P1: Cross-system $C$ co-elevation in multi-system disease.}
+Patients with multiple simultaneous resistance phenotypes will demonstrate co-elevated $C$-proxy measurements across multiple domains relative to single-system patients. In CDFT terms: when the adaptive medium is globally stiffened (elevated $C$ throughout), all systems show simultaneous $D_{\mathrm{eff}}$ reduction. \textit{Test:} CKD cohort comparing composite $C_\Om$ between single-system and multi-system dysfunction. \textit{Falsification:} No $C_\Om$ co-elevation after confound adjustment.
+\end{predbox}
+
+\begin{predbox}
+\textbf{P2: Sequential $C$ relief staircase.}
+Multi-$C$ therapy will produce a stepwise staircase: each intervention that reduces one $C$ component (increasing $D_{\mathrm{eff}}$ in that domain) produces a new haemoglobin plateau until the next-dominant $C$ becomes rate-limiting. \textit{Test:} Stepped trial: (1) iron/folate/B12 (reduce $C_M$); (2) add mitochondrial support (reduce $C_E$); (3) add anti-inflammatory (reduce $C_R$). Serial OCR, GSH/GSSG, SAM/SAH identify dominant $C$ at each step. \textit{Falsification:} Continuous linear response; no sequential plateaus.
+\end{predbox}
+
+\begin{predbox}
+\textbf{P3: $C$-profile clustering is mechanism-based, not organ-based.}
+Patients with different organ diagnoses but the same dominant $C$ component will cluster together in $C$-profile space. In CDFT terms: disease classification should follow the $C$ architecture of the adaptive medium, not the anatomical location of the symptom. \textit{Test:} Multi-domain $C_\Om$ profiling in CKD, metabolic syndrome, and autoimmune disease; unsupervised clustering should correlate with dominant $C$ component more strongly than with conventional diagnosis. \textit{Falsification:} Clusters align with conventional classification.
+\end{predbox}
+
+\begin{predbox}
+\textbf{P4: Capacity-expansion (multi-$C$ reduction) outperforms input escalation in multi-system disease.}
+Interventions that simultaneously reduce multiple $C$ components ($C_E$ through mitochondrial biogenesis, $C_R$ through antioxidant restoration, $C_M$ through methylation optimization) will produce simultaneous improvement across multiple resistance phenotypes; input-escalation strategies that raise $\nabla X$ without reducing $C$ will not. \textit{Test:} In patients with co-occurring ESA hyporesponsiveness and insulin resistance (chronic $C_E$ upregulation), compare input-escalation vs.\ capacity-expansion therapy; measure haemoglobin and glucose disposal simultaneously. \textit{Falsification:} Input-escalation produces equivalent multi-system improvement.
+\end{predbox}
+
+\begin{predbox}
+\textbf{P5: Maternal multi-$C$ reduction decreases developmental anomaly risk beyond folate alone.}
+In at-risk pregnancies, the developmental adaptive medium has globally elevated $C$ (elevated $C_E$, $C_M$, $C_R$). Folate supplementation reduces $C_M$ only. Comprehensive multi-$C$ reduction --- targeting $C_E$, $C_M$, and $C_R$ simultaneously --- will produce greater NTD and structural anomaly reduction by restoring $D_{\mathrm{eff}}$ across the full embryonic adaptive medium. \textit{Test:} Randomized trial in metabolically at-risk pregnancies; primary outcome: structural anomaly rate at 20-week morphology scan. \textit{Falsification:} Multi-$C$ optimization produces no additional benefit beyond standard folate supplementation.
+\end{predbox}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Main Results}
+
+\subsection{Domain dictionary}
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{System} & \textbf{Driver / $\varphi$ proxy} & \textbf{Throughput $\Phi$} & \textbf{Constraint $C$} \\
+\midrule
+Metabolism & chemical potential & substrate / ATP flux & enzyme / mitochondrial cap \\
+Neural & membrane potential & ion current / spike budget & channel / fatigue load \\
+Circulatory & pressure head & blood flow & vascular resistance \\
+Immune & cytokine field & signaling flux & regulatory / inflammatory load \\
+Development & morphogen potential & effective diffusion flux & receptor / GRN limits \\
+Ecology & resource potential & energy / biomass flux & environmental / trophic cap \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\subsection{Cross-system predictions}
+If B1--B3 hold approximately, then: (i)~saturation under increased drive; (ii)~bottlenecking by the tightest effective constraint; (iii)~adaptive adjustment of $C$ following \eqref{eq:afl2closure}; (iv)~operating bands expressed via $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ in consistent units.
+
+\textbf{Status: Inferred}
+
+\section{Numerical Verification}
+An active-numbered public supplement (NumPy, seed \texttt{7}) instantiates four domains with identical lattice dynamics and distinct $(\alpha,\beta)$, source strength, and boundary placement. Console Table~1 reports final $\Psi_s$, mean $\Phi$, mean $C$, and a discrete regime label. Table~2 states the isomorphism claim in prose tied to those numbers.
+
+\textbf{Status: Derived}
+
+\section{Interpretation}
+The result is \textbf{structural}: we do not claim that a single numeric $\Psi_s$ is measurable or comparable across organs without calibration. Rather, the same \emph{equations} reproduce homeostasis ($\Psi_s \approx 1.0$)-like bands when parameters are tuned per domain---consistent with a transferable modeling habit rather than a new empirical law.
+
+\textbf{Status: Inferred}
+
+\section{Limitations and Open Problems}
+\begin{itemize}
+  \item No statistical fit to experimental time series.
+  \item Discrete regime thresholds in the script are illustrative.
+  \item Regulatory networks with sharp switches may need hybrid models.
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Conclusion}
+AFL-2 extends AFL-1 by exhibiting a shared AFL closure across stylized biological domains. The next paper (AFL-3) anchors the same contract in a clinical pathway: erythropoiesis in chronic disease.
+
+\textbf{Status: Inferred}
+
+\section{Reproducibility Note}
+\begin{itemize}
+  \item \textbf{Script packaging:} active-numbered public supplement.
+  \item \textbf{Dependencies:} NumPy; runtime $\ll 1$\,s.
+  \item \textbf{Seed:} 7.
+  \item \textbf{Outputs:} console Tables~1--2 (final $\Psi_s$, means, regime labels).
+\end{itemize}
+
+\textbf{Status: Derived}
+
+
+\section{Deepening the Universality Claim}
+AFL should not be interpreted as a claim that every biological process is metabolic in disguise. The stronger claim is structural: many biological systems maintain function by matching throughput to adaptive constraint. A neural circuit, an immune response, a vascular bed, a developmental field, and an ecosystem differ materially, but each can enter overload when drive exceeds regulatory capacity.
+
+The universal biology claim therefore requires three tests. First, the system must have a measurable throughput variable. Second, it must have a measurable constraint or capacity variable. Third, perturbing throughput must change the constraint state, either through adaptation, fatigue, repair, suppression, or remodeling. If any of these fail, AFL should not be applied.
+
+\section{Cross-System Research Program}
+A strong biology program should compare domains by nondimensionalized trajectories rather than raw units. For each domain, one can measure a normalized flux $\widehat{\Phi}$, a normalized constraint $\widehat{C}$, and the operating ratio $\widehat{\Psi_s}=\widehat{\Phi}/\widehat{C}$. The prediction is not that the numbers match across organs; it is that the phase portrait has recurring regions: under-drive, regulated throughput, overload, compensatory constraint rise, and decompensation.
+
+This gives a practical research design. In metabolism, measure substrate turnover, redox burden, and mitochondrial reserve. In immunity, measure antigenic or inflammatory drive against regulatory and tissue-tolerance capacity. In development, measure morphogen throughput against receptor, transcriptional, and mechanical constraints. In ecology, measure energy transfer against trophic and environmental limits. If these systems produce comparable phase portraits after normalization, AFL becomes a biological systems principle rather than a metabolic analogy.
+
+\section{Falsifiability}
+The universality claim fails where throughput and constraint cannot be operationalized, where constraint does not respond to flux, or where observed transitions are better explained by fixed thresholds without adaptation. The framework also fails if it cannot predict the direction of regime change under intervention. A useful AFL model must say whether reducing flux, lowering constraint, increasing relaxation, or redistributing load should improve the system.
+
+
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3.0cm}p{3.8cm}p{4.5cm}}
+\toprule
+Symbol & Universal meaning & Candidate proxy (domain-dependent) & Invalidation condition \\
+\midrule
+$\Phi$ & Throughput intensity & Substrate flux, signaling rate, energy transfer & If $\Phi$ cannot be operationalized in a given domain, AFL should not be applied \\
+$C$ & Constraint / capacity burden & Enzyme capacity, vascular resistance, trophic limit & If $C$ does not respond to $\Phi$ perturbation, no adaptation — static model suffices \\
+$S$ & Responsiveness & Normalized adaptation index; domain-specific & If constant across domains, not useful for cross-domain comparison \\
+$M_s$ & Memory / locked state & Domain-specific: fibrosis, epigenetic age, scar tissue & If $M_s \to 0$ rapidly, memory framing is not needed \\
+$\Psi_s$ & Operating state & Computed proxy; not a single universal assay & If phase portrait does not match AFL prediction after normalization, framework fails for that domain \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Clinical Safety Boundary}
+
+AFL-2 is a research framework establishing structural universality of the flux-constraint grammar. It does not provide cross-domain clinical decision thresholds. $\Psi_s$ values are not comparable across organ systems without domain-specific calibration. No treatment decisions should be based on AFL framing without domain-specific clinical validation.
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_02.py}. Outputs in \texttt{outputs/paper\_02/}: \texttt{domain\_comparison.csv}, \texttt{cross\_domain\_afl.png}, \texttt{summary.json}. All outputs are toy diagnostics showing candidate cross-domain AFL mappings — not validated measurements.
+
+\section*{Conflict of Interest} The author declares no conflict of interest.
+\section*{Funding} This research received no external funding.
+\section*{Author Contributions} Conceptualization, formal analysis, runtime engineering, and manuscript preparation: S.B.M.
+\section*{Data Availability} All computational models and scripts are in the \texttt{supplementary/} directory.
+
+\section{Reference Layer}
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

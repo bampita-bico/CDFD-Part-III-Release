@@ -1,0 +1,318 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-11: Adaptive Flux Limitation in Bioelectric Regulation:\\ A CDFD Model of Ion Fields as Constraint Controllers}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Bioelectric Regulation: A CDFD Model of Ion Fields as Constraint Controllers}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Bioelectricity --- the ensemble of membrane potentials, ion gradients, and intercellular electrical coupling across tissues --- is conventionally studied as a property of excitable cells (neurons, cardiomyocytes). We argue that bioelectric fields constitute a \textbf{global constraint control layer} governing biological flux in all cell types: they regulate metabolic throughput, developmental patterning, tissue organization, and regeneration capacity.
+
+We develop an AFL model in which membrane potential $V_m$ is the primary constraint controller ($C_{\mathrm{mem}} = f(V_m)$), gap junction coupling propagates constraint signals spatially, and bioelectric pattern disruption underlies a wide range of pathologies from cancer to neurodegeneration to impaired wound healing. Key results: (1) hyperpolarization raises $C_{\mathrm{mem}}$, suppressing metabolic flux; depolarization lowers $C_{\mathrm{mem}}$, enabling throughput --- explaining why depolarized cells are more proliferative; (2) bioelectric developmental patterning is a spatial AFL constraint field that guides morphogenesis independently of and prior to gene expression cascades; (3) bioelectric therapies can reset $C_{\mathrm{mem}}$ in a targeted manner, offering a non-genetic intervention route for regeneration and cancer suppression.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper brings bioelectric regulation into the AFL sequence. Electrical gradients, membrane potentials, ion fluxes, gap junctions, and tissue voltage patterns are not decorations on biology; they are part of how cells coordinate growth, repair, excitability, and pattern.
+
+In AFL notation, bioelectric states can be read as constraints on signaling throughput. A depolarized or poorly coupled tissue may have altered $C$ for communication even before gross anatomy changes. Memory $M_s$ can include persistent channel-expression states, scar architecture, or stable patterning errors.
+
+The clinical relevance is still early. Bioelectric interventions require careful distinction between established therapies, experimental tissue-patterning work, and speculative applications. This paper should therefore be read as a research framework for mapping electrical state to flow-constraint dynamics.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+Bioelectricity is often introduced through excitable tissues, yet membrane potential and ion flux are older and broader than nerves or myocardium. Every living cell maintains electrochemical gradients. Those gradients influence transport, metabolism, proliferation, polarity, migration, gap-junction coupling, wound repair, and developmental pattern. The question for AFL is whether electrical state can be treated as a constraint layer rather than only a signal layer.
+
+In this paper, $V_m$ is read as a regulator of membrane and tissue constraint. Hyperpolarized, well-coupled, and spatially coherent states can stabilize quiescence or differentiation; depolarized or poorly coupled states can permit growth, migration, or failed patterning. The claim is not that voltage replaces genes, morphogens, mechanics, or metabolism. It is that voltage helps set the boundary conditions under which those systems can act.
+
+This distinction matters because bioelectric memory may persist after the initiating injury has passed. Channel expression, gap-junction architecture, scar structure, and stable pattern errors can preserve an abnormal constraint field. That makes bioelectric regulation relevant to development, regeneration, cancer biology, wound healing, and neurological disease without turning it into a universal cure narrative.
+
+The clinical boundary remains conservative. Established electrophysiology and approved electroceutical therapies should not be confused with speculative tissue-patterning applications. AFL is used here to organize experiments that connect voltage state, flux, constraint, and recovery.
+
+\textbf{Status: Hypothesis}
+
+\section{Membrane Potential as $C_{\mathrm{mem}}$}
+
+\begin{equation}
+    C_{\mathrm{mem}} = f(V_m) = C_0 \cdot e^{-\kappa (V_m - V_{\mathrm{rest}})}
+\end{equation}
+
+where $C_0$ is basal membrane constraint, $\kappa$ is voltage sensitivity, and $V_{\mathrm{rest}}$ is the resting potential.
+
+\begin{itemize}
+    \item \textbf{Hyperpolarization} ($V_m < V_{\mathrm{rest}}$): $C_{\mathrm{mem}} \uparrow$ --- ion channels close, metabolic coupling decreases, cell enters quiescent low-throughput state ($\Psi_{s,\mathrm{cell}} < 1$).
+    \item \textbf{Depolarization} ($V_m > V_{\mathrm{rest}}$): $C_{\mathrm{mem}} \downarrow$ --- ion channels open, metabolic coupling increases, cell enters high-throughput state ($\Psi_{s,\mathrm{cell}} > 1$).
+\end{itemize}
+
+Resting $V_m$ in non-excitable cells correlates with proliferative state: cancer cells are typically more depolarized ($-20$ to $-40$\,mV) than quiescent differentiated cells ($-60$ to $-90$\,mV). In AFL terms: depolarization lowers $C_{\mathrm{mem}}$, enabling the high-$\Psi_s$ growth state.
+
+\textbf{Status: Inferred}
+
+\section{Spatial Constraint Propagation via Gap Junctions}
+
+Gap junctions (connexins) electrically couple adjacent cells, allowing $V_m$ and small molecules to propagate spatially. In AFL terms:
+\begin{equation}
+    \nabla C_{\mathrm{mem}}(\mathbf{x}) = -D_{\mathrm{gap}} \nabla^2 V_m(\mathbf{x})
+\end{equation}
+
+A bioelectric gradient across a tissue creates a spatial AFL constraint field. Cells in regions of high $V_m$ (depolarized) have low $C_{\mathrm{mem}}$ and high $\Psi_s$ --- prone to growth. Cells in hyperpolarized regions have high $C_{\mathrm{mem}}$ and low $\Psi_s$ --- quiescent.
+
+\textbf{Consequence}: disrupting gap junction coupling (e.g., by Cx43 mutations) destroys the spatial constraint gradient, creating local deregulation of growth. This is consistent with the tumour-suppressive role of connexins in multiple cancer types.
+
+\textbf{Status: Inferred}
+
+\section{Developmental Patterning as AFL Spatial Constraint}
+
+In embryonic development, bioelectric gradients are established before gene expression patterns are visible. Levin's group has demonstrated that the spatial pattern of $V_m$ across the embryo predicts the position of organs and body structures.
+
+AFL interpretation: the bioelectric pattern is a spatial AFL constraint field that specifies \textbf{where} growth (high $\Psi_s$) and differentiation (low $\Psi_s$) are to occur. Gene expression cascades then implement this pattern --- but the pattern itself is bioelectrically encoded.
+\begin{equation}
+    \Psi_{s,\mathrm{cell}}(\mathbf{x}) = \frac{\Phi_{\mathrm{growth}}}{C_{\mathrm{mem}}(V_m(\mathbf{x}))}
+\end{equation}
+
+Regions where $\Psi_s > 1$: proliferating progenitors. Regions where $\Psi_s < 1$: differentiating post-mitotic cells. The bioelectric pattern is the AFL blueprint for morphogenesis.
+
+\textbf{Status: Inferred}
+
+\section{Regeneration: Resetting the Constraint Field}
+
+Planaria (flatworms) regenerate entire heads from tail fragments. Salamanders regenerate limbs. Humans do not regenerate limbs. The AFL explanation: regeneration requires re-establishing the embryonic bioelectric constraint field pattern in the injured tissue.
+
+In planaria, wound healing is accompanied by a bioelectric depolarization wave that propagates from the wound site, temporarily lowering $C_{\mathrm{mem}}$ and raising $\Psi_s$ in the blastema, enabling dedifferentiation and proliferation. When this wave is pharmacologically blocked, regeneration fails.
+
+In mammals, the equivalent wave is much weaker and shorter-lived. AFL prediction: amplifying the wound-depolarization wave (via pharmacological ion channel modulation, bioelectric scaffolds, or direct electrical stimulation) should extend the regenerative window. This is consistent with experimental results in mammalian spinal cord and peripheral nerve regeneration models.
+
+\textbf{Status: Inferred}
+
+\section{Bioelectricity in Disease}
+
+\subsection{Cancer as Depolarization-Mediated Constraint Escape}
+
+Cancer cells are characteristically depolarized. This is not a consequence of cancer but a \textbf{driver}: experimental depolarization of normal cells (by overexpressing depolarizing channels) is sufficient to induce tumour-like proliferation in some model systems.
+
+AFL mechanism: depolarization $\Rightarrow$ $C_{\mathrm{mem}} \downarrow$ $\Rightarrow$ $\Psi_{s,\mathrm{growth}} > 1$ $\Rightarrow$ uncontrolled proliferation.
+
+Therapeutic implication: hyperpolarizing tumour cells (by activating K$^+$ channels or Cl$^-$ channels) should raise $C_{\mathrm{mem}}$ and suppress $\Psi_{s,\mathrm{growth}} < 1$, potentially arresting growth without targeting specific oncogenes.
+
+\textbf{Status: Inferred}
+
+\subsection{Neurodegeneration: Loss of Neural Bioelectric Constraint Architecture}
+
+In Parkinson's disease, dopaminergic neurons in the substantia nigra progressively lose neuromelanin and mitochondrial function. In AFL terms:
+\begin{itemize}
+    \item Neuromelanin loss: $S \uparrow$ (the melanin-like stabilization channel from OOL-3 applies at the neural level)
+    \item Mitochondrial dysfunction: $\sigma_e \downarrow$, reducing energetic capacity to maintain $V_m$
+    \item $C_{\mathrm{mem}}$ dysregulation: unstable $V_m$ $\Rightarrow$ irregular constraint field $\Rightarrow$ abnormal firing patterns
+\end{itemize}
+
+The pathological tremor and bradykinesia of PD are AFL phenomena: the neural constraint architecture has degraded to the point where the system cannot maintain $\Psi_{s,\mathrm{neural}} \approx 1$ stably.
+
+\textbf{Status: Inferred}
+
+\subsection{Wound Healing: Injury Current as Flux Signal}
+
+Tissue injury creates an \textbf{injury current}: the disruption of the transepithelial potential generates an electrical field at the wound edge. This field ($\Phi_{\mathrm{injury}}$) drives directional migration of keratinocytes and fibroblasts toward the wound (galvanotaxis).
+
+In AFL terms: the injury current is a $\Phi$ signal that activates directed flux ($J_{\mathrm{migration}}$) toward the wound. The constraint on this flux is the tissue ECM stiffness and cellular actomyosin contractility ($C_{\mathrm{ECM}}$). When injury current is disrupted (e.g., in diabetic neuropathy with impaired transepithelial potential), wound healing fails --- an AFL wound healing deficit.
+
+\textbf{Status: Inferred}
+
+\section{Bioelectric Therapeutics: Resetting $C_{\mathrm{mem}}$}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Intervention & AFL mechanism & Application \\
+\midrule
+Direct current stimulation & Raises $\Phi_{\mathrm{elec}}$, modulates $C_{\mathrm{mem}}$ spatially & Wound healing, bone regeneration \\
+Ion channel modulators & Changes $V_m$ directly ($C_{\mathrm{mem}} = f(V_m)$) & Cancer suppression, regeneration \\
+Optogenetics & Light-controlled $\Phi_{\mathrm{ion}}$ injection & Neural circuit restoration \\
+Bioelectric scaffolds & Sustained $\Phi_{\mathrm{elec}}$ gradient in 3D & Tissue engineering \\
+Transcranial magnetic stimulation & Modulates $C_{\mathrm{neural}}$ via induced currents & Neurological/psychiatric \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\section{Flux--Constraint Regime}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+$V_m$ state & $C_{\mathrm{mem}}$ & $\Psi_{s,\mathrm{cell}}$ & Biological state \\
+\midrule
+Deeply hyperpolarized ($< -80$\,mV) & Very high & $\ll 1$ & Quiescent, senescent \\
+Resting ($-60$ to $-80$\,mV) & Normal & $\approx 1$ & Homeostatic \\
+Mildly depolarized ($-40$ to $-60$\,mV) & Reduced & $\approx 1$--$2$ & Proliferating \\
+Significantly depolarized ($> -40$\,mV) & Low & $> 2$ & Cancer-like, injured \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+\begin{enumerate}
+    \item Hyperpolarizing ion channel agonists should suppress proliferation in cancer cell lines, with effect size proportional to the degree of baseline depolarization (starting $C_{\mathrm{mem}}$ deficit).
+    \item Embryonic bioelectric pattern disruption (via pharmacological gap junction blockade) should predictably misplace morphogenetic fields in a manner consistent with spatial AFL constraint field maps.
+    \item Wound healing rate should correlate with injury current magnitude in longitudinal measurements across wound types.
+    \item Neurodegeneration progression rate should correlate with mitochondrial $\sigma_e$ decline (measurable via Complex I activity) before clinical symptoms appear.
+    \item Bioelectric scaffold-enhanced tissue engineering should show regeneration rates proportional to the amplitude of the imposed $\Phi_{\mathrm{elec}}$ gradient.
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL bioelectric model would be falsified if: cell proliferation is uncorrelated with $V_m$ across cell types; embryonic bioelectric disruption produces random (not spatially predicted) morphological defects; wound healing rate is independent of injury current magnitude; or hyperpolarizing drugs have no anti-proliferative effect in depolarized cancer cells.
+
+\textbf{Status: Open}
+
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.8cm}p{3.2cm}p{3.5cm}p{4.5cm}}
+\toprule
+Symbol & Bioelectric meaning & Measurement proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Ion flux / metabolic throughput & Patch-clamp current; metabolic rate & If $\Phi$ cannot be independently measured from $C_{\mathrm{mem}}$, the mapping is circular \\
+$C_{\mathrm{mem}}$ & Membrane constraint ($=f(V_m)$) & Membrane potential (patch clamp, VSDs) & If $V_m$ change produces no measurable flux change, $C_{\mathrm{mem}}$ as constraint fails \\
+$S$ & Surface responsiveness & Channel density; gap junction coupling index & If coupling index is uncorrelated with patterning outcomes, $S$ adds no value \\
+$M_s$ & Memory / locked channel state & Persistent channel expression; scar impedance & If $M_s$ relaxes instantly on threat removal, memory framing is unnecessary \\
+$\Psi_s$ & Operating state & Computed proxy only — no direct assay & If $\Psi_s$ trajectories match random walks, the model is not informative \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+Established bioelectric medicine includes:
+\begin{itemize}
+    \item \textbf{Cardiac electrophysiology}: pacemakers, defibrillators, antiarrhythmics — mature clinical practice built on action potential dynamics, not AFL framing.
+    \item \textbf{Neurostimulation}: deep brain stimulation (Parkinson's disease, OCD), spinal cord stimulation (pain), transcranial magnetic stimulation (depression) — approved therapies with evidence from controlled trials.
+    \item \textbf{Wound healing}: bioelectric wound dressings (electrostimulation) — early evidence in chronic wound management; mechanisms partially characterised.
+    \item \textbf{Cancer bioelectrics}: experimental; Levin lab and collaborators have shown $V_m$ manipulation influences tumour-like growth in some model organisms — no approved clinical translation yet.
+\end{itemize}
+
+AFL is layered on top of established electrophysiology, not a replacement for it. The $C_{\mathrm{mem}} = f(V_m)$ mapping is a research hypothesis, not a clinical tool.
+
+\section{Seizure Threshold and Neural Criticality}
+
+Epilepsy can be read in AFL terms as a failure of inhibitory constraint maintenance. In a critical network, the balance between excitatory flux $\Phi_{\mathrm{exc}}$ and inhibitory constraint $C_{\mathrm{inh}}$ determines whether a perturbation is absorbed or amplifies into a seizure.
+
+\begin{equation}
+    \Psi_{s,\mathrm{neural}} = \frac{\Phi_{\mathrm{exc}}}{C_{\mathrm{inh}}} \cdot S \cdot M_s
+\end{equation}
+
+Near the seizure threshold: $\Psi_{s,\mathrm{neural}} \approx 1^-$, small perturbations tip the network into runaway excitation ($\Psi_s \gg 1$). Anticonvulsant drugs increase $C_{\mathrm{inh}}$ (GABA-A agonists, Na$^+$ channel blockers) or reduce $\Phi_{\mathrm{exc}}$ (NMDA antagonists). Memory $M_s$ could represent kindling — the progressive lowering of seizure threshold with repeated events.
+
+\textbf{Status: Hypothesis. Validation: EEG biomarker correlation, dose-response in animal models.}
+
+\section{Deep Analysis: Neural Plasticity and Constraint-Governed Network Reorganization}
+
+Synaptic plasticity (LTP/LTD) can be read as adaptive $C$ restructuring: LTP lowers $C_{\mathrm{syn}}$, increasing throughput in a pathway; LTD raises $C_{\mathrm{syn}}$, reducing it. The memory parameter $M_s$ then encodes the persistence of these changes — structural synaptic changes (spine growth, receptor insertion) are the AFL memory lock.
+
+Neurodegeneration disrupts this architecture: loss of synapses, dendritic pruning, and white matter lesions progressively raise $C_{\mathrm{neural}}$ across circuits, reducing $\Psi_{s,\mathrm{neural}}$ until function falls below threshold.
+
+\textbf{Status: Hypothesis. No AFL-specific predictions beyond what standard computational neuroscience already models.}
+
+\section{Experiments and Future Validation}
+
+\begin{enumerate}
+    \item \textbf{Mathematical consistency}: $C_{\mathrm{mem}}(V_m)$ monotonicity, finite Psi\_s at resting potential, sensitivity to kappa parameter.
+    \item \textbf{Synthetic perturbation}: release-local script (\texttt{supplementary/supplementary\_afl\_11.py}) — pacemaker oscillation, spatial gap junction propagation, therapeutic reset toy.
+    \item \textbf{In vitro}: patch-clamp measurement of metabolic flux vs $V_m$ across a panel of cell lines; gap junction manipulation (18-$\alpha$-glycyrrhetinic acid) and spatial $\Psi_s$ proxy change.
+    \item \textbf{Ex vivo}: organoid bioelectric assays; voltage-sensitive dye (VSD) imaging during morphogen challenge.
+    \item \textbf{Retrospective}: ECG / EEG datasets — test whether $\Psi_{s,\mathrm{neural}}$ proxy correlates with seizure frequency.
+    \item \textbf{Prospective observational}: wound healing rate vs injury current magnitude in chronic wound cohort.
+    \item \textbf{Clinical utility}: only after steps 1--6 are completed, with safety data and ethics approval.
+\end{enumerate}
+
+\textbf{Success criterion}: $V_m$ correlates with metabolic flux rate (patch clamp) after controlling for direct ion current effects. \textbf{Failure criterion}: no correlation — $C_{\mathrm{mem}}$ as AFL constraint adds no explanatory power.
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework, not a clinical tool.
+\begin{itemize}
+    \item No bioelectric intervention should be modified based on AFL framing without established clinical evidence.
+    \item Cardiac electrophysiology, neurostimulation, and wound bioelectrics are governed by device regulations, clinical trials, and specialist expertise.
+    \item Experimental bioelectric cancer or regeneration therapies require dedicated phase I/II safety and efficacy trials.
+    \item This model does not replace electrophysiology training, EEG interpretation, or device safety assessment.
+\end{itemize}
+
+\section{Conclusion}
+
+Bioelectricity is proposed as a global AFL constraint control layer — a research hypothesis that membrane potential sets $C_{\mathrm{mem}}$, gap junctions propagate constraint spatially, and the resulting bioelectric field shapes development, regeneration, and disease. This positioning is distinct from established cardiac/neural electrophysiology and requires systematic experimental validation before any clinical translation.
+
+\textbf{Status: Inferred}
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_11.py}. Outputs in \texttt{outputs/paper\_11/}: \texttt{membrane\_constraint\_profiles.csv} (voltage table), \texttt{pacemaker\_dynamics.csv}, \texttt{spatial\_bioelectric.csv}, \texttt{reset\_scenario.csv}, \texttt{bioelectric\_regulation.png}. All outputs are toy diagnostics under stated assumptions. No clinical inference should be drawn from them.
+
+\textbf{Status: Derived}
+
+\section{Reproducibility Note}
+\begin{itemize}
+    \item \textbf{Script}: \texttt{supplementary/supplementary\_afl\_11.py} (NumPy + matplotlib; seed fixed; runtime $< 2$\,s)
+    \item \textbf{Dependencies}: NumPy, matplotlib (Agg backend)
+\end{itemize}
+\textbf{Status: Derived}
+\clearpage
+\section*{Adaptive Flux Limitation in Bioelectric Regulation: Ion Fields as Global Constraint Controllers in Living Systems}
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

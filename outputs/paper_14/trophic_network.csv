@@ -1,0 +1,8 @@
+scenario,phi_producer,phi_primary,phi_apex,c_producer,c_primary,c_apex,final_psi_combined,regime,note,claim_status
+Pristine,2.5,1.8,1.2,0.5,0.6,0.7,9990.0,overload,undisturbed ecosystem,candidate ecological AFL mapping — not validated
+Overexploited,1.0,1.8,1.2,0.5,0.6,0.7,9990.0,overload,producer flux halved,candidate ecological AFL mapping — not validated
+Apex removed,2.5,1.8,0.0,0.5,0.6,0.5,6660.0,overload,apex consumer absent,candidate ecological AFL mapping — not validated
+Invasion,2.5,1.8,1.2,1.5,0.6,0.7,9990.0,overload,invasive competitor raises C_prod,candidate ecological AFL mapping — not validated
+Recovery,2.0,1.5,1.0,0.6,0.7,0.8,9990.0,overload,post-perturbation partial recovery,candidate ecological AFL mapping — not validated
+Microbiome OK,2.0,1.5,1.0,0.5,0.5,0.6,9990.0,overload,host microbiome in balance,candidate ecological AFL mapping — not validated
+Dysbiosis,2.0,1.5,1.0,1.5,1.2,0.8,9990.0,overload,dysbiosis raises host C,candidate ecological AFL mapping — not validated

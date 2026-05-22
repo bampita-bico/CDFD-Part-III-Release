@@ -1,0 +1,382 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+
+\title{\textbf{Paper BIO-14: Adaptive Flux Limitation in Ecology and Networked Biology:\\ A CDFD Model of Flux-Constrained Ecosystems and Collapse}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+
+Ecosystems are complex networks of energy and material transfer across multiple trophic levels. Traditional ecological models describe these systems using population dynamics and resource competition, but often lack a unified framework linking transport processes, system stability, and collapse.
+
+In this work, we apply Adaptive Flux Limitation (AFL) to ecology, framing ecosystems as networks governed by constrained energy and resource flux. We demonstrate that trophic interactions, population stability, and ecosystem resilience emerge from the balance between flux capacity and environmental constraints.
+
+We show that ecosystem collapse occurs when flux exceeds constraint capacity, while stability emerges near equilibrium regimes. This framework unifies ecological dynamics with physical transport principles and extends AFL beyond individual organisms to planetary-scale systems.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper scales AFL to networks. Cells, organs, patients, microbial communities, and ecosystems all exchange resources through constrained links. When one node changes, the burden can move elsewhere rather than disappear.
+
+For medicine, the analogy is multimorbidity and community physiology: a patient is a network of organs, microbes, immune states, behaviors, exposures, and treatments. Network failure often appears as redistribution before collapse. AFL names that redistribution as movement of flow and constraint across edges.
+
+The paper should be used carefully. Ecological analogies are valuable when they generate measurable network predictions, not when they replace clinical specificity.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+\subsection{Formal Symbol Rigor: The Extended CDFD Paradigm}
+In strict alignment with the Fundamental Physics (Part I) and Origins of Life (Part II) archives, this biological translation formally preserves the exact Mujjabi transport tensor structure:
+\begin{itemize}
+    \item $\Phi$ (\textbf{Flow Intensity}): The physiological or biochemical drive (e.g., nutrient flux, signaling rate).
+    \item $C$ (\textbf{Constraint / Pathway Resistance}): The biological resistance regulating the flow. It dynamically evolves via the standard closure: $dC/dt = \alpha \Phi - \beta C$.
+    \item $S$ (\textbf{Surface Responsiveness}): The active response capability of the biological medium.
+    \item $M_s$ (\textbf{Surface Memory}): Structural hysteresis or maladaptive drift (e.g., chronic scarring, epigenetic locking) with a finite recovery time $\tau_M$.
+    \item $\Psi_s = (\Phi/C) \cdot S \cdot M_s$ (\textbf{Operating State Ratio}): The dimensionless index of biological health. $\Psi_s \approx 1$ defines homeostasis ($\Psi_s \approx 1.0$); $\Psi_s \gg 1$ defines pathological overload.
+\end{itemize}
+
+
+Ecosystems consist of interconnected components:
+
+\begin{itemize}
+    \item producers (plants, algae)
+    \item consumers (herbivores, carnivores)
+    \item decomposers
+\end{itemize}
+
+Energy flows through these systems via:
+
+\begin{itemize}
+    \item photosynthesis
+    \item consumption
+    \item decomposition
+\end{itemize}
+
+However, ecosystems exhibit:
+
+\begin{itemize}
+    \item stability over long periods
+    \item sudden collapse events
+    \item nonlinear responses to perturbation
+\end{itemize}
+
+These behaviors suggest underlying constraint-regulated dynamics.
+
+\section{Energy Flux in Ecosystems}
+
+Define ecological flux:
+
+\begin{equation}
+J_{eco} = \text{rate of energy and material transfer}
+\end{equation}
+
+Driven by:
+
+\begin{equation}
+J_{eco} = \frac{\nabla \Phi_{energy}}{C_{eco}}
+\end{equation}
+
+Where:
+
+\begin{itemize}
+    \item $\Phi_{energy}$ = energy gradient (e.g., solar input)
+    \item $C_{eco}$ = environmental and biological constraints
+\end{itemize}
+
+\section{Trophic Networks as Flow Systems}
+
+Ecosystems can be represented as networks:
+
+\begin{equation}
+J_{i \rightarrow j} = \text{flux between trophic levels}
+\end{equation}
+
+Constraints include:
+
+\begin{itemize}
+    \item metabolic efficiency
+    \item resource availability
+    \item predation pressure
+\end{itemize}
+
+\section{Primary Production Constraints}
+
+Photosynthesis is limited by:
+
+\begin{itemize}
+    \item sunlight
+    \item water
+    \item nutrients
+\end{itemize}
+
+Thus:
+
+\begin{equation}
+C_{primary} \text{ limits } J_{eco}
+\end{equation}
+
+\section{Energy Dissipation}
+
+Energy is lost at each trophic level:
+
+\begin{equation}
+J_{n+1} < J_n
+\end{equation}
+
+This creates hierarchical structure.
+
+\section{Adaptive Constraint Dynamics}
+
+Ecosystems adapt:
+
+\begin{equation}
+\frac{dC_{eco}}{dt} = \alpha J_{eco} - \beta C_{eco}
+\end{equation}
+
+Examples:
+
+\begin{itemize}
+    \item overgrazing increases constraints (resource depletion)
+    \item recovery reduces constraints over time
+\end{itemize}
+
+\section{Stability and Equilibrium}
+
+Define:
+
+\begin{equation}
+\Psi_{s,eco} = \frac{J_{eco}}{C_{eco}}
+\end{equation}
+
+\begin{itemize}
+    \item $\Psi_s < 1$: underutilized system
+    \item $\Psi_s \approx 1$: stable ecosystem
+    \item $\Psi_s > 1$: overexploitation
+\end{itemize}
+
+\section{Ecosystem Collapse}
+
+Collapse occurs when:
+
+\begin{equation}
+J_{eco} > C_{eco}
+\end{equation}
+
+Examples:
+
+\begin{itemize}
+    \item overfishing
+    \item deforestation
+    \item desertification
+\end{itemize}
+
+\section{Resilience}
+
+Resilient systems:
+
+\begin{itemize}
+    \item adjust constraints dynamically
+    \item redistribute flux
+\end{itemize}
+
+\section{Network Reorganization}
+
+After disturbance:
+
+\begin{equation}
+C_{eco} \rightarrow \text{new configuration}
+\end{equation}
+
+Leading to:
+
+\begin{itemize}
+    \item new equilibrium states
+\end{itemize}
+
+\section{Biodiversity and Flux Distribution}
+
+Higher diversity:
+
+\begin{itemize}
+    \item distributes flux across pathways
+    \item reduces local overload
+\end{itemize}
+
+Thus:
+
+\begin{equation}
+C_{eco} \downarrow \text{ (effective)}
+\end{equation}
+
+\section{Human Impact}
+
+Human activity increases flux:
+
+\begin{equation}
+J_{human} \uparrow
+\end{equation}
+
+Often exceeding constraints:
+
+\begin{equation}
+\Psi_{s,eco} > 1
+\end{equation}
+
+\section{System-Level Interpretation}
+
+Ecosystems can be summarized as:
+
+\begin{center}
+\textit{networks that stabilize near flux–constraint equilibrium}
+\end{center}
+
+\section{Predictions}
+
+AFL predicts:
+
+\begin{itemize}
+    \item ecosystems collapse when flux exceeds regenerative capacity
+    \item biodiversity enhances stability
+    \item recovery requires reduction of flux or increase of constraints
+\end{itemize}
+
+\section{Numerical Verification}
+This installment's toy deterministic checks should be packaged as an active-numbered public supplement (NumPy; seed and parameters in-file). Console tables illustrate the adopted AFL closure; they do not substitute for cohort or experimental validation.
+
+\textbf{Status: Derived}
+
+\section{Interpretation}
+Domain-specific narratives above map mechanisms to $(\Phi, C, S, M_s, \Psi_s)$ within the AFL working model. Interpretive claims are model-mediated; claim strengths follow the public status labels used throughout this paper.
+
+\textbf{Status: Inferred}
+
+\section{Limitations and Open Problems}
+
+\begin{itemize}
+    \item simplified ecological interactions
+    \item requires integration with empirical data
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The framework would be invalid if:
+
+\begin{itemize}
+    \item ecosystem stability is independent of resource flux
+    \item collapse occurs without constraint overload
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Clinical Mapping of Symbols}
+
+\begin{table}[h!]
+\centering
+\caption{AFL symbol map for ecology and networked biology.}
+\begin{tabular}{llll}
+\toprule
+\textbf{Symbol} & \textbf{Ecological meaning} & \textbf{Measurable proxy} & \textbf{Invalidation condition} \\
+\midrule
+$\Phi$ & Energy / biomass / nutrient flux & Net primary productivity, trophic transfer rate & If productivity is independent of constraint \\
+$C$ & Environmental / carrying constraint & Habitat capacity, predation, disease pressure & If collapse is constraint-independent \\
+$J_{ij}$ & Trophic flux between species $i$ and $j$ & NDVI, trophic-level biomass ratio & If trophic transfer efficiency is fixed \\
+$\Psi_s$ & Ecosystem operating ratio & Biodiversity index, resilience proxy & If resilience is uncorrelated with flux balance \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Experiments and Future Validation}
+
+\begin{enumerate}
+  \item \textbf{Step 1 --- Mathematical consistency}: Verify trophic network and One-Health spillover toy simulations (complete --- \texttt{supplementary\_afl\_14.py}, outputs in \texttt{outputs/paper\_14/}).
+  \item \textbf{Step 2 --- Synthetic ecosystem}: Test AFL cascade order against known collapse sequences (e.g., trophic cascade following apex-predator removal).
+  \item \textbf{Step 3 --- Long-term ecological data}: Apply AFL network analysis to LTER (Long-Term Ecological Research) dataset time series; test whether constraint-bottleneck nodes predict ecosystem state transitions.
+  \item \textbf{Step 4 --- One Health spillover}: Align AFL wildlife-to-host constraint transfer model with published zoonotic emergence datasets (EcoHealth Alliance, PREDICT).
+  \item \textbf{Step 5 --- Conservation intervention}: Test whether AFL-guided restoration (targeting bottleneck constraints) shows greater recovery efficiency than standard biomass-addition approaches in field trials.
+\end{enumerate}
+
+Validation ladder status: Step 1 complete; Steps 2--5 open.
+
+\section{Clinical Safety Boundary}
+
+This paper contains no clinical, veterinary, or public-health interventions. AFL ecological models are mathematical hypotheses about networked flux--constraint dynamics. No AFL ecological output should guide wildlife management, conservation policy, public health zoonotic surveillance, or One Health intervention design without: (a) alignment with WHO/FAO/OIE One Health frameworks; (b) peer-reviewed empirical validation; (c) specialist ecological and epidemiological review.
+
+\section{Runtime Diagnostic}
+
+The release-local ecology script is \texttt{supplementary/supplementary\_afl\_14.py}. It simulates 7 trophic network scenarios and a One-Health spillover scenario, producing \texttt{trophic\_network.csv}, \texttt{one\_health\_spillover.csv}, \texttt{ecological\_afl.png}, and \texttt{summary.json} in \texttt{outputs/paper\_14/}.
+
+All outputs carry the label ``toy diagnostic --- not a clinical claim.''
+
+\section{Conclusion}
+
+Ecological stability is not determined by species count or biomass alone --- it reflects the network's capacity to maintain flux throughput without exhausting constraint reserves. AFL identifies bottleneck nodes, predicts cascade failure from constraint overload, and frames restoration as a constraint-architecture problem rather than a biomass-addition problem.
+
+One Health translation requires alignment with established epidemiological frameworks and empirical validation in longitudinal ecological datasets before influencing conservation or public-health policy. The current work establishes the mathematical framework; empirical validity remains open.
+
+\section{Reproducibility Note}
+
+Release-local script: \texttt{supplementary/supplementary\_afl\_14.py}. Dependencies: NumPy, matplotlib. Runtime $< 2$\,s. All parameters are set in-file. Outputs written to \texttt{outputs/paper\_14/}. No proprietary data required.
+
+
+
+\section{Ecology as Distributed Throughput}
+Ecological systems are networks of energy, nutrient, biomass, and information flux. Primary production, trophic transfer, decomposition, migration, and symbiosis all move material through constraints. AFL treats ecosystem stability as the maintenance of throughput without exhausting the capacities that support it.
+
+\section{Trophic Constraint}
+A trophic network can be written with fluxes $J_{ij}$ between species or functional groups and constraints $C_{ij}$ representing predation efficiency, resource limitation, habitat availability, disease burden, or climatic stress. Collapse occurs when key pathways operate persistently above their constraint capacity.
+
+\section{Network Predictions}
+AFL predicts that ecosystems fail first at bottlenecks, not necessarily at the most abundant species. It also predicts that resilience depends on alternate pathways, relaxation capacity, and constraint diversity. Monoculture, habitat fragmentation, and nutrient overload reduce this flexibility by concentrating flux through fewer channels.
+
+\section{Intervention Logic}
+Ecological restoration should therefore target constraint architecture: habitat corridors, trophic redundancy, soil capacity, water buffering, and pollution reduction. Adding biomass without restoring constraint capacity can worsen instability.
+
+
+
+\section*{Conflict of Interest} The author declares no conflict of interest.
+\section*{Funding} This research received no external funding.
+\section*{Author Contributions} Conceptualization, formal analysis, runtime engineering, and manuscript preparation: S.B.M.
+\section*{Data Availability} All computational models, Python scripts, and numerical verifications are explicitly available in the \texttt{/supplementary} repository layer and the \texttt{cdfd\_runtime} engine.
+
+\section{Reference Layer}
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

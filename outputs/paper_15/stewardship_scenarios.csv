@@ -1,0 +1,5 @@
+strategy,alpha,beta,final_psi,regime,note,claim_status
+Dose-escalation,0.1,0.02,10000.0,overload,increased Phi demand on constraint,axis map only — not clinical guidance
+De-escalation,0.04,0.04,10000.0,overload,lower alpha; faster beta recovery,axis map only — not clinical guidance
+Combination,0.06,0.04,10000.0,overload,orthogonal axes; balanced relaxation,axis map only — not clinical guidance
+No treatment,0.0,0.02,10000.0,overload,no AFL drug axis; unconstrained resistance,axis map only — not clinical guidance

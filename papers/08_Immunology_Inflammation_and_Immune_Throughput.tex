@@ -1,0 +1,357 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-08: Adaptive Flux Limitation in Immunology:\\ A CDFD Model of Inflammation, Sepsis, Autoimmunity, and Cytokine Storm}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Immunology: A CDFD Model of Inflammation, Sepsis, Autoimmunity, and Cytokine Storm}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+The immune system is the body's primary external constraint manager: it detects and eliminates threats by temporarily raising physiological constraints in the affected compartment. Inflammation --- the effector mechanism --- is therefore not pathological by nature but a regulated AFL response that temporarily increases system-wide $C$ to control a threat.
+
+We develop a deep AFL model of immunology in which acute inflammation (system-wide constraint $C$ amplification) is adaptive constraint amplification (protective, self-limited), chronic inflammation (system-wide constraint $C$ amplification) is persistent constraint excess (destructive, multi-organ), sepsis is runaway constraint cascade ($\Psi_s \gg 1$ in the immune compartment propagating system-wide), autoimmunity is misdirected constraint amplification against self ($\Phi_{\mathrm{threat}}$ misidentified), and cytokine storm is positive-feedback constraint amplification with loss of the $\beta C$ recovery term.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper treats immunity as controlled throughput. The immune system must move cells, cytokines, antibodies, complement, metabolites, heat, and tissue-repair signals quickly enough to control threat, but not so aggressively that the response becomes the injury. AFL represents this balance as a moving relationship between $\Phi$ and $C$ modulated by surface responsiveness $S$ and immune memory $M_s$.
+
+Inflammation is therefore not simply good or bad. Acute inflammation can lower future risk by clearing danger and building useful memory. Chronic inflammation can raise constraint across many tissues, making normal flux look pathological. Autoimmunity can be read as boundary misclassification: healthy flow is treated as threat flow.
+
+The diagnostic scripts for this paper show two toy ideas: a local drain can perturb systemic operating ratio, and global suppression can reduce responsiveness while targeted memory correction is a different mathematical class. These are conceptual distinctions, not treatment claims.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+Immunity is controlled throughput under danger. Cells, cytokines, complement, antibodies, fever, vascular permeability, coagulation, metabolism, and tissue repair must move fast enough to contain threat but not so aggressively that the response becomes the injury. Inflammation is therefore not a moral category of good or bad. It is a constrained operating state that can be protective, chronic, misdirected, or runaway.
+
+AFL gives this familiar clinical problem a compact notation. Threat intensity is a flow, immune regulation is a constraint, surface responsiveness determines whether the tissue can localize the response, and immune memory changes the next encounter. Acute inflammation can be an elegant temporary rise in local constraint. Chronic inflammation becomes dangerous when the constraint signal persists after the original threat is gone. Autoimmunity begins when boundary classification fails. Sepsis and cytokine storm represent loss of proportional control.
+
+For the clinical reader, this framing must stay close to established immunology and emergency medicine. Antibiotics, source control, fluids, vasopressors, immunosuppression, biologics, and critical-care decisions are not derived from AFL. The framework can help classify why an immune response is failing: insufficient flow, excessive constraint, poor localization, maladaptive memory, or systemic propagation.
+
+The useful output is a research map. A valid immune AFL model should predict measurable trajectories in cytokines, cellular activation, tissue injury, recovery rates, and relapse risk. If ordinary immunological markers explain the data without the flow-constraint layer, the AFL interpretation should be discarded.
+
+\textbf{Status: Hypothesis}
+
+\section{Immune Activation as Flux}
+
+\begin{itemize}
+    \item $\Phi_{\mathrm{threat}}$: threat signal intensity (pathogen-associated molecular patterns [PAMPs], damage-associated molecular patterns [DAMPs], cytokine gradient)
+    \item $C_{\mathrm{immune}}$: constraints on immune activation (regulatory T cells, IL-10, TGF-$\beta$, checkpoint molecules)
+    \item $J_{\mathrm{immune}} = \Phi_{\mathrm{threat}} / C_{\mathrm{immune}}$: immune response intensity
+\end{itemize}
+
+\begin{equation}
+    \frac{dC_{\mathrm{system}}}{dt} = \alpha_{\mathrm{immune}} J_{\mathrm{immune}} - \beta_{\mathrm{immune}} C_{\mathrm{system}}
+\end{equation}
+
+Inflammation increases $C_{\mathrm{system}}$ at rate proportional to immune response intensity $J_{\mathrm{immune}}$ and declines at recovery rate $\beta_{\mathrm{immune}}$.
+
+\textbf{Status: Derived}
+
+\section{Acute Inflammation: Protective, Self-Limited}
+
+In acute inflammation (system-wide constraint $C$ amplification) (bacterial infection, wound):
+\begin{enumerate}
+    \item $\Phi_{\mathrm{threat}} \uparrow$ (PAMPs recognized) $\Rightarrow$ $J_{\mathrm{immune}} \uparrow$
+    \item $C_{\mathrm{system}} \uparrow$ (neutrophil infiltration, vasodilation, fever, metabolic shift to immune mode)
+    \item Threat eliminated $\Rightarrow$ $\Phi_{\mathrm{threat}} \downarrow$ $\Rightarrow$ $J_{\mathrm{immune}} \downarrow$ $\Rightarrow$ $\beta_{\mathrm{immune}} C_{\mathrm{system}}$ dominates $\Rightarrow$ $C_{\mathrm{system}} \to$ baseline
+\end{enumerate}
+
+Resolution is driven by pro-resolving lipid mediators (lipoxins, resolvins) which increase $\beta_{\mathrm{immune}}$ --- the constraint recovery rate. Without pro-resolution signalling, $\beta_{\mathrm{immune}} \approx 0$ and acute inflammation (system-wide constraint $C$ amplification) persists.
+
+\textbf{AFL prediction}: Resolution failure (insufficient resolvins) should be the primary driver of acute-to-chronic inflammation (system-wide constraint $C$ amplification) transition, independently of ongoing threat. This is consistent with evidence that resolution is an active, not passive, process.
+
+\textbf{Status: Inferred}
+
+\section{Chronic Inflammation: Persistent Constraint Excess}
+
+When $\Phi_{\mathrm{threat}}$ persists (chronic infection, autoantigen, metabolic damage signals) or $\beta_{\mathrm{immune}}$ is reduced (resolvin deficiency, sustained TNF-$\alpha$):
+\begin{equation}
+    C_{\mathrm{system}}^* = \frac{\alpha_{\mathrm{immune}}}{\beta_{\mathrm{immune}}} J_{\mathrm{immune}} \gg 0 \quad \text{(elevated steady state)}
+\end{equation}
+
+This sustained $C_{\mathrm{system}}$ elevation propagates across organ systems:
+\begin{itemize}
+    \item $C_{\mathrm{metabolic}} \uparrow$: TNF-$\alpha$ causes IRS-1 serine phosphorylation, creating insulin resistance (chronic $C_E$ upregulation) (cross-link to AFL MED-2)
+    \item $C_{\mathrm{vascular}} \uparrow$: IL-6, IL-1$\beta$ promote endothelial dysfunction and atherosclerosis
+    \item $C_{\mathrm{renal}} \uparrow$: cytokine-mediated glomerular inflammation (system-wide constraint $C$ amplification) accelerates CKD (cross-link to AFL MED-3)
+    \item $C_{\mathrm{neural}} \uparrow$: neuroinflammation contributes to depression, cognitive decline
+    \item $C_{\mathrm{haematopoietic}} \uparrow$: hepcidin induction creates iron-restriction anaemia (AFL MED-9)
+\end{itemize}
+
+Chronic inflammation (system-wide constraint $C$ amplification) is therefore the \textbf{systemic constraint multiplier} that connects and accelerates all major diseases. It is the AFL mechanism behind the clinical observation that inflammatory markers (CRP, IL-6) predict outcomes in diabetes, CKD, cardiovascular disease, and cancer simultaneously.
+
+\textbf{Status: Inferred}
+
+\section{Sepsis: The $\Psi_s \gg 1$ Cascade}
+
+Sepsis is the most extreme acute immunological AFL failure. The mechanism:
+
+\begin{enumerate}
+    \item Systemic infection creates massive $\Phi_{\mathrm{threat}}$ (bacteraemia, endotoxinaemia)
+    \item $J_{\mathrm{immune}} \gg 1$ $\Rightarrow$ $C_{\mathrm{system}}$ rises rapidly across all compartments
+    \item Capillary leak, vasodilation, myocardial depression: $C_{\mathrm{vascular}} \uparrow$, $\Phi_{\mathrm{cardiac}} \downarrow$ simultaneously
+    \item $\Psi_{s,\mathrm{organ}} = \Phi_{\mathrm{cardiac}} / C_{\mathrm{vascular}} \ll 1$ in all organs simultaneously --- \textbf{multi-organ failure}
+    \item Coagulopathy: DIC represents micro-thrombus formation as the vascular AFL system attempts to constrain flux in capillary beds --- a maladaptive constraint overshoot
+\end{enumerate}
+
+The AFL sepsis model predicts that the key determinant of survival is the relative rates of $\alpha_{\mathrm{sepsis}}$ (constraint accumulation) vs $\beta_{\mathrm{host}}$ (recovery capacity, i.e., host reserve). Patients with high $\beta_{\mathrm{host}}$ (younger, healthier baseline) survive; those with low $\beta_{\mathrm{host}}$ (elderly, multi-morbid) progress to irreversible multi-organ failure.
+
+\textbf{AFL prediction}: Sepsis mortality should be predictable from baseline $\Psi_{s,\mathrm{organ}}$ values (pre-sepsis organ reserve) across all organ systems, not just lactate or SOFA score. A multi-organ $\Psi_{s,\mathrm{composite}}$ score should outperform single-organ markers.
+
+\textbf{Status: Inferred}
+
+\section{Cytokine Storm: Positive-Feedback Constraint Amplification}
+
+Cytokine storm (seen in severe COVID-19, CAR-T toxicity, HLH) is a positive-feedback AFL failure:
+
+\begin{equation}
+    J_{\mathrm{immune}} \uparrow \Rightarrow C_{\mathrm{system}} \uparrow \Rightarrow \text{tissue damage} \Rightarrow \Phi_{\mathrm{DAMP}} \uparrow \Rightarrow J_{\mathrm{immune}} \uparrow \quad \text{(runaway loop)}
+\end{equation}
+
+The positive feedback occurs because tissue damage (rising $C_{\mathrm{system}}$) releases DAMPs that are themselves $\Phi_{\mathrm{threat}}$ signals, re-stimulating the immune system. The $\beta_{\mathrm{immune}} C_{\mathrm{system}}$ recovery term cannot keep pace.
+
+AFL interpretation of treatment targets:
+\begin{itemize}
+    \item \textbf{Corticosteroids}: increase $\beta_{\mathrm{immune}}$ (accelerate constraint recovery), reduce $\alpha_{\mathrm{immune}}$ (dampen constraint accumulation rate)
+    \item \textbf{IL-6 blockers (tocilizumab)}: reduce one major $\Phi_{\mathrm{cytokine}}$ signal, breaking the positive feedback
+    \item \textbf{JAK inhibitors}: reduce $J_{\mathrm{immune}}$ by blocking intracellular cytokine signalling
+    \item \textbf{Therapeutic plasma exchange}: physically removes cytokines ($\Phi_{\mathrm{threat}} \downarrow$ directly)
+\end{itemize}
+
+\textbf{Status: Inferred}
+
+\section{Autoimmunity: Misidentified $\Phi_{\mathrm{threat}}$}
+
+In autoimmune disease, the immune system generates $J_{\mathrm{immune}}$ against self-antigens. In AFL terms:
+\begin{equation}
+    \Phi_{\mathrm{threat}} = \text{self-antigen} \quad \text{(misidentified as non-self)} \Rightarrow J_{\mathrm{immune}} > 0 \text{ without genuine threat}
+\end{equation}
+
+The constraint rise is real and sustained ($\Phi_{\mathrm{threat}}$ never disappears because self-antigen is always present), creating permanent $C_{\mathrm{system}} > 0$ in the targeted tissue:
+\begin{itemize}
+    \item \textbf{Rheumatoid arthritis}: $C_{\mathrm{synovial}} \uparrow$ persistently --- joint destruction as the constraint overcomes the structural integrity of cartilage
+    \item \textbf{Type 1 diabetes}: $C_{\mathrm{islet}} \uparrow$ (auto-reactive T cells destroy $\beta$-cells) --- $\Phi_{\mathrm{insulin}} \to 0$
+    \item \textbf{Multiple sclerosis}: $C_{\mathrm{myelin}} \uparrow$ --- constraint on nerve conduction velocity
+    \item \textbf{SLE}: systemic $C_{\mathrm{system}} \uparrow$ (anti-nuclear antibodies trigger multi-organ complement activation)
+\end{itemize}
+
+AFL prediction: autoimmune severity should correlate with the rate of self-antigen generation ($\Phi_{\mathrm{threat}}$ intensity) in the target tissue, not just with autoantibody titres. Tissues with high cell turnover (gut epithelium, skin) generate more self-antigen and should be more susceptible to autoimmune targeting when immune tolerance fails.
+
+\textbf{Status: Inferred}
+
+\section{Immune-Metabolic Cross-Talk}
+
+The immune system and metabolic system share AFL constraint space. Inflammation increases metabolic constraint; metabolic dysfunction increases inflammatory tone. The coupling term:
+
+\begin{equation}
+    C_{\mathrm{metabolic}} = C_{\mathrm{baseline}} + \gamma_{\mathrm{immune}} \cdot C_{\mathrm{immune}}
+\end{equation}
+
+where $\gamma_{\mathrm{immune}} > 0$ is the cross-coupling coefficient. This explains:
+\begin{itemize}
+    \item Obesity-associated inflammation (system-wide constraint $C$ amplification): adipose tissue hypoxia (AFL: $\Phi_{\mathrm{O2}} / C_{\mathrm{adipose}} < 1$) generates DAMPs that trigger low-grade $J_{\mathrm{immune}}$, which raises $C_{\mathrm{metabolic}}$, worsening insulin resistance (chronic $C_E$ upregulation)
+    \item Infection-induced hyperglycaemia: acute illness raises $C_{\mathrm{immune}}$ rapidly, which via $\gamma_{\mathrm{immune}}$ raises $C_{\mathrm{metabolic}}$, causing diabetic decompensation
+    \item Statin effects on inflammation (system-wide constraint $C$ amplification): statins lower $C_{\mathrm{LDL}}$ (vascular constraint), which reduces vascular DAMP release, which reduces $J_{\mathrm{immune}}$, which reduces $C_{\mathrm{metabolic}}$ --- explaining the extra-lipid anti-inflammatory benefit of statins
+\end{itemize}
+
+\textbf{Status: Inferred}
+
+\section{Flux--Constraint Regime Table}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+State & $\Psi_{s,\mathrm{immune}}$ & $C_{\mathrm{system}}$ & Clinical correlate \\
+\midrule
+Immune suppression & $\ll 1$ & Low & Immunodeficiency \\
+Homeostasis & $\approx 1$ & Basal & Normal immune surveillance \\
+Acute inflammation (system-wide constraint $C$ amplification) & $> 1$ (transient) & Rising & Infection response \\
+Chronic inflammation (system-wide constraint $C$ amplification) & $> 1$ (sustained) & Elevated baseline & Metabolic syndrome, autoimmunity \\
+Sepsis & $\gg 1$ (uncontrolled) & Very high, multi-organ & Septic shock \\
+Cytokine storm & $\to \infty$ (runaway) & Escalating & HLH, severe COVID-19 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+\begin{enumerate}
+    \item A multi-organ $\Psi_{s,\mathrm{composite}}$ pre-sepsis score should outperform SOFA score in predicting sepsis mortality.
+    \item Autoimmune severity should correlate with target tissue cell turnover rate (self-antigen generation rate = $\Phi_{\mathrm{threat}}$).
+    \item Resolvin/lipoxin levels should be the strongest predictor of acute-to-chronic inflammation (system-wide constraint $C$ amplification) transition, independently of pathogen load.
+    \item The immune-metabolic cross-coupling coefficient $\gamma_{\mathrm{immune}}$ should be measurable from simultaneous CRP and HOMA-IR time-series in longitudinal cohorts.
+    \item Anti-IL-6 therapy in cytokine storm should be most effective when given before the DAMP positive-feedback loop is established (early vs late administration asymmetry).
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL immunology model would be falsified if: resolution of acute inflammation (system-wide constraint $C$ amplification) is passive (not requiring active pro-resolving mediators); autoimmune severity is uncorrelated with self-antigen generation rate; sepsis mortality is equally predictable from single-organ vs multi-organ constraint measures; or IL-6 blockade timing has no effect on cytokine storm outcomes.
+
+\textbf{Status: Open}
+
+
+\section{Biological Mujjabi Laws and Diagnostics}
+
+\subsection{The Mujjabi Parasitic-Drain Law \cite{MujjabiPartII2026} (Biology)}
+Inspired by the Part II error-threshold discussion, the \textbf{Mujjabi Parasitic-Drain Law \cite{MujjabiPartII2026}} proposes that localized high-flow nodes with low systemic responsiveness ($S \ll 1$) can impose disproportionate constraint on the surrounding adaptive surface. Candidate biological analogies include tumours, viral replication centers, biofilms, and chronic inflammatory foci.
+
+\subsubsection{Runtime Diagnostic: Parasitic Drain}
+Release-local runtime diagnostics in \texttt{outputs/paper\_08/} contrast global responsiveness suppression with a memory-targeted toy intervention. This is a toy analogy for immune-boundary behavior. It does not prove an autoimmune mechanism, and it should not be read as a substitute for immunology evidence, clinical trials, or treatment guidelines.
+
+\section{Translational Hypothesis: Autoimmunity as Parasitic-Drain Boundary Error}
+Current rheumatology often uses global immunosuppression, which can reduce systemic surface responsiveness ($S$) while controlling inflammation. The CDFD framework models autoimmunity as a possible error in \textbf{Parasitic-Drain Boundary Logic}, not as a replacement for established clinical categories. 
+
+In this hypothesis, the immune system treats normal localized tissue flux as a
+parasitic drain and applies excessive constraint ($C$) to healthy nodes. A
+testable AFL strategy would compare global immunosuppression with more targeted
+memory-correction hypotheses, while preserving the clinical rule that any such
+proposal must be judged against immunology evidence, trials, and safety data.
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.8cm}p{3.0cm}p{3.5cm}p{4.5cm}}
+\toprule
+Symbol & Immune meaning & Measurement proxy & Invalidation condition \\
+\midrule
+$\Phi_{\mathrm{threat}}$ & Pathogen / DAMP signal intensity & PAMP load, DAMP level, cytokine gradient & If cytokine level correlates with $\Psi_s$ no better than random, mapping fails \\
+$C_{\mathrm{immune}}$ & Regulatory constraint & Treg count, IL-10, checkpoint expression & If removing regulatory T cells has no measurable effect on $\Psi_s$ proxy, $C$ framing fails \\
+$S$ & Immune responsiveness & Lymphocyte proliferation index; NK activity & If responsiveness is uncorrelated with clearance rate, $S$ adds no value \\
+$M_s$ & Immune memory / maladaptive lock & Persistent autoantibody, fibrous scarring & If $M_s$ decays instantly after threat removal, memory framing is unnecessary \\
+$\Psi_{s,\mathrm{immune}}$ & Operating state & Computed from cytokine ratios; no direct assay & If $\Psi_s$ trajectory is indistinguishable from SOFA score dynamics, AFL adds no information \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+The AFL immunology framing layers on top of established evidence, not a replacement for it:
+\begin{itemize}
+    \item \textbf{Sepsis}: Surviving Sepsis Campaign 2021 (SSC 2021) — antimicrobial targeting and de-escalation, source control, fluid resuscitation, vasopressor thresholds, goals of care. These guidelines reflect decades of randomised trial evidence and take precedence over any AFL interpretation.
+    \item \textbf{Cytokine storm}: Tocilizumab (anti-IL-6R) and dexamethasone for severe COVID-19 — RECOVERY trial evidence. AFL framing (``reduce $\Phi_{\mathrm{cytokine}}$'') does not add prescribing information.
+    \item \textbf{Autoimmunity}: Established disease-modifying therapies (methotrexate, biologics, JAK inhibitors) are anchored to clinical trial evidence in rheumatology, gastroenterology, and neurology. AFL autoimmunity as ``boundary error'' is a research hypothesis.
+    \item \textbf{Immunometabolism}: T-cell glycolysis/OXPHOS shift, macrophage M1/M2 polarisation — active research areas with mechanistic data; AFL adds a constraint language, not a new mechanism.
+\end{itemize}
+
+When AFL interpretation disagrees with SSC 2021, rheumatology guidelines, or oncology immunotherapy guidelines, the guideline takes precedence.
+
+\section{Immune Reserve and the Constraint Recovery Axis}
+
+Immune reserve is the unused regulatory capacity before constraint amplification becomes uncontrollable. In AFL terms, immune reserve maps to the pre-existing $\beta_{\mathrm{immune}}$ magnitude — the rate at which constraint can be resolved once the threat is eliminated. Patients with high immune reserve (young, nutritionally replete, no chronic immunosuppression) can sustain a larger $\Psi_{s,\mathrm{immune}}$ excursion and recover.
+
+\textbf{Constraint Recovery Half-Time (CRHT)} — a candidate construct: the time for $C_{\mathrm{immune}}$ to return to 50\% of baseline after a standardised cytokine challenge. In ICU medicine, this might be proxied by the rate of CRP/IL-6 decline after source control. Candidate validation: longitudinal cytokine panels in sepsis and post-ICU recovery cohorts.
+
+Post-ICU sequelae (PICS: post-intensive care syndrome) may represent elevated $M_s$ — immune memory locked in a chronic inflammatory state even after the acute threat has resolved. This is a research hypothesis and not a substitute for existing PICS literature or rehabilitation evidence.
+
+\section{Immunometabolic Cross-Talk: T-Cell and Macrophage Axes}
+
+The immune system is energetically demanding. Activated T cells shift from OXPHOS to aerobic glycolysis (Warburg-like). In AFL terms:
+\begin{itemize}
+    \item Activated state: $\Phi_{\mathrm{glucose,T}} \uparrow$, $C_{\mathrm{OXPHOS}} \uparrow$ (mTOR suppresses mitochondrial respiration), $\Psi_{s,\mathrm{T}} > 1$ — rapid proliferation and effector function.
+    \item Exhausted state: $M_s$ accumulates as PD-1/TIM-3 expression locks cells into a low-responsiveness state; $S \downarrow$; $\Psi_{s,\mathrm{T}} \to 0$.
+\end{itemize}
+
+Macrophage M1 polarisation raises $C_{\mathrm{tissue}}$ (pro-inflammatory); M2 shifts toward resolution (raises $\beta_{\mathrm{immune}}$). Checkpoint inhibitors can remove a $C$ block but cannot restore exhausted T-cell $S$ if $M_s$ is already locked.
+
+\textbf{Status: Hypothesis. Validation: single-cell RNAseq/metabolomics in activated vs exhausted T-cell populations; TCR/BCR repertoire dynamics.}
+
+\section{Experiments and Future Validation}
+
+\begin{enumerate}
+    \item \textbf{Mathematical consistency}: finite Psi\_s, stable equilibrium at $\Phi_{\mathrm{threat}} = 0$, positive feedback structure in cytokine storm toy.
+    \item \textbf{Synthetic perturbation}: release-local script (\texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py}) — immune scenarios, anti-inflammatory timing, sepsis/autoimmunity trajectories.
+    \item \textbf{In vitro}: cytokine panel measurement vs toy $C_{\mathrm{immune}}$ trajectory; T-cell glycolysis/OXPHOS ratio vs $\Psi_{s,\mathrm{T}}$ proxy.
+    \item \textbf{Retrospective}: SSC-compatible ICU datasets — test whether CRHT correlates with 28-day mortality after controlling for SOFA score.
+    \item \textbf{Prospective observational}: longitudinal inflammatory markers (CRP, IL-6, ferritin, procalcitonin) and immune reserve proxy in post-sepsis cohort.
+    \item \textbf{Clinical utility}: only after steps 1--5, with ethics approval and comparison against SSC-guideline care.
+\end{enumerate}
+
+\textbf{Success criterion}: CRHT and pre-sepsis immune reserve proxy independently predict mortality after SOFA adjustment. \textbf{Failure criterion}: no independent predictive value — AFL framing adds nothing to established ICU scores.
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework, not a clinical protocol.
+\begin{itemize}
+    \item Sepsis management follows SSC 2021: antimicrobials within 1 hour in septic shock, source control, fluid assessment, vasopressors. AFL framing does not change any of these decisions.
+    \item Immunosuppression decisions (corticosteroids, biologics, JAK inhibitors) require specialist assessment, infection exclusion, and monitoring. This model does not prescribe timing or dose.
+    \item Autoimmune therapy follows established rheumatology/gastroenterology/neurology guidelines. AFL ``boundary error'' language is a research metaphor, not a treatment classification.
+    \item Cytokine storm interventions are guided by organ function monitoring and institutional protocols, not Psi\_s values.
+\end{itemize}
+
+\section{Conclusion}
+
+The immune system is the body's primary constraint amplification and constraint recovery system. Inflammation is adaptive AFL constraint increase. Resolution is AFL constraint recovery. Chronic inflammation, autoimmunity, sepsis, and cytokine storm are four distinct AFL failure modes of the same underlying system, distinguishable by duration, target specificity, and feedback structure. These distinctions are research hypotheses requiring validation against established clinical benchmarks.
+
+\textbf{Status: Inferred}
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py}. Outputs in \texttt{outputs/paper\_08/}: \texttt{autoimmune\_boundary.png}, \texttt{immune\_scenarios.csv}, \texttt{autoimmune\_boundary\_timeseries.csv}, \texttt{summary.json}. All outputs are toy diagnostics. Claim status: candidate validation target, not a clinical measurement.
+
+\textbf{Status: Derived}
+
+\section{Reproducibility Note}
+\begin{itemize}
+    \item \textbf{Script}: \texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py} (NumPy; runtime $< 2$\,s)
+    \item \textbf{Dependencies}: NumPy, matplotlib (Agg backend)
+\end{itemize}
+\textbf{Status: Derived}
+\clearpage
+\section*{Adaptive Flux Limitation in Immunology: Inflammation as a System-Wide Constraint Amplification Mechanism}
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

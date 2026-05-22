@@ -1,0 +1,12 @@
+{
+  "adaptive_final_psi": 3947.0359,
+  "adaptive_std_C": 14.4875,
+  "claim_status": "toy diagnostic \u2014 not a clinical claim",
+  "control_final_psi": 709356.2081,
+  "control_std_C": 0.0,
+  "falsification_target": "If Psi_s evolution is fully explained by a static concentration without adaptive constraint dynamics, AFL adds no mechanistic value.",
+  "paper": "01",
+  "regime_adaptive": "overload",
+  "regime_control": "overload",
+  "title": "Adaptive Flux Limitation in Living Systems"
+}

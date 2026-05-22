@@ -1,0 +1,531 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newenvironment{corebox}{\begin{center}\begin{minipage}{0.95\linewidth}\hrule\vspace{0.5em}}{\vspace{0.5em}\hrule\end{minipage}\end{center}}
+\newcommand{\maybeincludegraphics}[2][]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{\parbox{0.9\linewidth}{\centering Missing figure asset: \texttt{\detokenize{#2}}}}}}
+
+\title{\textbf{Paper BIO-05: Adaptive Flux Limitation in Metabolic Disease:\\ A CDFD Model of Insulin Resistance and Multi-Tissue Constraint Dynamics}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+insulin resistance (chronic $C_E$ upregulation) is the central pathophysiology of Type 2 diabetes and metabolic syndrome, affecting over 500 million people worldwide. Classical models frame it as impaired insulin signalling --- a molecular defect in the IRS-1/PI3K/Akt pathway. While accurate at the molecular level, this framing fails to explain the coordinated, tissue-specific, and adaptive character of insulin resistance (chronic $C_E$ upregulation): why it emerges predictably with caloric excess, reverses with fasting, progresses differently across muscle, liver, and adipose tissue, and resists correction by insulin alone once established.
+
+We develop a deep AFL model of insulin resistance (chronic $C_E$ upregulation) as a \textbf{multi-tissue constraint cascade}: insulin resistance (chronic $C_E$ upregulation) is not pathological failure but adaptive upregulation of metabolic constraint $C$ to prevent mitochondrial overload under sustained substrate excess. We derive tissue-specific constraint profiles, show that the HOMA-IR index approximates the system $\Psi_{s,\mathrm{met}} = \Phi_{\mathrm{glucose}}/C_{\mathrm{met}}$, distinguish Type 1 and Type 2 diabetes by their constraint structure, model fasting and OMAD as constraint recovery dynamics, and interpret GLP-1 receptor agonists within the AFL framework.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This paper treats insulin resistance as a dynamic constraint state rather than a single pathway defect. The molecular details remain important: insulin receptor signalling, IRS phosphorylation, mitochondrial substrate handling, lipid intermediates, inflammation, and beta-cell reserve all matter. AFL adds a systems layer over those details by asking why the same tissue becomes less willing or less able to accept incoming substrate.
+
+The key translation is that $\Phi_{\mathrm{glucose}}$ is not merely blood glucose. It is the delivered substrate burden at a tissue over time. $C_{\mathrm{met}}$ is not one molecule. It is the combined capacity burden from mitochondrial oxidation, redox pressure, lipid accumulation, inflammatory tone, membrane transport, and hormonal signalling. $M_s$ is the reason a tissue does not instantly reset when a meal, a drug, or a brief exercise session ends.
+
+This paper therefore reads Type 2 diabetes as a chronic mismatch between delivery, constraint, and recovery. That interpretation should be tested against ordinary metabolic measurements such as HOMA-IR, clamp studies, liver fat, muscle oxidative capacity, inflammatory markers, and longitudinal response to diet, exercise, GLP-1 receptor agonists, SGLT2 inhibitors, metformin, and bariatric interventions. The runtime outputs are illustrations of this geometry, not clinical validation.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+\subsection{Formal Symbol Rigor: The Extended CDFD Paradigm}
+In strict alignment with the Fundamental Physics (Part I) and Origins of Life (Part II) archives, this biological translation formally preserves the exact Mujjabi transport tensor structure:
+\begin{itemize}
+    \item $\Phi$ (\textbf{Flow Intensity}): The physiological or biochemical drive (e.g., nutrient flux, signaling rate).
+    \item $C$ (\textbf{Constraint / Pathway Resistance}): The biological resistance regulating the flow. It dynamically evolves via the standard closure: $dC/dt = \alpha \Phi - \beta C$.
+    \item $S$ (\textbf{Surface Responsiveness}): The active response capability of the biological medium.
+    \item $M_s$ (\textbf{Surface Memory}): Structural hysteresis or maladaptive drift (e.g., chronic scarring, epigenetic locking) with a finite recovery time $\tau_M$.
+    \item $\Psi_s = (\Phi/C) \cdot S \cdot M_s$ (\textbf{Operating State Ratio}): The dimensionless index of biological health. $\Psi_s \approx 1$ defines homeostasis ($\Psi_s \approx 1.0$); $\Psi_s \gg 1$ defines pathological overload.
+\end{itemize}
+
+
+insulin resistance (chronic $C_E$ upregulation) is defined clinically as a subnormal biological response to a given insulin concentration. This definition is correct but incomplete: it describes the outcome without explaining the mechanism or the adaptive logic.
+
+The AFL framework reframes the question. Instead of asking ``why does insulin fail to work?'', it asks: ``what constraint state does the metabolic system maintain, and is the observed insulin resistance (chronic $C_E$ upregulation) adaptive or maladaptive relative to that state?''
+
+The answer has three parts:
+\begin{enumerate}
+    \item insulin resistance (chronic $C_E$ upregulation) is initially \textbf{adaptive}: it prevents mitochondrial overload when glucose flux exceeds oxidative capacity.
+    \item It becomes \textbf{maladaptive} when sustained hyperglycaemia keeps $\Phi_{\mathrm{glucose}}$ high, driving progressive constraint accumulation $C \uparrow$ beyond recovery.
+    \item It manifests \textbf{differently across tissues} because muscle, liver, and adipose have different constraint architectures (different $\alpha$, $\beta$ parameters in $\dot{C} = \alpha\Phi - \beta C$).
+\end{enumerate}
+
+\textbf{Status: Hypothesis}
+
+\section{The Metabolic Flux System}
+
+\subsection{Biological Translation of the Mujjabi Capacity Law \cite{MujjabiPartI2026}}
+In Part I, the Mujjabi Capacity Law \cite{MujjabiPartI2026} dictates that local transport becomes non-linear as the flux-to-constraint ratio approaches unity ($J/C \to 1$). In the biological realm, this explains metabolic saturation: as nutrient flow $\Phi$ scales up, the mitochondrial and enzymatic constraint $C$ adapts upward, capping the throughput and triggering bottleneck responses (e.g., insulin resistance (chronic $C_E$ upregulation)).
+
+
+\subsection{Flow, Constraint, and Equilibrium}
+
+Define:
+\begin{itemize}
+    \item $\Phi_{\mathrm{glucose}}$: glucose delivery rate to peripheral tissues (portal glucose flux, hepatic output, intestinal absorption)
+    \item $C_{\mathrm{met}}$: aggregate metabolic constraint (mitochondrial capacity, redox balance, enzymatic saturation, membrane lipid composition, inflammatory load)
+    \item $\Psi_{s,\mathrm{met}} = \Phi_{\mathrm{glucose}} / C_{\mathrm{met}}$: metabolic operating ratio
+\end{itemize}
+
+The transport relation:
+\begin{equation}
+    J_{\mathrm{glucose}} = -\frac{1}{C_{\mathrm{met}}} \nabla \Phi_{\mathrm{glucose}}
+\end{equation}
+
+The constraint adaptation equation (AFL core):
+\begin{equation}
+    \frac{dC_{\mathrm{met}}}{dt} = \alpha_{\mathrm{met}} |\Phi_{\mathrm{glucose}}| - \beta_{\mathrm{met}} C_{\mathrm{met}}
+    \label{eq:cmet}
+\end{equation}
+
+Steady state: $C_{\mathrm{met}}^* = (\alpha_{\mathrm{met}}/\beta_{\mathrm{met}}) |\Phi_{\mathrm{glucose}}|$. Thus chronic hyperglycaemia raises steady-state constraint linearly with sustained flux --- the mechanism of progressive insulin resistance (chronic $C_E$ upregulation).
+
+\textbf{Status: Derived}
+
+\subsection{HOMA-IR as $\Psi_{s,\mathrm{met}}$ Proxy}
+
+The Homeostatic Model Assessment of insulin resistance (chronic $C_E$ upregulation) (HOMA-IR) is defined as:
+\begin{equation}
+    \mathrm{HOMA\text{-}IR} = \frac{\mathrm{fasting\ glucose\ (mmol/L)} \times \mathrm{fasting\ insulin\ (\mu U/mL)}}{22.5}
+\end{equation}
+
+In AFL terms: fasting glucose approximates $\Phi_{\mathrm{glucose}}$ (portal glucose delivery to hepatocytes under fasting conditions), and fasting insulin approximates $C_{\mathrm{met}}^{-1}$ (lower insulin required per unit glucose = lower constraint = better sensitivity; higher insulin required = higher constraint = resistance).
+
+Therefore:
+\begin{equation}
+    \mathrm{HOMA\text{-}IR} \propto \Phi_{\mathrm{glucose}} \cdot \frac{1}{C_{\mathrm{met}}^{-1}} = \Phi_{\mathrm{glucose}} \cdot C_{\mathrm{met}} \propto \frac{1}{\Psi_{s,\mathrm{met}}}
+\end{equation}
+
+High HOMA-IR corresponds to low $\Psi_{s,\mathrm{met}}$: high constraint relative to flux, indicating a system operating far below its glucose utilization capacity.
+
+\textbf{Status: Inferred}
+
+\section{Tissue-Specific Constraint Profiles}
+
+The three primary metabolic tissues have distinct AFL constraint architectures, reflecting their different physiological roles.
+
+\subsection{Skeletal Muscle: High-Capacity, Responsive Constraint}
+
+Skeletal muscle accounts for approximately 80\% of insulin-stimulated glucose disposal. Its AFL parameters:
+\begin{itemize}
+    \item $\alpha_{\mathrm{muscle}}$: moderate (constraint builds with sustained excess but recovers with exercise)
+    \item $\beta_{\mathrm{muscle}}$: high (rapid constraint recovery; exercise $\uparrow \beta$ via GLUT4 translocation, mitochondrial biogenesis)
+    \item Primary constraints: mitochondrial capacity (oxidative phosphorylation ceiling), intramyocellular lipid accumulation (ceramide-mediated IRS-1 serine phosphorylation)
+\end{itemize}
+
+AFL prediction: skeletal muscle insulin resistance (chronic $C_E$ upregulation) is the most reversible because $\beta_{\mathrm{muscle}}$ is high --- exercise, caloric restriction, and GLP-1 agonists all increase $\beta$ (accelerate constraint recovery), restoring $\Psi_{s,\mathrm{muscle}} \to 1$.
+
+\textbf{Status: Inferred}
+
+\subsection{Liver: Selective insulin resistance (chronic $C_E$ upregulation) --- The Constraint Splitting Paradox}
+
+The liver exhibits a phenomenon called \textbf{selective insulin resistance (chronic $C_E$ upregulation)}: insulin fails to suppress hepatic glucose production (HGP) while retaining the ability to activate lipogenesis. This appears contradictory within classical insulin signalling models.
+
+In AFL terms, this resolves immediately. Hepatic insulin action splits into two pathways with different constraint architectures:
+
+\begin{itemize}
+    \item HGP suppression pathway: uses Foxo1 → glucokinase axis. High $C_{\mathrm{liver,HGP}}$ due to DAG-PKC$\varepsilon$ accumulation → HGP escapes insulin control.
+    \item Lipogenesis pathway: uses SREBP-1c → FAS axis. Lower $C_{\mathrm{liver,lipid}}$ because lipid flux has no analogous constraint accumulator at the same substrate load → lipogenesis proceeds.
+\end{itemize}
+
+Selective insulin resistance (chronic $C_E$ upregulation) is therefore \textbf{pathway-specific constraint asymmetry}: two parallel AFL channels with different $\alpha$ and $\beta$ parameters diverge as hepatic substrate load increases.
+
+\textbf{Status: Inferred}
+
+AFL prediction: interventions targeting DAG-PKC$\varepsilon$ (e.g., liver-targeted diacylglycerol lipase) should restore HGP suppression without affecting lipogenesis, because they selectively lower $C_{\mathrm{liver,HGP}}$.
+
+\subsection{Adipose Tissue: Overflow and Spillover Dynamics}
+
+Adipose tissue acts as the metabolic overflow buffer: when $\Phi_{\mathrm{glucose}}$ exceeds muscle and liver capacity, adipose stores the excess. The constraint here is storage capacity:
+\begin{equation}
+    C_{\mathrm{adipose}} \uparrow \text{ as adipocyte size} \uparrow \Rightarrow J_{\mathrm{esterification}} \downarrow
+\end{equation}
+
+When adipose constraint is saturated, free fatty acids (FFA) spill into the circulation, raising ectopic lipid accumulation in muscle and liver, thereby increasing $C_{\mathrm{muscle}}$ and $C_{\mathrm{liver}}$ --- a positive feedback loop that accelerates whole-body insulin resistance (chronic $C_E$ upregulation).
+
+AFL interpretation of lipotoxicity: adipose constraint overflow is the mechanism by which local constraint failure propagates system-wide. This is the metabolic analogue of the cascade propagation seen in AFL Earth Systems (dam overflow → downstream flooding).
+
+\textbf{Status: Inferred}
+
+\section{Type 1 vs Type 2: Different Constraint Structures}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Feature & Type 1 Diabetes & Type 2 Diabetes \\
+\midrule
+Primary deficit & $\Phi_{\mathrm{insulin}} = 0$ (source absent) & $C_{\mathrm{met}} \uparrow$ (constraint excess) \\
+Insulin production & Absent (autoimmune $\beta$-cell destruction) & Present but insufficient at high $C$ \\
+$\Psi_{s,\mathrm{met}}$ & Dysregulated (no flux regulation) & Suppressed ($\Phi/C \ll 1$) \\
+Response to insulin & Restores $\Phi_{\mathrm{insulin}}$; normalizes $\Psi_s$ & Partial (cannot overcome elevated $C$) \\
+Primary intervention & Flux restoration (insulin replacement) & Constraint reduction + flux optimization \\
+Fasting effect & Reduces $\Phi_{\mathrm{glucose}}$ but risks ketoacidosis & Reduces $C$ significantly; improves $\Psi_s$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+In Type 1 diabetes, the AFL problem is a \textbf{missing driver}: $\Phi_{\mathrm{insulin}} = 0$ means the flux regulation signal is absent. The constraint machinery is intact; the flux is uncontrolled. Treatment restores the missing $\Phi$.
+
+In Type 2 diabetes, the AFL problem is a \textbf{constraint excess}: $C_{\mathrm{met}}$ has risen beyond the regulatory capacity of normal insulin concentrations. Treatment must lower $C$, not just add $\Phi$.
+
+\textbf{Status: Derived} (given the AFL mapping)
+
+\section{Fasting, Caloric Restriction, and OMAD as Constraint Recovery}
+
+\subsection{Mechanism of Fasting-Induced Improvement}
+
+During fasting, $\Phi_{\mathrm{glucose}}$ falls. From Equation~(\ref{eq:cmet}):
+\begin{equation}
+    \frac{dC_{\mathrm{met}}}{dt} = \alpha_{\mathrm{met}} |\Phi_{\mathrm{glucose}}| - \beta_{\mathrm{met}} C_{\mathrm{met}}
+\end{equation}
+
+With $\Phi_{\mathrm{glucose}} \downarrow$, the constraint recovery term $\beta_{\mathrm{met}} C_{\mathrm{met}}$ dominates, and $C_{\mathrm{met}} \to 0$ exponentially with time constant $\tau_{\mathrm{recovery}} = 1/\beta_{\mathrm{met}}$.
+
+This is consistent with clinical data: insulin sensitivity improves within 24--72 hours of caloric restriction, and returns to near-normal after extended fasting (3--5 days), matching the AFL constraint recovery timescale.
+
+\textbf{Status: Inferred}
+
+\subsection{OMAD (One Meal A Day)}
+
+OMAD creates a temporal flux profile:
+\begin{itemize}
+    \item 23-hour fasting window: $\Phi_{\mathrm{glucose}} \approx 0$, $C_{\mathrm{met}}$ declines toward basal
+    \item 1-hour feeding window: $\Phi_{\mathrm{glucose}}$ spikes, $C_{\mathrm{met}}$ rises transiently
+\end{itemize}
+
+Net effect over 24 hours: low mean $C_{\mathrm{met}}$ despite normal total caloric intake, because the constraint accumulation term $\alpha_{\mathrm{met}} \int |\Phi| dt$ is bounded by the single meal event, while the recovery term $\beta_{\mathrm{met}} \int C\, dt$ operates over 23 hours.
+
+AFL prediction: OMAD should produce greater improvement in HOMA-IR (lower HOMA-IR = lower $1/\Psi_{s,\mathrm{met}}$) than isocaloric three-meal feeding, even at identical total energy intake. This is consistent with multiple randomized controlled trials.
+
+\textbf{Status: Inferred}
+
+\subsection{Exercise as $\beta$ Upregulation}
+
+Exercise does not primarily reduce $\Phi_{\mathrm{glucose}}$; it increases $\beta_{\mathrm{met}}$ (accelerates constraint recovery) via:
+\begin{itemize}
+    \item GLUT4 translocation to the plasma membrane (acute $\beta$ increase)
+    \item Mitochondrial biogenesis via PGC-1$\alpha$ (chronic $\beta$ increase)
+    \item Irisin-mediated adipose browning (increases adipose $\beta$)
+\end{itemize}
+
+AFL prediction: exercise-induced improvement in insulin sensitivity should be tissue-specific and proportional to the increase in $\beta_{\mathrm{met}}$ in the exercised tissue. Aerobic exercise preferentially improves muscle $\beta$; resistance training preferentially improves liver $\beta$ via glycogen storage expansion.
+
+\textbf{Status: Inferred}
+
+\section{Pharmacological Targets in AFL Terms}
+
+\subsection{Metformin: Mitochondrial Constraint Modulator}
+
+Metformin's primary mechanism is inhibition of mitochondrial Complex I, reducing ATP production rate. In AFL terms: metformin reduces $\Phi_{\mathrm{oxidative}}$ slightly, which via AMPK activation signals a low-energy state, reducing $\alpha_{\mathrm{met}}$ (the rate at which glucose flux increases constraint) by switching cells toward constraint-minimizing metabolism.
+
+Metformin also reduces hepatic glucose production by directly inhibiting gluconeogenesis --- a reduction of $\Phi_{\mathrm{HGP}}$ that lowers the constraint load on peripheral tissues.
+
+\textbf{Status: Inferred}
+
+\subsection{GLP-1 Receptor Agonists: Multi-Channel Constraint Reduction}
+
+GLP-1 receptor agonists (semaglutide, tirzepatide, liraglutide) represent the most effective AFL constraint reduction strategy currently available:
+
+\begin{itemize}
+    \item \textbf{Gastric emptying delay}: reduces $\Phi_{\mathrm{glucose}}$ spike amplitude post-meal, limiting the peak constraint accumulation event.
+    \item \textbf{Appetite suppression}: reduces total $\int \Phi_{\mathrm{glucose}}\, dt$ over 24 hours via hypothalamic GLP-1R signalling, directly reducing steady-state $C_{\mathrm{met}}^*$.
+    \item \textbf{$\beta$-cell preservation}: slows $\beta$-cell apoptosis under glucolipotoxic constraint, extending the window during which insulin supply can match demand.
+    \item \textbf{Hepatic constraint}: reduces liver fat (ectopic lipid, the primary hepatic constraint source), lowering $C_{\mathrm{liver}}$.
+\end{itemize}
+
+AFL interpretation: GLP-1 agonists work because they simultaneously reduce $\Phi_{\mathrm{glucose}}$ (gastric, appetite) and reduce $C_{\mathrm{met}}$ (liver fat, $\beta$-cell protection). This is a dual-axis AFL intervention --- the most effective strategy for lowering $\Psi_{s,\mathrm{met}}^{-1}$ = HOMA-IR.
+
+\textbf{Status: Inferred}
+
+\subsection{SGLT2 Inhibitors: Flux Reduction at the Kidney}
+
+SGLT2 inhibitors block glucose reabsorption in the proximal tubule, causing glycosuria. In AFL terms: they reduce systemic $\Phi_{\mathrm{glucose}}$ by increasing renal glucose excretion, directly lowering the constraint accumulation rate $\alpha_{\mathrm{met}} |\Phi_{\mathrm{glucose}}|$ without requiring improved insulin sensitivity.
+
+SGLT2 inhibitors therefore act on the \textit{upstream} part of the AFL equation (reducing $\Phi$) rather than the downstream constraint ($C$). This explains why they work in late-stage Type 2 diabetes when $\beta$-cell function is minimal and GLP-1 responsiveness is reduced: they bypass the entire insulin-signalling pathway.
+
+\textbf{Status: Inferred}
+
+\section{Flux--Constraint Regime Table}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+$\Psi_{s,\mathrm{met}}$ & HOMA-IR (approx.) & State & Clinical correlate \\
+\midrule
+$> 2$ & $< 1$ & Unconstrained & Lean, highly insulin sensitive \\
+$1$--$2$ & $1$--$2$ & Balanced & Normal metabolic health \\
+$0.5$--$1$ & $2$--$4$ & Early resistance & Pre-diabetes, metabolic syndrome \\
+$< 0.5$ & $> 4$ & High constraint & Type 2 diabetes (established) \\
+Dysregulated & Variable & Unregulated flux & Type 1 diabetes \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+
+\section{Deep Analysis: Universal Saturation Law and insulin resistance (chronic $C_E$ upregulation)}
+\subsection{Derivation from adaptive medium principles}
+
+The AFL constraint law generates the universal saturation relationship directly from the CDFT gradient law. When $C$ is approximately constant (constraint capacity not yet exhausted) and increasing slowly with flux:
+\begin{equation}
+J = kI \cdot \left(1 - \frac{J}{\Jmax}\right)
+\label{eq:feedback}
+\end{equation}
+This states: flux is proportional to input $kI$, modulated by the fraction of remaining capacity $(1 - J/\Jmax)$. Solving for $J$:
+\begin{equation}
+J(I) = \frac{\Jmax \cdot I}{K + I}, \qquad K = \frac{\Jmax}{k}
+\label{eq:saturation}
+\end{equation}
+
+\begin{corebox}
+\textbf{Why the same equation appears everywhere:} Equation~\eqref{eq:saturation} is not a coincidence of domain-specific biology. It is the universal consequence of any adaptive medium $D = 1/C(F)$ where $C$ increases with flux. Wherever the medium adapts to the flux it carries --- whether enzyme active sites, erythropoietic progenitors, neural circuits, or bacterial populations --- the same saturation geometry emerges.
+\end{corebox}
+
+\subsection{Model unification}
+
+Table~\ref{tab:reductions} demonstrates that established biological and physical models are special cases of Equation~\eqref{eq:saturation}.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{AFL Special-Case Reductions.} The same saturation equation $J(I) = \Jmax I/(K+I)$
+emerges from CDFT across all domains where a medium adaptively constrains flux.}
+\label{tab:reductions}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{>{\bfseries}lXXX}
+\toprule
+Domain & Established Model & AFL/CDFT Interpretation & Adaptive $C$ mechanism \\
+\midrule
+Biochemistry & Michaelis--Menten: $v = V_{\max}[S]/(K_m+[S])$ & Enzyme active-site saturation & Product inhibition increases $C_{\mathrm{enz}}$ \\[2pt]
+Ecology & Logistic: $dN/dt = rN(1-N/K)$ & Resource depletion & Environmental $C_{\mathrm{env}}$ rises with $N$ \\[2pt]
+Pharmacology & Hill: $E = E_{\max}D^n/(EC_{50}^n+D^n)$ & Receptor binding saturation & Receptor desensitization increases $C_S$ \\[2pt]
+Neuroscience & Sigmoid: $f(I) = 1/(1+e^{-I})$ & Dual-constraint firing limit & $C_T$ (refractory) + $C_E$ (ATP) \\[2pt]
+Organism & Metabolic scaling: $B \propto M^{3/4}$ & Fractal network constraint & $C \propto M^{1/4}$ (transport geometry) \\[2pt]
+Information & Shannon--Hartley: $C = B\log_2(1+S/N)$ & Channel capacity & Noise increases $C_{\mathrm{info}}$ \\[2pt]
+Development & Morphogen gradients & Diffusion-reaction constraint & $C_T$ increases with tissue density \\[2pt]
+Evolution & Fitness landscape & Selection constraint ceiling & $C$ = cumulative constraint architecture \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \maybeincludegraphics[width=\linewidth]{figures/fig1_saturation.png}
+  \caption{\textbf{The Universal AFL Saturation Law.}
+  \textbf{(A)} The saturation curve $J(I) = \Jmax I/(K+I)$ with annotated regime transitions.
+  In CDFT language: when $C$ is low, flux scales proportionally with gradient (linear
+  regime); when $C$ has risen to the constraint ceiling, flux saturates regardless of
+  further gradient increase (saturation regime).
+  \textbf{(B)} All domain-specific models on normalized axes. The same geometry arises
+  because all describe CDFT in adaptive media with the same qualitative $C$ response.
+  \textbf{KEY:} $\Jmax$ = constraint ceiling; $K$ = half-saturation (input at half-maximum);
+  slope = $\Jmax/K$.}
+  \label{fig:saturation}
+\end{figure}
+
+%% ────────────────────────────────────────────────────────────
+
+\section{Deep Analysis: Two-Timescale Dynamics and Metabolic $C$ State Space}
+Based on the explicit CDFD insulin-resistance models, the metabolic adaptive medium is governed by two interacting constraints: energetic constraint ($C_E$) and redox constraint ($C_R$). A compact glucose-disposal bound is
+\begin{equation}
+J_{\mathrm{glucose}} \le \frac{\nabla X}{C_E + C_R},
+\end{equation}
+where $\nabla X$ represents the insulin-driven transport potential. This equation is not a replacement for molecular insulin signalling. It is a systems summary: the same insulin signal produces less effective glucose disposal when energetic and redox constraints are high.
+
+\subsection{Fast vs Slow Dynamics}
+\begin{enumerate}
+    \item \textbf{Fast dynamics:} $dC/dt = \alpha \Phi - \beta C$. Healthy metabolism exhibits rapid constraint relaxation when $\beta$ is high. In a persistent substrate-overload state, impaired relaxation lowers effective $\beta$, so $C$ remains elevated after the initiating load falls.
+    \item \textbf{Slow dynamics:} chronic elevation of $C$ can be retained in $M_s$ through lipid accumulation, inflammatory tone, mitochondrial remodeling, epigenetic state, or tissue architecture. Raising $\nabla X$ with more insulin can then produce a plateau because the limiting problem is no longer only signal strength.
+\end{enumerate}
+
+Therapeutic efficacy in this framework is interpreted as movement of the limiting axis: reduced source load, lower $C_E$, lower $C_R$, improved relaxation $\beta$, or reduced retained memory $M_s$. The claim is testable only if those axes can be connected to measured physiology.
+
+\section{System-Level View: The Multi-Organ Cascade}
+
+insulin resistance (chronic $C_E$ upregulation) does not stay confined to its initial site. The AFL cascade:
+
+\begin{enumerate}
+    \item Skeletal muscle $C_{\mathrm{muscle}} \uparrow$ (first site, due to lipid accumulation or mitochondrial aging)
+    \item Glucose diverted to liver and adipose $\Rightarrow$ $\Phi_{\mathrm{liver}} \uparrow$, $\Phi_{\mathrm{adipose}} \uparrow$
+    \item Liver $C_{\mathrm{liver}} \uparrow$ (hepatic steatosis) + adipose $C_{\mathrm{adipose}} \uparrow$ (hypertrophy)
+    \item FFA spillover from adipose $\Rightarrow$ systemic $C_{\mathrm{met}} \uparrow$ in all tissues
+    \item Pancreatic $\beta$-cell constraint $\uparrow$ (glucolipotoxicity) $\Rightarrow$ insulin secretion fails
+    \item Hyperglycaemia accelerates all constraint accumulation $\Rightarrow$ irreversible progression
+\end{enumerate}
+
+This cascade is structurally identical to the multi-organ cascade seen in CKD (renal constraint $\to$ mineral redistribution $\to$ cardiac constraint $\to$ vascular calcification). Both are AFL constraint propagation events across organ systems.
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+AFL predicts, beyond the existing literature:
+
+\begin{enumerate}
+    \item \textbf{Constraint asymmetry predicts therapy response}: patients with high $C_{\mathrm{muscle}}$ (low mitochondrial density, measurable by muscle biopsy or MRI spectroscopy) will respond better to exercise than to GLP-1 agonists; those with high $C_{\mathrm{liver}}$ will respond better to GLP-1 agonists.
+    \item \textbf{OMAD superiority at isocaloric intake}: in randomized trials, OMAD should outperform three-meal isocaloric feeding on HOMA-IR, independent of total energy intake.
+    \item \textbf{FFA-driven constraint propagation rate}: the rate of whole-body insulin resistance (chronic $C_E$ upregulation) progression should correlate with circulating FFA levels more strongly than with fasting glucose, because FFA is the constraint propagator across tissues.
+    \item \textbf{Metformin-exercise synergy}: combining metformin and aerobic exercise should produce supralinear improvement in muscle $\Psi_{s,\mathrm{met}}$ because metformin reduces $\alpha_{\mathrm{muscle}}$ while exercise increases $\beta_{\mathrm{muscle}}$ --- both parameters in Equation~(\ref{eq:cmet}).
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL model of insulin resistance (chronic $C_E$ upregulation) would be falsified if:
+\begin{itemize}
+    \item HOMA-IR improvement with fasting occurs without measurable reduction in intramyocellular lipid or hepatic lipid (the proposed constraint substrates).
+    \item Exercise improves insulin sensitivity in denervated muscle (ruling out AMPK/GLUT4 as $\beta$-upregulators).
+    \item insulin resistance (chronic $C_E$ upregulation) develops in the absence of substrate excess (ruling out $\Phi$-driven $C$ accumulation).
+    \item GLP-1 agonists improve insulin sensitivity without reducing liver fat or gastric emptying rate.
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Limitations}
+
+\begin{itemize}
+    \item The model uses a single $C_{\mathrm{met}}$ per tissue, collapsing molecular complexity into a scalar. Real insulin resistance (chronic $C_E$ upregulation) involves dozens of signalling intermediates.
+    \item HOMA-IR is a fasting index; postprandial $\Psi_{s,\mathrm{met}}$ dynamics require continuous glucose monitoring data.
+    \item Parameters $\alpha_{\mathrm{met}}$ and $\beta_{\mathrm{met}}$ are not identified from patient data in this paper.
+    \item Genetic forms of insulin resistance (chronic $C_E$ upregulation) (lipodystrophy, MODY subtypes) may have fundamentally different $\alpha/\beta$ structures not captured by this model.
+\end{itemize}
+
+\textbf{Status: Open}
+
+
+\section{Biological Mujjabi Laws \& Discoveries}
+
+\subsection{The Mujjabi Cycling-Retention Test \cite{MujjabiPartII2026} (Biology)}
+Translating the Part II environmental fluctuation theorems, the \textbf{Mujjabi Cycling-Retention Test \cite{MujjabiPartII2026}} proposes that biological resilience depends not only on peak steady-state throughput, but also on retention or clearance of structural memory ($M_s$) across repeated stress-recovery cycles.
+
+\subsubsection{Runtime Diagnostic: Cycling and Recovery}
+Release-local runtime diagnostics in \texttt{outputs/paper\_05/} illustrate two qualitative behaviors: sustained substrate drive can raise local constraint, and low-relaxation regions can retain elevated memory after a transient load. These outputs support the internal consistency of the AFL toy model; they do not prove that fasting, exercise, or any treatment is required for health.
+
+\section{Conclusion}
+
+insulin resistance (chronic $C_E$ upregulation) is best understood as an adaptive, multi-tissue constraint accumulation cascade triggered by sustained substrate excess. The AFL framework unifies the tissue-specific patterns (muscle, liver, adipose), the reversal by fasting, the mechanism of OMAD superiority, the paradox of selective hepatic resistance, and the pharmacological mechanisms of all major anti-diabetic drug classes into a single dynamical picture governed by $\dot{C} = \alpha\Phi - \beta C$ and $\Psi_s = (\Phi/C) \cdot S \cdot M_s$.
+
+Type 1 and Type 2 diabetes are fundamentally different AFL problems: flux absence vs constraint excess. Their treatment must reflect this structural difference.
+
+\textbf{Status: Inferred}
+
+\section{Numerical Verification}
+
+\begin{figure}[H]
+    \centering
+    \maybeincludegraphics[width=\textwidth]{figures/fig1_insulin_resistance.png}
+    \caption{Numerical Verification: Insulin Resistance as Adaptive Flux Limitation. The input-output dissociation demonstrates the Mujjabi Capacity Law in metabolic constraint ($C$) space.}
+    \label{fig:insulin1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \maybeincludegraphics[width=\textwidth]{figures/fig2_twotimescale_therapy.png}
+    \caption{Numerical Verification: Two-Timescale CDFD Dynamics. Validating the Mujjabi Cycling-Retention test for restoring optimal $\Psi_s$.}
+    \label{fig:insulin2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \maybeincludegraphics[width=\textwidth]{figures/fig3_statespace_therapy.png}
+    \caption{Numerical Verification: Metabolic Constraint State Space. Illustrating why $C$ reduction can matter more than input ($\Phi$) escalation in the toy model.}
+    \label{fig:insulin3}
+\end{figure}
+
+
+\subsection{Runtime Discovery: Metabolic Saturation via Mujjabi Capacity Law \cite{MujjabiPartI2026}}
+Executing the engine \texttt{cdfd\_runtime} reveals that continuous external nutrient drive ($\Phi$ scaling linearly) triggers an adaptive response in mitochondrial constraints ($C$). Numerical outputs confirm that the adaptive ratio $\Psi_s$ drifts upward to precisely \textbf{1.22623}, indicating a locked overload regime where $\Phi$ decoupled from efficient processing---mirroring insulin resistance (chronic $C_E$ upregulation).
+
+
+Deterministic numerics should be packaged as an active-numbered public supplement (NumPy, parameters and seed in-file). The toy model contrasts healthy, pre-diabetic, T2DM, fasting, OMAD, and multi-modality intervention scenarios, reporting $\Psi_{s,\mathrm{met}}$ trajectories and HOMA-IR proxies for each.
+
+\textbf{Status: Derived}
+
+\section{Reproducibility Note}
+
+\begin{itemize}
+    \item \textbf{Script packaging}: active-numbered public supplement
+    \item \textbf{Dependencies}: NumPy only; runtime $< 1$\,s
+    \item \textbf{Outputs}: console table of $\Psi_{s,\mathrm{met}}$, $C_{\mathrm{met}}$, HOMA-IR proxy across 6 scenarios
+\end{itemize}
+
+\textbf{Status: Derived}
+
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3.0cm}p{3.5cm}p{4.5cm}}
+\toprule
+Symbol & Metabolic meaning & Measurement proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Glucose/insulin flux & C-peptide, CGM area under curve, clamp-derived $M$ value & Cannot be isolated from dietary intake without controlled conditions \\
+$C$ & Insulin resistance / metabolic constraint & HOMA-IR, fasting insulin, Matsuda index & If HOMA-IR explains all outcomes without adaptive dynamics, AFL adds nothing \\
+$M_s$ & Metabolic memory & HbA1c trend, adipose inflammation, epigenetic methylation & If weight loss fully resets $M_s$ within 12 weeks, long-term memory framing is unnecessary \\
+$\Psi_s$ & Glucose-insulin operating state & Computed ratio from OGTT-derived metrics & If trajectory indistinguishable from HOMA-IR slope alone, the extended model adds no value \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+\begin{itemize}
+    \item \textbf{ADA Standards of Care 2026}: glycaemic targets, GLP-1/GIP, SGLT2, metformin, cardiovascular and kidney risk, weight management.
+    \item AFL framing does not change ADA prescribing guidance. GLP-1 as ``Phi-axis'' and SGLT2 as ``renal deloading'' are research metaphors, not prescribing rationale.
+    \item Fasting and OMAD approaches: avoid strong claims; frame only as perturbation and recovery models with explicit contraindications (T1DM, eating disorders, pregnancy, frailty).
+    \item When AFL framing disagrees with ADA 2026, ADA takes precedence.
+\end{itemize}
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework, not a prescribing guide. Insulin, GLP-1, SGLT2, metformin, bariatric surgery, and dietary interventions are clinical decisions requiring specialist assessment. This model does not provide CGM interpretation, dose adjustments, or hypoglycaemia management guidance.
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/AFL\_Metabolism\_Verification.py}. Outputs in \texttt{outputs/paper\_05/}: metabolic saturation figures, constraint memory time-series, interactive panel, summary JSON. All outputs are toy diagnostics.
+
+\section*{Conflict of Interest} The author declares no conflict of interest.
+\section*{Funding} This research received no external funding.
+\section*{Author Contributions} Conceptualization, formal analysis, runtime engineering, and manuscript preparation: S.B.M.
+\section*{Data Availability} All computational models and scripts are in the \texttt{supplementary/} directory.
+
+\section{Reference Layer}
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

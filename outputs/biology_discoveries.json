@@ -1,0 +1,632 @@
+{
+  "paper_05": {
+    "constraint_memory": {
+      "clinical_status": "toy model; not CKD, fibrosis, or metabolic disease validation",
+      "diagnostic": "constraint_memory",
+      "final_state": {
+        "C": {
+          "all_finite": true,
+          "max": 25.0,
+          "mean": 3.9349600961056206,
+          "min": 1.0876197589824435
+        },
+        "Ms": {
+          "all_finite": true,
+          "max": 1.0794999999999613,
+          "mean": 1.008833333333329,
+          "min": 1.0
+        },
+        "S": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "meta": {
+          "life_number": 0.1081258865147193,
+          "ool_C_electron": 0.39057373239940024,
+          "ool_C_input": 4.049601484232682,
+          "ool_C_proton": 0.5467163150607841,
+          "ool_C_stability": 0.12504096826954184,
+          "ool_J_max": 0.12504096826954184,
+          "ool_S_stability": 7.997378889808114,
+          "ool_sigma_e": 0.39057373239940024,
+          "ool_sigma_p": 0.5467163150607841,
+          "ool_transport_factor": 0.4736371184683911,
+          "throughput_J": 1.9476684116330543
+        },
+        "phi": {
+          "all_finite": true,
+          "max": 24.975,
+          "mean": 4.046823706454905,
+          "min": 1.4233151756473459
+        },
+        "psi_s": {
+          "all_finite": true,
+          "max": 1.3086514509252505,
+          "mean": 1.2284644018339723,
+          "min": 0.28968888550820776
+        },
+        "regime": "overload",
+        "t": 8.38
+      },
+      "interpretation": "A low-relaxation region retains elevated constraint and memory after a transient load."
+    },
+    "metabolic_saturation": {
+      "clinical_status": "toy model; not diabetes clinical guidance",
+      "diagnostic": "metabolic_saturation",
+      "final_state": {
+        "C": {
+          "all_finite": true,
+          "max": 19.23666397071161,
+          "mean": 10.664501278505867,
+          "min": 2.533482417339506
+        },
+        "Ms": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "S": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "meta": {
+          "life_number": 0.9308004493218208,
+          "ool_C_electron": 0.05608848091968199,
+          "ool_C_input": 23.765816866193223,
+          "ool_C_proton": 4.6703418986094345,
+          "ool_C_stability": 0.14951387083987744,
+          "ool_J_max": 0.05608848091968199,
+          "ool_S_stability": 6.688342655986444,
+          "ool_sigma_e": 0.05608848091968199,
+          "ool_sigma_p": 4.6703418986094345,
+          "ool_transport_factor": 0.5211637710502698,
+          "throughput_J": 6.358700707661823
+        },
+        "phi": {
+          "all_finite": true,
+          "max": 24.975,
+          "mean": 23.74220575508211,
+          "min": 2.783118041345088
+        },
+        "psi_s": {
+          "all_finite": true,
+          "max": 2.4698382473730796,
+          "mean": 2.2474508713999333,
+          "min": 0.6827808367591885
+        },
+        "regime": "overload",
+        "t": 7.18
+      },
+      "interpretation": "Sustained substrate drive raises local constraint and produces a plateau-like operating ratio."
+    }
+  },
+  "paper_07": {
+    "clinical_status": "toy model; candidate analogy for oncology, viral foci, or biofilm systems only",
+    "diagnostic": "parasitic_drain",
+    "final_state": {
+      "C": {
+        "all_finite": true,
+        "max": 10.253074617871928,
+        "mean": 1.4714777090018476,
+        "min": 1.061830176394531
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 0.9577551020408164,
+        "min": 0.08
+      },
+      "meta": {
+        "life_number": 0.09442536870530449,
+        "ool_C_electron": 0.442758781132648,
+        "ool_C_input": 2.345579872896103,
+        "ool_C_proton": 0.47195053808516696,
+        "ool_C_stability": 0.19265256434511419,
+        "ool_J_max": 0.19265256434511419,
+        "ool_S_stability": 5.1906913536256845,
+        "ool_sigma_e": 0.442758781132648,
+        "ool_sigma_p": 0.47195053808516696,
+        "ool_transport_factor": 0.33972169001537644,
+        "throughput_J": 5.00551530229754
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 25.0,
+        "mean": 2.3454523218756944,
+        "min": 1.2541027245183942
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 1.1810765529161444,
+        "mean": 1.1148782107996615,
+        "min": 0.19486837602033313
+      },
+      "regime": "stable",
+      "t": 5.98
+    },
+    "interpretation": "A high-flow, low-responsiveness node perturbs the surrounding operating ratio."
+  },
+  "paper_08": {
+    "clinical_status": "toy model; not an autoimmune treatment protocol",
+    "diagnostic": "autoimmune_boundary",
+    "global_final": {
+      "C": {
+        "all_finite": true,
+        "max": 1.9600000000000009,
+        "mean": 1.9600000000000009,
+        "min": 1.9600000000000009
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.12,
+        "mean": 1.1200000000000003,
+        "min": 1.12
+      },
+      "S": {
+        "all_finite": true,
+        "max": 0.5199999999999996,
+        "mean": 0.5199999999999996,
+        "min": 0.5199999999999996
+      },
+      "meta": {
+        "autoimmune_state_active": true,
+        "treatment_type": "global_immunosuppression"
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 0.2971428571428568,
+        "mean": 0.2971428571428567,
+        "min": 0.2971428571428568
+      },
+      "regime": "constrained",
+      "t": 4.78
+    },
+    "interpretation": "The model contrasts global responsiveness suppression with a memory-targeted toy intervention.",
+    "targeted_final": {
+      "C": {
+        "all_finite": true,
+        "max": 1.9600000000000009,
+        "mean": 1.9600000000000009,
+        "min": 1.9600000000000009
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "autoimmune_state_active": true,
+        "treatment_type": "afl_targeted_clearance"
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 0.5102040816326529,
+        "mean": 0.5102040816326527,
+        "min": 0.5102040816326529
+      },
+      "regime": "constrained",
+      "t": 4.78
+    }
+  },
+  "paper_09": {
+    "cross_axis": {
+      "clinical_status": "toy model; not a drug recommendation or safety model",
+      "diagnostic": "cross_axis_flux_relaxation",
+      "drugs": [
+        {
+          "effect": -0.08,
+          "target": "phi"
+        },
+        {
+          "effect": 0.055,
+          "target": "beta"
+        }
+      ],
+      "final_state": {
+        "C": {
+          "all_finite": true,
+          "max": 1.45,
+          "mean": 1.4499999999999995,
+          "min": 1.45
+        },
+        "Ms": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "S": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "meta": {
+          "ischemia_warning": false,
+          "synergy_status": "ORTHOGONAL SYNERGY: Optimal Psi_s recovery."
+        },
+        "phi": {
+          "all_finite": true,
+          "max": 0.35999999999999943,
+          "mean": 0.35999999999999943,
+          "min": 0.35999999999999943
+        },
+        "psi_s": {
+          "all_finite": true,
+          "max": 0.24827586206896513,
+          "mean": 0.24827586206896513,
+          "min": 0.24827586206896513
+        },
+        "regime": "constrained",
+        "t": 7.95
+      },
+      "status": "ORTHOGONAL SYNERGY: Optimal Psi_s recovery."
+    },
+    "same_axis": {
+      "clinical_status": "toy model; not a drug recommendation or safety model",
+      "diagnostic": "same_axis_flux_reduction",
+      "drugs": [
+        {
+          "effect": -0.12,
+          "target": "phi"
+        },
+        {
+          "effect": -0.1,
+          "target": "phi"
+        }
+      ],
+      "final_state": {
+        "C": {
+          "all_finite": true,
+          "max": 1.45,
+          "mean": 1.4499999999999995,
+          "min": 1.45
+        },
+        "Ms": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "S": {
+          "all_finite": true,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0
+        },
+        "meta": {
+          "ischemia_warning": true,
+          "synergy_status": "REDUNDANT: Dangerous Phi collapse risk."
+        },
+        "phi": {
+          "all_finite": true,
+          "max": 0.01,
+          "mean": 0.01,
+          "min": 0.01
+        },
+        "psi_s": {
+          "all_finite": true,
+          "max": 0.006896551724137932,
+          "mean": 0.006896551724137932,
+          "min": 0.006896551724137932
+        },
+        "regime": "constrained",
+        "t": 7.95
+      },
+      "status": "REDUNDANT: Dangerous Phi collapse risk."
+    }
+  },
+  "paper_10": {
+    "clinical_status": "toy model; not a validated endothelial, epithelial, or gut-barrier test",
+    "diagnostic": "boundary_covariance",
+    "failing_final": {
+      "C": {
+        "all_finite": true,
+        "max": 7.409740877336381,
+        "mean": 7.409740877336381,
+        "min": 7.409740877336381
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 0.40000000000001057,
+        "mean": 0.40000000000001057,
+        "min": 0.40000000000001057
+      },
+      "meta": {
+        "life_number": 1517793.5820786671,
+        "ool_C_electron": 0.06747874295163447,
+        "ool_C_input": 25.0,
+        "ool_C_proton": 1000000.0,
+        "ool_C_stability": 0.8997165718789695,
+        "ool_J_max": 0.06747874295163447,
+        "ool_S_stability": 1.111461132600457,
+        "ool_sigma_e": 0.06747874295163447,
+        "ool_sigma_p": 1000000.0,
+        "ool_transport_factor": 0.0,
+        "throughput_J": 60.711743232148855
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 24.961114611326003,
+        "mean": 24.961114611326003,
+        "min": 24.961114611326003
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 1.347475709315199,
+        "mean": 1.3474757093151992,
+        "min": 1.347475709315199
+      },
+      "regime": "overload",
+      "t": 4.78
+    },
+    "interpretation": "Matched flow produces different operating ratios when surface responsiveness diverges.",
+    "responsive_final": {
+      "C": {
+        "all_finite": true,
+        "max": 9.418732526001081,
+        "mean": 9.418732526001081,
+        "min": 9.418732526001081
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.2,
+        "mean": 1.1999999999999997,
+        "min": 1.2
+      },
+      "meta": {
+        "life_number": 939363.812721181,
+        "ool_C_electron": 0.053085699017326855,
+        "ool_C_input": 25.0,
+        "ool_C_proton": 1000000.0,
+        "ool_C_stability": 0.7078093197300306,
+        "ool_J_max": 0.053085699017326855,
+        "ool_S_stability": 1.4128098799001623,
+        "ool_sigma_e": 0.053085699017326855,
+        "ool_sigma_p": 1000000.0,
+        "ool_transport_factor": 0.0,
+        "throughput_J": 37.57455247728465
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 24.964128098799,
+        "mean": 24.964128098799,
+        "min": 24.964128098799
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 3.1805716571588056,
+        "mean": 3.1805716571588056,
+        "min": 3.1805716571588056
+      },
+      "regime": "overload",
+      "t": 4.78
+    }
+  },
+  "paper_16": {
+    "decompensated": {
+      "clinical_status": "toy model; not a diagnostic, prognostic, or treatment tool",
+      "constraint_lead_time": 1.15,
+      "diagnostic": "biomarker_horizon_summary",
+      "final_state": {
+        "constraint_proxy_C": 2.2492150190652005,
+        "flux_proxy_phi": 0.4501286682261089,
+        "memory_Ms": 1.3278572361474639,
+        "psi_s_proxy": 0.19934679025086055,
+        "responsiveness_S": 0.7501569961869599
+      },
+      "first_constraint_signal_t": 0.7000000000000001,
+      "first_flux_decline_t": 1.85,
+      "interpretation": "Normalized toy trajectory for constraint-before-flux biomarker behavior.",
+      "scenario": "decompensated",
+      "thresholds": {
+        "constraint_proxy_C": 1.1,
+        "flux_proxy_phi": 0.94
+      }
+    },
+    "early_disease": {
+      "clinical_status": "toy model; not a diagnostic, prognostic, or treatment tool",
+      "constraint_lead_time": 4.6,
+      "diagnostic": "biomarker_horizon_summary",
+      "final_state": {
+        "constraint_proxy_C": 1.3762242110312972,
+        "flux_proxy_phi": 0.9024535986687381,
+        "memory_Ms": 1.0610986834274823,
+        "psi_s_proxy": 0.6434550670456634,
+        "responsiveness_S": 0.9247551577937405
+      },
+      "first_constraint_signal_t": 1.6500000000000001,
+      "first_flux_decline_t": 6.25,
+      "interpretation": "Normalized toy trajectory for constraint-before-flux biomarker behavior.",
+      "scenario": "early_disease",
+      "thresholds": {
+        "constraint_proxy_C": 1.1,
+        "flux_proxy_phi": 0.94
+      }
+    },
+    "healthy": {
+      "clinical_status": "toy model; not a diagnostic, prognostic, or treatment tool",
+      "constraint_lead_time": "not_reached",
+      "diagnostic": "biomarker_horizon_summary",
+      "final_state": {
+        "constraint_proxy_C": 1.039456400419385,
+        "flux_proxy_phi": 1.0,
+        "memory_Ms": 1.0031624754492614,
+        "psi_s_proxy": 0.9574679986426639,
+        "responsiveness_S": 0.992108719916123
+      },
+      "first_constraint_signal_t": "not_reached",
+      "first_flux_decline_t": "not_reached",
+      "interpretation": "Normalized toy trajectory for constraint-before-flux biomarker behavior.",
+      "scenario": "healthy",
+      "thresholds": {
+        "constraint_proxy_C": 1.1,
+        "flux_proxy_phi": 0.94
+      }
+    }
+  },
+  "paper_17": {
+    "chronic_final": {
+      "C": {
+        "all_finite": true,
+        "max": 12.719936402081638,
+        "mean": 12.71993640208164,
+        "min": 12.719936402081638
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.126000000000026,
+        "mean": 1.126000000000026,
+        "min": 1.126000000000026
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "life_number": 515049.38616182044,
+        "ool_C_electron": 0.03930837263605926,
+        "ool_C_input": 25.0,
+        "ool_C_proton": 1000000.0,
+        "ool_C_stability": 0.5241116348727638,
+        "ool_J_max": 0.03930837263605926,
+        "ool_S_stability": 1.907990461312246,
+        "ool_sigma_e": 0.03930837263605926,
+        "ool_sigma_p": 1000000.0,
+        "ool_transport_factor": 0.0,
+        "throughput_J": 20.60197542916717
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 24.94411082470851,
+        "mean": 24.944110824708506,
+        "min": 24.94411082470851
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 2.2081139323956003,
+        "mean": 2.2081139323956007,
+        "min": 2.2081139323956003
+      },
+      "regime": "overload",
+      "t": 7.18
+    },
+    "clinical_status": "toy model; not a fasting, exercise, or therapy recommendation",
+    "cyclic_final": {
+      "C": {
+        "all_finite": true,
+        "max": 14.88954760240247,
+        "mean": 14.889547602402471,
+        "min": 14.88954760240247
+      },
+      "Ms": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "S": {
+        "all_finite": true,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0
+      },
+      "meta": {
+        "life_number": 375885.65216387575,
+        "ool_C_electron": 0.03358060388076019,
+        "ool_C_input": 25.0,
+        "ool_C_proton": 1000000.0,
+        "ool_C_stability": 0.4477413848763302,
+        "ool_J_max": 0.03358060388076019,
+        "ool_S_stability": 2.2334321413603706,
+        "ool_sigma_e": 0.03358060388076019,
+        "ool_sigma_p": 1000000.0,
+        "ool_transport_factor": 0.0,
+        "throughput_J": 15.035426073925285
+      },
+      "phi": {
+        "all_finite": true,
+        "max": 24.94736198709219,
+        "mean": 24.94736198709219,
+        "min": 24.94736198709219
+      },
+      "psi_s": {
+        "all_finite": true,
+        "max": 1.6754949615169548,
+        "mean": 1.6754949615169548,
+        "min": 1.6754949615169548
+      },
+      "regime": "overload",
+      "t": 7.18
+    },
+    "diagnostic": "cycling_retention",
+    "interpretation": "Equal qualitative stress can diverge depending on recovery windows and memory retention."
+  },
+  "status": {
+    "clinical_status": "toy diagnostics only; not clinical validation",
+    "generated_paper_folders": [
+      "paper_01",
+      "paper_02",
+      "paper_03",
+      "paper_04",
+      "paper_05",
+      "paper_06",
+      "paper_07",
+      "paper_08",
+      "paper_09",
+      "paper_10",
+      "paper_11",
+      "paper_12",
+      "paper_13",
+      "paper_14",
+      "paper_15",
+      "paper_16",
+      "paper_17"
+    ],
+    "output_boundary": "all generated files are release-local under CDFD-Part-III-Release/outputs"
+  }
+}

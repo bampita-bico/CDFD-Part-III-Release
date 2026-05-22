@@ -1,0 +1,11 @@
+domain,Phi_label,C_label,Phi0,C0,final_psi,regime,candidate_mapping
+Metabolic,glucose flux,insulin resistance,2.0,1.0,10000.0,overload,hypothesis
+Renal,filtration flux,nephron damage,1.5,1.2,10000.0,overload,hypothesis
+Immune,pathogen clearance,inflammatory load,1.8,0.8,10000.0,overload,hypothesis
+Oncologic,proliferative flux,apoptosis constraint,3.0,0.4,10000.0,overload,hypothesis
+Neurologic,neural firing rate,inhibitory tone,2.2,1.0,10000.0,overload,hypothesis
+Developmental,morphogen flux,patterning constraint,1.0,1.0,10000.0,overload,hypothesis
+Microbial,bacterial replication,host defence,1.5,1.5,10000.0,overload,hypothesis
+Cardiovascular,cardiac output,vascular resistance,2.0,1.0,10000.0,overload,hypothesis
+Hepatic,metabolic detox flux,fibrotic constraint,1.8,0.9,10000.0,overload,hypothesis
+Pulmonary,gas exchange flux,airway resistance,1.6,1.1,10000.0,overload,hypothesis

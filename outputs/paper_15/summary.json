@@ -1,0 +1,22 @@
+{
+  "claim_status": "toy diagnostic \u2014 NOT clinical guidance",
+  "falsification": "If resistance fitness cost is uncorrelated with AFL constraint relaxation dynamics after drug withdrawal in controlled in vitro experiments, the resistance-cycle framing does not hold.",
+  "guideline_anchors": [
+    "WHO AMR Report 2021 (IACG): resistance, stewardship, HGT, public health",
+    "CDC AMR Guidelines: diagnostics, treatment duration, de-escalation"
+  ],
+  "paper": "15",
+  "safety_note": "Antibiotic holiday / de-escalation decisions require clinical judgement, culture and sensitivity data, and institutional guidelines. This model is a framing tool, not prescriptive.",
+  "simulations": [
+    "resistance_cycle",
+    "hgt_dynamics",
+    "stewardship_scenarios"
+  ],
+  "title": "Adaptive Flux Limitation in Microbial Systems",
+  "validation_targets": [
+    "In vitro resistance fitness cost assays: growth rate vs antibiotic pressure",
+    "HGT plasmid transfer experiments: resistance spread rate vs Phi/C analogy",
+    "Retrospective AMR registry: stewardship strategy vs outcome correlation",
+    "Wastewater AMR surveillance: community resistance load as C proxy"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "claim_status": "toy diagnostic \u2014 candidate validation target",
+  "falsification": "If FGF23 rise does not precede serum phosphate elevation in longitudinal CKD cohort data, the compensation framing does not hold.",
+  "guideline_anchor": "KDIGO 2024 CKD Guideline (eGFR staging, albuminuria, CKD-MBD, complications)",
+  "paper": "06",
+  "scenarios": {
+    "ckd_stages": 6,
+    "dialysis_sessions": 5,
+    "erythro_scenarios": 7
+  },
+  "title": "Adaptive Flux Limitation in Renal Disease",
+  "validation_targets": [
+    "Longitudinal eGFR slope vs FGF23/PTH trajectory",
+    "Urine albumin-creatinine ratio as C_renal early signal",
+    "ESA resistance index vs iron/inflammatory markers"
+  ]
+}

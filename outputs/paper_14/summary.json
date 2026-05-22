@@ -1,0 +1,13 @@
+{
+  "claim_status": "toy diagnostic \u2014 candidate ecological framework",
+  "falsification": "If wildlife constraint elevation has no predictive correlation with zoonotic spillover risk after controlling for habitat overlap, the One Health AFL bridge does not hold.",
+  "paper": "14",
+  "scenarios": 7,
+  "title": "Adaptive Flux Limitation in Ecology and Networked Biology",
+  "validation_targets": [
+    "Outbreak surveillance: wildlife stress indicator before spillover event",
+    "Wastewater surveillance: community-level C proxy from pathogen load",
+    "Microbiome perturbation studies: dysbiosis as C elevation in host",
+    "Ecological network data: trophic cascade Phi/C signatures"
+  ]
+}

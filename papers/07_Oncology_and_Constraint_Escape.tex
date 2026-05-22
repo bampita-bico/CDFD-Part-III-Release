@@ -1,0 +1,372 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\newcommand{\Jmax}{J_{\max}}
+\newcommand{\Jreq}{J_{\mathrm{req}}}
+\newcommand{\Jeff}{J_{\mathrm{eff}}}
+\newcommand{\Om}{\Omega}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+
+\title{\textbf{Paper BIO-07: Adaptive Flux Limitation in Oncology:\\ A CDFD Model of Constraint Escape, Resistance, and Boundary Failure}}
+\author{Steve Bico Mujjabi\\ \small Independent Researcher}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section*{Adaptive Flux Limitation in Oncology: A CDFD Model of Constraint Escape, Resistance, and Boundary Failure}
+
+\begin{abstract}
+
+This paper presents \textbf{Adaptive Flux Limitation (AFL)} as the Part III biology-and-medicine model inside Constraint-Driven Flux Dynamics (CDFD). CDFD supplies the flow-constraint-memory grammar: physiological flow $\Phi$, constraint $C$, surface responsiveness $S$, and structural memory $M_s$. The Runtime citation anchors the CDFL implementation, while clinical interpretation remains separate from software output and bedside validation.
+
+Cancer is conventionally framed as a genetic disease of uncontrolled proliferation. While somatic mutations are essential, they do not explain the emergent systems-level behaviour of tumours: the Warburg effect, angiogenesis, immune evasion, metastasis, and multi-drug resistance. These are not independent hallmarks but coupled consequences of a single dynamical transition --- constraint escape.
+
+We develop a deep AFL model of cancer in which tumour initiation is the crossing of a critical $\Psi_{s,\mathrm{growth}}$ threshold through constraint reduction, tumour progression is flux reprogramming to maximize throughput under the new constraint structure, and treatment failure is adaptive constraint re-establishment against each therapeutic intervention.
+
+Key results: (1) carcinogenesis is a $C_{\mathrm{cell}} \to 0$ catastrophe triggered by oncogenic mutation of constraint-maintaining machinery (tumour suppressors, checkpoints, apoptosis); (2) the Warburg effect is a constraint \textit{restructuring} rather than a constraint \textit{removal} --- cancer trades oxidative efficiency for glycolytic speed under hypoxic constraint; (3) metastasis is triggered when local $C_{\mathrm{tissue}}$ exceeds the tumour's tolerance --- cells migrate to lower-constraint environments; (4) drug resistance is AFL adaptation: $\partial C_{\mathrm{drug}} / \partial t = \alpha |J_{\mathrm{drug}}| - \beta C_{\mathrm{drug}}$; (5) the tumour microenvironment (TME) is a constraint field that the tumour actively remodels.
+
+\textbf{Status: Inferred}
+
+\medskip
+\noindent Within the extended framework of this series, biological networks are modeled as \emph{Adaptive Surfaces} that dynamically integrate physiological load and retain structural memory. The system's health is governed by the adaptive ratio $\Psi_s = (\Phi/C) \cdot S \cdot M_s$, where homeostasis ($\Psi_s \approx 1.0$) is maintained near the stable attractor ($S \cdot M_s \approx 1.0$), and disease emerges as surface dysregulation when maladaptive memory locks tissues into chronic constraint.
+
+\end{abstract}
+
+
+\paragraph{Greek-symbol convention.}
+Unless a manuscript states a tighter equation-local meaning, Greek symbols are local CDFD variables or coefficients, not universal constants. Here $\Phi$ denotes driving flux, $\Psi_s$ denotes the adaptive operating ratio, $\Omega$ denotes a domain or state space, and $\Lambda$ denotes the Life Number where used. The coefficients $\alpha$, $\beta$, and $\gamma$ denote accumulation or reinforcement, relaxation or decay, and diffusion, coupling, or redistribution. The symbols $\delta$ and $\epsilon$ denote perturbation or tolerance scales, while $\eta$, $\lambda$, $\mu$, $\nu$, $\rho$, $\sigma$, $\tau$, and $\phi$ denote local efficiency, rate, baseline, frequency, density or correlation, noise or variance, time-scale, and phase or field terms. Subscripts restrict any coefficient to the named pathway, tissue, domain, or experiment.
+
+\section*{Clinical Reader's Guide}
+This oncology paper frames cancer as constraint escape and constraint re-engineering. A tumour is not only fast-growing tissue; it is a system that changes the rules under which growth, blood supply, immune visibility, redox handling, and therapy response are constrained. AFL names those changes as shifts in $\Phi$, $C$, $S$, and $M_s$.
+
+The clinical reader should separate three levels. First, established cancer biology already describes metabolic reprogramming, angiogenesis, immune evasion, genomic instability, clonal selection, and resistance. Second, AFL groups these under a control architecture: the tumour lowers or bypasses constraints that would normally limit proliferation, then adapts when treatment imposes new constraints. Third, the runtime parasitic-drain diagnostic is only a toy analogy for a high-flow, low-system-responsiveness node.
+
+The framework is useful only if it makes testable predictions about combination timing, adaptive resistance, metabolic vulnerability, or immune-boundary failure. It is not a substitute for oncology trials, tumour-specific biology, staging, molecular profiling, or standard-of-care treatment.
+
+
+\vspace{0.5em}\noindent\fbox{\parbox{0.97\linewidth}{\small\textbf{AFL notation.} In this paper, $\Phi$ denotes the relevant physiological throughput, $C$ the operative biological constraint, $S$ surface responsiveness, and $M_s$ retained structural memory. When a dominant flow can be specified, $\Psi_s=(\Phi/C) \cdot S \cdot M_s$ denotes the operating ratio. Claim discipline: explicit assumptions, separated derivation vs. interpretation, and status labels.}}
+\vspace{0.75em}
+
+\section{Introduction}
+
+Adaptive Flux Limitation (AFL) is the named model used in this paper; CDFD is the parent framework that supplies the variables, closure logic, and claim discipline. The biological or medical question is posed first as AFL, then interpreted as a CDFD model of flow, constraint, surface responsiveness, and structural memory.
+
+Cancer is not simply rapid cell division. It is a living system that changes the constraints under which division, metabolism, immune visibility, tissue boundaries, and treatment response normally operate. Mutation is essential, but the clinical phenotype is architectural: proliferative signalling is amplified, checkpoints are bypassed, apoptosis is resisted, immune recognition is evaded, blood supply is recruited, and metastatic routes are opened.
+
+AFL reads these hallmarks as changes in flow and constraint. Growth drive $\Phi_{\mathrm{growth}}$ rises, cell-cycle and apoptotic constraints fall, tissue and immune boundaries are remodelled, and structural memory $M_s$ accumulates through clonal selection and microenvironmental conditioning. The tumour is therefore not a single high-flow node; it is a constraint-engineering system embedded in a host.
+
+This view is clinically useful only when it remains disciplined. It cannot replace histology, staging, molecular profiling, treatment guidelines, clinical trials, or patient-specific oncology judgement. Its value is to organize questions about adaptive resistance: which constraint did the treatment impose, which escape route did the tumour open, and which host surface paid the cost?
+
+The runtime parasitic-drain analogy is deliberately limited. It is a toy diagnostic for a high-throughput node that can perturb surrounding responsiveness. It does not prove cancer biology. It suggests falsifiable ways to compare tumour load, immune boundary failure, metabolic state, and treatment timing.
+
+\textbf{Status: Hypothesis}
+
+\section{Carcinogenesis: The $C_{\mathrm{cell}} \to 0$ Catastrophe}
+
+\subsection{Normal Cellular Constraint Architecture}
+
+In a healthy epithelial cell, the effective constraint $C_{\mathrm{cell}}$ is maintained by a hierarchy of tumour suppressor mechanisms:
+\begin{equation}
+    C_{\mathrm{cell}} = C_{\mathrm{p53}} + C_{\mathrm{Rb}} + C_{\mathrm{PTEN}} + C_{\mathrm{APC}} + C_{\mathrm{contact}} + C_{\mathrm{apoptosis}} + \cdots
+\end{equation}
+
+Each component is a distinct constraint pathway. Loss of a single component reduces $C_{\mathrm{cell}}$ but may not cross the $\Psi_s > 1$ threshold alone. This is why carcinogenesis is multi-hit: typically 4--8 driver mutations are required.
+
+\subsection{Multi-Hit Carcinogenesis as Progressive Constraint Erosion}
+
+Each driver mutation removes one $C_i$ term:
+\begin{align}
+    \text{Hit 1 (e.g., APC loss):} & \quad C_{\mathrm{cell}} = C_{\mathrm{p53}} + C_{\mathrm{Rb}} + C_{\mathrm{PTEN}} + \cdots \quad \Psi_s < 1 \\
+    \text{Hit 2 (e.g., KRAS):} & \quad \Phi_{\mathrm{growth}} \uparrow \quad \Psi_s \to 1 \\
+    \text{Hit 3 (e.g., p53 loss):} & \quad C_{\mathrm{p53}} = 0 \quad \Psi_s > 1 \text{ (malignant)}
+\end{align}
+
+The AFL model predicts that the number of driver mutations required for malignant transformation is inversely proportional to the magnitude of each individual constraint. Tissues with higher baseline $C_{\mathrm{cell}}$ require more hits; tissues with lower baseline $C_{\mathrm{cell}}$ (e.g., rapidly dividing epithelium) are more cancer-prone.
+
+\textbf{Status: Inferred}
+
+\section{The Warburg Effect: Constraint Restructuring Under Hypoxia}
+
+The Warburg effect --- preferential use of aerobic glycolysis even in the presence of oxygen --- is puzzling from an efficiency standpoint: glycolysis yields only 2 ATP per glucose vs 36--38 for OXPHOS.
+
+The AFL explanation: the Warburg effect is not inefficiency but \textbf{constraint restructuring under spatial hypoxia}.
+
+Solid tumours develop hypoxic cores as they outgrow their blood supply. Under hypoxia, the oxidative phosphorylation pathway faces a constraint:
+\begin{equation}
+    C_{\mathrm{OXPHOS}} \uparrow \text{ (oxygen limitation)} \Rightarrow J_{\mathrm{OXPHOS}} \downarrow
+\end{equation}
+
+Switching to glycolysis:
+\begin{itemize}
+    \item Removes the oxygen constraint ($C_{\mathrm{oxygen}}$ is irrelevant to glycolysis)
+    \item Trades ATP yield for speed (glycolysis is $\sim$100$\times$ faster per enzyme molecule)
+    \item Generates lactate that acidifies the TME, creating a new constraint on surrounding normal cells ($C_{\mathrm{normal}} \uparrow$ via acidosis)
+\end{itemize}
+
+In AFL terms: the Warburg effect is an adaptation that simultaneously reduces the tumour's own constraint ($C_{\mathrm{oxygen}}$ no longer limiting) and increases the constraint on the surrounding normal tissue (lactate acidification). It is constraint escape plus constraint imposition on competitors.
+
+\textbf{Status: Inferred}
+
+\section{Angiogenesis: Flux Amplification for Growing Constraint}
+
+As a tumour grows, its intrinsic demand (nutrient flux $\Phi_{\mathrm{nutrients}}$) exceeds vascular supply. The gradient drives VEGF secretion, which stimulates angiogenesis.
+
+In AFL terms:
+\begin{equation}
+    \Psi_{s,\mathrm{tumour}} = \frac{\Phi_{\mathrm{nutrients}}}{C_{\mathrm{vascular}}} < 1 \quad \text{(nutrient-limited)} \Rightarrow \text{VEGF} \uparrow \Rightarrow C_{\mathrm{vascular}} \downarrow
+\end{equation}
+
+Anti-VEGF therapy (bevacizumab) works by preventing this constraint reduction: it keeps $C_{\mathrm{vascular}}$ elevated, starving the tumour. But tumours adapt by upregulating alternative pro-angiogenic factors (FGF, PDGF), which is AFL constraint bypass: when one pathway for constraint reduction is blocked, another is activated.
+
+\textbf{Anti-VEGF resistance AFL mechanism:}
+\begin{equation}
+    \frac{dC_{\mathrm{VEGF-resistance}}}{dt} = \alpha_{\mathrm{res}} |J_{\mathrm{anti-VEGF}}| - \beta_{\mathrm{res}} C_{\mathrm{VEGF-resistance}}
+\end{equation}
+
+Resistance emerges as the tumour adaptively increases its alternative angiogenic flux capacity in response to the drug-imposed constraint.
+
+\textbf{Status: Inferred}
+
+\section{The Tumour Microenvironment as a Constraint Field}
+
+The TME --- comprising cancer-associated fibroblasts (CAFs), tumour-associated macrophages (TAMs), extracellular matrix (ECM), immunosuppressive T-regulatory cells, and myeloid-derived suppressor cells --- is not a passive bystander. The tumour actively remodels the TME to create a low-constraint environment.
+
+\subsection{CAF-Mediated ECM Remodelling}
+
+CAFs secrete matrix metalloproteinases (MMPs) that degrade collagen and fibronectin. In AFL terms: ECM degradation reduces the mechanical constraint $C_{\mathrm{ECM}}$, allowing tumour cells to expand with lower energy cost.
+\begin{equation}
+    C_{\mathrm{ECM}} \downarrow \Rightarrow \Phi_{\mathrm{growth}} / C_{\mathrm{ECM}} \uparrow \Rightarrow \text{expansion}
+\end{equation}
+
+\subsection{TAM Polarization: From M1 (Constraint) to M2 (Permissive)}
+
+Tumour-associated macrophages can adopt M1 (anti-tumour, constraint-imposing) or M2 (pro-tumour, constraint-relaxing) phenotypes. The tumour secretes IL-4, IL-13, and TGF-$\beta$ to drive M2 polarization:
+\begin{equation}
+    \text{IL-4/IL-13} \Rightarrow \mathrm{TAM_{M2}} \Rightarrow C_{\mathrm{immune \to tumour}} \downarrow
+\end{equation}
+
+This is direct AFL constraint reduction by immunosuppressive remodelling of the TME.
+
+\textbf{Status: Inferred}
+
+\section{Immune Evasion: Checkpoint Exploitation as Constraint Reduction}
+
+The immune system imposes constraint on tumour growth through cytotoxic T lymphocyte (CTL) activity:
+\begin{equation}
+    J_{\mathrm{immune}} = \frac{\Phi_{\mathrm{CTL}}}{ C_{\mathrm{immune}}} \quad \Rightarrow \quad \text{tumour cell killing}
+\end{equation}
+
+Tumour cells reduce $C_{\mathrm{immune \to tumour}}$ by upregulating checkpoint ligands:
+\begin{itemize}
+    \item \textbf{PD-L1}: binds PD-1 on CTLs, inducing T cell exhaustion ($\Phi_{\mathrm{CTL}} \downarrow$)
+    \item \textbf{CTLA-4 pathway}: inhibits T cell activation at the priming stage
+    \item \textbf{IDO pathway}: depletes tryptophan, creating metabolic constraint on T cells ($C_{\mathrm{T-cell}} \uparrow$)
+\end{itemize}
+
+Checkpoint inhibitors (pembrolizumab, nivolumab, ipilimumab) work by restoring $C_{\mathrm{immune \to tumour}}$ to normal levels. AFL prediction: checkpoint inhibitors should be most effective in tumours with highest PD-L1 expression (highest immune constraint reduction) and least effective in tumours with alternative immune evasion mechanisms not targeted by the drug.
+
+\textbf{Status: Inferred}
+
+\section{Metastasis: The Constraint Gradient Migration}
+
+Metastasis occurs when tumour cells detach from the primary site and colonize distant organs. The AFL mechanism:
+
+\begin{equation}
+    C_{\mathrm{local}} > C_{\mathrm{tumour\ tolerance}} \Rightarrow \text{migration signal} \Rightarrow J_{\mathrm{cells}} \to \text{lower-constraint sites}
+\end{equation}
+
+The local constraint $C_{\mathrm{local}}$ rises in the primary tumour as:
+\begin{itemize}
+    \item Hypoxia increases (oxygen constraint)
+    \item Lactate acidification increases (pH constraint)
+    \item Immune pressure increases (immune constraint)
+    \item Nutrient competition increases (metabolic constraint)
+\end{itemize}
+
+When $C_{\mathrm{local}}$ exceeds the tumour's adaptation capacity, cells undergo epithelial-mesenchymal transition (EMT) --- a phenotypic switch that reduces cellular adhesion (lowers $C_{\mathrm{contact}}$) and enables motility.
+
+\textbf{Metastatic organotropism} (why specific cancers colonize specific organs) is predicted by the AFL model as a matching of tumour constraint profile to target organ constraint profile: breast cancer metastasizes to bone because bone ECM provides a mechanical constraint environment similar to the breast stroma; colorectal cancer metastasizes to liver because portal venous flow delivers cells to a high-nutrient, low-immune constraint environment.
+
+\textbf{Status: Inferred}
+
+\section{Drug Resistance: AFL Adaptation to Therapeutic Constraints}
+
+\subsection{The Universal Resistance Mechanism}
+
+Every effective cancer therapy imposes a new constraint $C_{\mathrm{drug}}$ on the tumour. The tumour's response follows the AFL adaptation equation:
+\begin{equation}
+    \frac{dC_{\mathrm{drug-resistance}}}{dt} = \alpha_{\mathrm{res}} |J_{\mathrm{drug}}| - \beta_{\mathrm{res}} C_{\mathrm{drug-resistance}}
+\end{equation}
+
+As drug concentration $J_{\mathrm{drug}}$ rises, resistance $C_{\mathrm{drug-resistance}}$ rises. At steady state:
+\begin{equation}
+    C_{\mathrm{drug-resistance}}^* = \frac{\alpha_{\mathrm{res}}}{\beta_{\mathrm{res}}} |J_{\mathrm{drug}}|
+\end{equation}
+
+Higher drug concentration drives faster resistance evolution. This is the AFL explanation of the ``dose-escalation paradox'': increasing dose accelerates resistance rather than cure.
+
+\subsection{Resistance Mechanisms as AFL Bypass Strategies}
+
+Specific resistance mechanisms map to AFL strategies:
+\begin{itemize}
+    \item \textbf{Efflux pumps (P-gp)}: actively reduce intracellular drug concentration ($\Phi_{\mathrm{drug,intracellular}} \downarrow$)
+    \item \textbf{Target mutation}: reduces drug-target binding, raising the effective $C_{\mathrm{drug}}$ threshold for effect
+    \item \textbf{Pathway redundancy}: activates alternative signalling routes ($C_{\mathrm{bypass}} \downarrow$ via alternative pathway)
+    \item \textbf{Senescence bypass}: cancer cells that would normally undergo therapy-induced senescence instead bypass the checkpoint ($C_{\mathrm{senescence}} \downarrow$)
+\end{itemize}
+
+\textbf{Status: Inferred}
+
+\subsection{Combination Therapy as Multi-Constraint Imposition}
+
+AFL predicts: effective treatment must impose constraints on multiple pathways simultaneously, because single-pathway constraint increase drives bypass evolution. The mathematical argument:
+
+If the tumour has $n$ bypass pathways with resistance rates $\alpha_1, \ldots, \alpha_n$, effective resistance develops at rate $\min_i \alpha_i$ under monotherapy but requires \textit{all} bypass pathways to evolve simultaneously under combination therapy --- a much slower process.
+
+This predicts the superiority of combination regimens and the clinical observation that resistance to combination chemotherapy develops far more slowly than resistance to single agents.
+
+\textbf{Status: Inferred}
+
+\section{Flux--Constraint Regime Table}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+$\Psi_{s,\mathrm{tumour}}$ range & State & Clinical correlate \\
+\midrule
+$< 1$ (sustained) & Controlled & Dormant micrometastasis, treatment-suppressed \\
+$\approx 1$ & Pre-malignant & CIN, dysplasia, carcinoma in situ \\
+$> 1$ (acute) & Active growth & Invasive carcinoma \\
+$\gg 1$ & Aggressive & High-grade, rapidly dividing tumour \\
+After therapy: $\to 0$ & Treatment response & Complete or partial response \\
+Rising after nadir & Resistance & Progressive disease, recurrence \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Inferred}
+
+\section{Predictions}
+
+\begin{enumerate}
+    \item \textbf{Multi-hit threshold varies by tissue}: Cancer incidence rate across tissue types should correlate with the average number of tumour suppressor genes expressed per cell (higher expression = higher baseline $C_{\mathrm{cell}}$ = more hits required = lower incidence).
+    \item \textbf{Warburg switch timing}: Aerobic glycolysis should activate when intratumoral $\mathrm{pO_2}$ falls below a threshold, not at a fixed tumour size --- because the trigger is oxygen constraint, not size per se.
+    \item \textbf{Metastasis timing prediction}: The time from primary diagnosis to first metastasis should correlate with the rate of TME constraint increase in the primary site, measurable via CAF density and ECM stiffness on biopsy.
+    \item \textbf{Combination therapy resistance rate}: The time to resistance under combination therapy should scale with $\sum_i \alpha_i^{-1}$ (sum of inverse resistance rates), which is measurable from single-agent resistance timecourses.
+    \item \textbf{Checkpoint inhibitor response prediction}: Response to anti-PD-1 should correlate with the ratio of PD-L1 expression to alternative immune evasion pathway activity, not with PD-L1 alone.
+\end{enumerate}
+
+\textbf{Status: Open}
+
+\section{Falsifiability}
+
+The AFL oncology model would be falsified if:
+\begin{itemize}
+    \item Cancer incidence is uncorrelated with tumour suppressor gene count across tissues.
+    \item The Warburg effect is present in well-oxygenated tumour cells without alternative metabolic constraint.
+    \item Metastasis occurs at fixed tumour sizes regardless of TME constraint dynamics.
+    \item Combination therapy resistance develops as rapidly as monotherapy resistance.
+    \item Checkpoint inhibitor response is independent of alternative immune evasion pathway activity.
+\end{itemize}
+
+\textbf{Status: Open}
+
+\section{Limitations}
+
+\begin{itemize}
+    \item Cancer heterogeneity (multiple subclonal populations with different $C_{\mathrm{cell}}$) is not fully captured by a single-constraint scalar model.
+    \item The model does not distinguish between driver and passenger mutations in terms of constraint contribution.
+    \item Immunotherapy combinations (anti-PD1 + anti-CTLA4) involve constraint interactions between two immune pathways not fully captured here.
+    \item Liquid tumours (leukaemia, lymphoma) have fundamentally different spatial constraint architecture than solid tumours --- this model primarily addresses solid tumours.
+\end{itemize}
+
+\textbf{Status: Open}
+
+
+\section{Deep Analysis: Resistance ODE: Global Stability and Compensatory Mutations}
+\noindent\textit{Detailed derivation placeholder retained for future expansion in this preprint release.}
+
+
+\section{Biological Mujjabi Laws and Diagnostics}
+
+\subsection{The Mujjabi Parasitic-Drain Law \cite{MujjabiPartII2026} (Biology)}
+Inspired by the Part II error-threshold discussion, the \textbf{Mujjabi Parasitic-Drain Law \cite{MujjabiPartII2026}} proposes that localized high-flow nodes with low systemic responsiveness ($S \ll 1$) can impose disproportionate constraint on the surrounding adaptive surface. Candidate biological analogies include tumours, viral replication centers, biofilms, and chronic inflammatory foci.
+
+\subsubsection{Runtime Diagnostic: Parasitic Drain}
+Release-local runtime diagnostics in \texttt{outputs/paper\_07/} introduce a high-flow, low-responsiveness node and track how it perturbs the surrounding operating ratio. This is a toy analogy for tumour-like or chronic-focus behavior. It does not prove a cancer mechanism, and it should not be read as a substitute for tumour biology, staging, molecular profiling, or clinical oncology evidence.
+
+\section{Clinical Mapping of Symbols}
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3.0cm}p{3.5cm}p{4.5cm}}
+\toprule
+Symbol & Oncology meaning & Measurement proxy & Invalidation condition \\
+\midrule
+$\Phi$ & Proliferative flux / growth drive & Ki-67, ctDNA fraction, tumour growth rate & If growth rate is uncorrelated with $\Phi$ proxy, mapping fails \\
+$C$ & Constraint on proliferation (apoptotic, immune) & p53 status, immune infiltration score, drug concentration & If constraint escape is explained by a single mutation without adaptive dynamics, AFL adds nothing \\
+$M_s$ & Epigenetic / phenotypic lock & DNA methylation pattern, chromatin accessibility, persister cell fraction & If $M_s$ reverses completely after drug removal, locked-state framing is not needed \\
+$\Psi_s$ & Tumour-host operating state & Computed from tumour/host constraint ratio; no direct assay & If $\Psi_s$ trajectory matches a simple PD-L1 score, framework adds no information \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status: Hypothesis}
+
+\section{Known Medicine Baseline}
+
+\begin{itemize}
+    \item Oncology evidence base: NCI TCGA/CPTAC genomics/proteomics, established tumour staging, approved targeted therapies and immunotherapy — all based on clinical trial evidence.
+    \item \textbf{FDA Project Optimus}: dose optimization as efficacy plus safety/tolerability, not maximum tolerated dose alone. AFL ``axis orthogonality'' in combination therapy is consistent with this principle but does not replace trial-based dose-ranging.
+    \item Tumour microenvironment (hypoxia, angiogenesis, immune exclusion, stromal stiffness): established oncology domains with active research; AFL constraint language is a research reframing.
+    \item When AFL framing conflicts with oncology guidelines or trial-based prescribing, the trial evidence takes precedence.
+\end{itemize}
+
+\section{Clinical Safety Boundary}
+
+This paper is a research framework, not a treatment guide.
+\begin{itemize}
+    \item Cancer treatment decisions (surgery, chemotherapy, immunotherapy, radiotherapy, targeted therapy) require oncology specialist assessment, molecular profiling, staging, and multidisciplinary tumour board review.
+    \item AFL does not provide predictive biomarkers, response prediction, or dose recommendations.
+    \item Tumour escape predictions are research hypotheses requiring organoid, ctDNA, or spatial transcriptomics validation.
+\end{itemize}
+
+\section{Runtime Diagnostic}
+
+Release-local script: \texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py} (parasitic drain section). Outputs in \texttt{outputs/paper\_07/}: \texttt{parasitic\_drain.png}, \texttt{parasitic\_drain\_timeseries.csv}, \texttt{summary.json}. All outputs are toy diagnostics; no clinical inference should be drawn.
+
+\section{Conclusion}
+
+Cancer is a constraint escape system. AFL unifies carcinogenesis (multi-hit $C$ erosion), tumour progression (Warburg/angiogenesis flux reprogramming), drug resistance (AFL adaptation), and immune evasion (checkpoint-mediated constraint reduction) under a single framework. Combination therapy and multi-constraint biomarkers follow as research predictions requiring NCI TCGA/CPTAC validation and FDA Project Optimus-aligned trial design.
+
+\textbf{Status: Inferred}
+
+\section{Reproducibility Note}
+
+Release-local script: \texttt{supplementary/AFL\_Biological\_Mujjabi\_Tests.py} (NumPy + matplotlib; runtime $< 2$\,s).
+
+\textbf{Status: Derived}
+\clearpage
+\section*{Adaptive Flux Limitation in Oncology: Cancer as a Constraint-Escape and Flux-Reprogramming System}
+
+
+\bibliographystyle{plainnat}
+\bibliography{afl_biology_references}
+
+\end{document}

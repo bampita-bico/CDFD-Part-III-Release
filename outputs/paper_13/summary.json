@@ -1,0 +1,13 @@
+{
+  "claim_status": "candidate evolutionary AFL framing \u2014 not validated",
+  "falsification": "If lineage fitness is uncorrelated with proximity to Psi_s ~ 1 in empirical evolutionary datasets, the selection-on-Psi framing fails.",
+  "lineages": 12,
+  "paper": "13",
+  "title": "Adaptive Flux Limitation in Evolutionary Dynamics",
+  "validation_targets": [
+    "Longitudinal cohort aging studies: M_s proxy vs biomarker accumulation",
+    "Comparative biology: alpha/beta analogs across species lifespans",
+    "Allometric scaling: constraint dynamics vs body mass",
+    "Evolutionary rescue experiments: constraint relaxation under stress"
+  ]
+}
